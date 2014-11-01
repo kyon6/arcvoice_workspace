@@ -3,7 +3,6 @@ package com.wanmei.arcvoice;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
-import com.wanmei.arcvoice.utils.DeviceUtils;
 
 /**
  * Created by liang on 14/10/31.
@@ -27,12 +26,18 @@ public class ArcVoice {
         this.mContext = context;
     }
 
+    /**
+     * 启动Arc Voice
+     */
     public void start(){
         isServiceRunning = true;
         Intent mIntent = new Intent(mContext,ArcWindowService.class);
         mContext.startService(mIntent);
     }
 
+    /**
+     * 显示Arc Voice
+     */
     public void show(){
         if(isServiceRunning){
             ArcWindowManager.createSmallWindow(mContext);
@@ -41,7 +46,7 @@ public class ArcVoice {
         }
     }
     /**
-     * 移除所有悬浮窗,service为停止
+     * 隐藏Arc Voice
      */
     public void hidden(){
         ArcWindowManager.removeBigWindow(mContext);
@@ -49,7 +54,7 @@ public class ArcVoice {
     }
 
     /**
-     * 移除所有悬浮窗，并停止Service
+     * 停止Arc Voice
      */
     public void stop(){
         hidden();

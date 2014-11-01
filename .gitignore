@@ -224,3 +224,5 @@ pip-log.txt
 .idea/workspace.xml
 
 project.properties
+
+libs/
