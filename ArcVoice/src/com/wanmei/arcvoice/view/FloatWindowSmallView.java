@@ -72,7 +72,6 @@ public class FloatWindowSmallView extends RelativeLayout {
         viewWidth = view.getLayoutParams().width;
         viewHeight = view.getLayoutParams().height;
         TextView percentView = (TextView) findViewById(R.id.percent);
-        percentView.setText(ArcWindowManager.getUsedPercentValue(context));
     }
 
     @Override
@@ -97,6 +96,27 @@ public class FloatWindowSmallView extends RelativeLayout {
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
                 if (xDownInScreen == xInScreen && yDownInScreen == yInScreen) {
                     openBigWindow();
+                }else{
+                    /*
+                     * release the HUD will anchor to the left or right
+                     */
+                    int screenWidth = windowManager.getDefaultDisplay().getWidth();
+                    int screenHeight = windowManager.getDefaultDisplay().getHeight();
+
+                    //todo 判断是横屏显示还是竖屏显示
+                    boolean isPortrait = true;
+                    if(isPortrait){
+                        if(xInScreen < screenWidth/2){
+                            mParams.x = 0;
+                        }else{
+                            mParams.x = (int)(screenWidth - xInView);
+                        }
+                        mParams.y = (int) (yInScreen - yInView);
+                    }else{
+
+                    }
+
+                    windowManager.updateViewLayout(this, mParams);
                 }
                 break;
             default:
