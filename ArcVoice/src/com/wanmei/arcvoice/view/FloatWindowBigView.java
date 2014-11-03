@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import com.wanmei.arcvoice.ArcWindowManager;
-import com.wanmei.arcvoice.ArcWindowService;
 import com.wanmei.arcvoice.R;
 
 public class FloatWindowBigView extends LinearLayout {
@@ -36,8 +35,6 @@ public class FloatWindowBigView extends LinearLayout {
 				// 点击关闭悬浮窗的时候，移除所有悬浮窗，并停止Service
 				ArcWindowManager.removeBigWindow(context);
 				ArcWindowManager.removeSmallWindow(context);
-				Intent intent = new Intent(getContext(), ArcWindowService.class);
-				context.stopService(intent);
 			}
 		});
 		back.setOnClickListener(new OnClickListener() {

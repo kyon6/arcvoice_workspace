@@ -2,18 +2,19 @@ package com.wanmei.arcvoicetest;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 import com.talkray.arcvoice.ArcRegion;
 import com.wanmei.arcvoice.ArcVoiceHelper;
 
 public class MyActivity extends Activity {
 
-    public static final String ARC_APP_ID = "AFSIBQV2";
-    public static final String ARC_APP_CREDENTIALS = "EP95V2XMWK1OCZVQNVCYIHBFLY1XGYWG";
-    public static final ArcRegion ARC_REGION = ArcRegion.BEIJING;
-    public static final String USER_ID = "123";
+    EditText mSessionEditText,mUserIdEditText;
+    Button mStartBtn;
 
-    ArcVoiceHelper mHelper;
     /**
      * Called when the activity is first created.
      */
@@ -22,57 +23,27 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
-        mHelper.init(ARC_APP_ID,ARC_APP_CREDENTIALS,ARC_REGION,USER_ID);
-        mHelper.start();
-
         initView();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mHelper.show();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mHelper.hidden();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mHelper.stop();
-    }
-
     private void initView() {
-        findViewById(R.id.btnStart).setOnClickListener(new View.OnClickListener() {
+        mSessionEditText = (EditText)findViewById(R.id.et_sessionid);
+        mUserIdEditText = (EditText)findViewById(R.id.et_userid);
+        mStartBtn = (Button)findViewById(R.id.btnStart);
+        mStartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArcVoiceHelper.getInstance(getApplicationContext()).start();
-            }
-        });
-
-        findViewById(R.id.btnShow).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArcVoiceHelper.getInstance(getApplicationContext()).show();
-            }
-        });
-
-        findViewById(R.id.btnHidden).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArcVoiceHelper.getInstance(getApplicationContext()).hidden();
-            }
-        });
-
-        findViewById(R.id.btnStop).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArcVoiceHelper.getInstance(getApplicationContext()).stop();
+                String sessionId = mSessionEditText.getText().toString().trim();
+                String userId = mUserIdEditText.getText().toString().trim();
+                if(TextUtils.isEmpty(sessionId)){
+                    Toast.makeText(MyActivity.this,"pls input the sessionId!",Toast.LENGTH_SHORT).show();;
+                    return;
+                }
+                if(TextUtils.isEmpty(userId)){
+                    Toast.makeText(MyActivity.this,"pls input the userId!",Toast.LENGTH_SHORT).show();;
+                    return;
+                }
+                GameActivity.start(MyActivity.this,sessionId,userId);
             }
         });
     }

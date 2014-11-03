@@ -7,6 +7,8 @@ import android.widget.Toast;
 import com.talkray.arcvoice.*;
 import com.wanmei.arcvoice.utils.LogUtils;
 
+import java.lang.reflect.Member;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -18,8 +20,6 @@ public class ArcVoiceHelper {
 
     private static ArcVoiceHelper mInstance = null;
     private Context mContext;
-    private boolean isServiceRunning = false;
-
 
     public static ArcVoiceHelper getInstance(Context context){
         if(mInstance == null){
@@ -51,27 +51,20 @@ public class ArcVoiceHelper {
         this.ARC_APP_CREDENTIALS = appCredentials;
         this.ARC_REGION = arcRegion;
         this.USER_ID = userId;
+
+        setupArc();
     }
 
-    /**
-     * start ArcVoiceHelper
-     * MUST call init() before
-     */
-    public void start(){
-        isServiceRunning = true;
-        Intent mIntent = new Intent(mContext,ArcWindowService.class);
-        mContext.startService(mIntent);
+    public void start(String sessionId){
+        if(arcVoice != null){
+            arcVoice.joinSession(sessionId);
+        }
     }
-
     /**
      * show ArcVoiceHelper
      */
     public void show(){
-        if(isServiceRunning){
-            ArcWindowManager.createSmallWindow(mContext);
-        }else{
-            Toast.makeText(mContext,"start ArcVoiceHelper first!!",Toast.LENGTH_SHORT).show();
-        }
+        ArcWindowManager.createSmallWindow(mContext);
     }
     /**
      * hidden ArcVoiceHelper
@@ -81,31 +74,65 @@ public class ArcVoiceHelper {
         ArcWindowManager.removeSmallWindow(mContext);
     }
 
-    /**
-     * stop ArcVoiceHelper
-     */
     public void stop(){
-        hidden();
-        isServiceRunning = false;
-        Intent intent = new Intent(mContext, ArcWindowService.class);
-        mContext.stopService(intent);
+        if(arcVoice != null){
+            arcVoice.leaveSession();
+        }
     }
 
-    private Handler mainThreadHandler;
+    public void muteMyself(){
+        if(arcVoice != null){
+            arcVoice.muteSelf();
+        }
+    }
+
+    public void unMuteMyself(){
+        if(arcVoice != null){
+            arcVoice.unmuteSelf();
+        }
+    }
+
+    public void muteOthers(){
+        if(arcVoice != null){
+            arcVoice.muteOthers();
+        }
+    }
+
+    public void unMuteOthers(){
+        if(arcVoice != null){
+            arcVoice.unmuteOthers();
+        }
+    }
+
+    /**
+     * 显示用户名称
+     */
+    public void showUserName(){
+
+    }
+
+    /**
+     * 隐藏用户名称
+     */
+    public void hiddenUserName(){
+
+    }
 
     private ArcVoice arcVoice;
     private ArcVoiceEventHandler eventHandler;
 
-    private void setupArc(String appId,String appCredentials,ArcRegion arcRegion,String userId){
+    private void setupArc(){
         eventHandler = new ArcVoiceEventHandler() {
             @Override
             public void onCallConnected() {
                 LogUtils.e("onCallConnected");
+                //当前用户上线
             }
 
             @Override
             public void onCallDisconnected() {
                 LogUtils.e("onCallDisconnected");
+                //当前用户下线
             }
 
             @Override
@@ -114,8 +141,13 @@ public class ArcVoiceHelper {
             }
 
             @Override
-            public void onCallStatusUpdate(Map map) {
+            public void onCallStatusUpdate(final Map memberStatusMap) {
                 LogUtils.e("onCallStatusUpdate");
+                //TODO 更新用户状态
+                Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
+                while(callStatusItera.hasNext()){
+
+                }
             }
 
             @Override
@@ -123,7 +155,6 @@ public class ArcVoiceHelper {
                 LogUtils.e("onError");
             }
         };
-        arcVoice = ArcVoice.getInstance(mContext,appId,appCredentials,arcRegion,userId,eventHandler);
-
+        arcVoice = ArcVoice.getInstance(mContext,ARC_APP_ID,ARC_APP_CREDENTIALS,ARC_REGION,USER_ID,eventHandler);
     }
 }
