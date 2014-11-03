@@ -14,6 +14,10 @@ import android.widget.TextView;
 import com.wanmei.arcvoice.view.FloatWindowBigView;
 import com.wanmei.arcvoice.view.FloatWindowSmallView;
 
+/**
+ * ArcVoice悬浮框 界面类
+ * Created by liang on 14/10/31.
+ */
 public class ArcWindowManager {
 
 	/**
