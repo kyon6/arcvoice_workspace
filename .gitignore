@@ -226,3 +226,5 @@ pip-log.txt
 project.properties
 
 libs/
+
+ArcVoiceTest/.idea/workspace.xml
