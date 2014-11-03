@@ -6,12 +6,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.wanmei.arcvoice.ArcWindowManager;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.utils.DeviceUtils;
 
-public class FloatWindowSmallView extends LinearLayout {
+public class FloatWindowSmallView extends RelativeLayout {
 
     /**
      * 记录小悬浮窗的宽度
@@ -127,7 +128,7 @@ public class FloatWindowSmallView extends LinearLayout {
      */
     private void openBigWindow() {
         ArcWindowManager.createBigWindow(getContext());
-        ArcWindowManager.removeSmallWindow(getContext());
+//        ArcWindowManager.removeSmallWindow(getContext());
     }
 
 

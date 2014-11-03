@@ -8,6 +8,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
@@ -69,8 +70,8 @@ public class ArcWindowManager {
 				smallWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
 						| LayoutParams.FLAG_NOT_FOCUSABLE;
 				smallWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
-				smallWindowParams.width = FloatWindowSmallView.viewWidth;
-				smallWindowParams.height = FloatWindowSmallView.viewHeight;
+				smallWindowParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;//FloatWindowSmallView.viewWidth;
+				smallWindowParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 				smallWindowParams.x = screenWidth;
 				smallWindowParams.y = screenHeight / 2;
 			}
@@ -115,7 +116,11 @@ public class ArcWindowManager {
 				bigWindowParams.width = FloatWindowBigView.viewWidth;
 				bigWindowParams.height = FloatWindowBigView.viewHeight;
 			}
-			windowManager.addView(bigWindow, bigWindowParams);
+            bigWindow.setLayoutParams(bigWindowParams);
+            smallWindow.addView(bigWindow,0);
+//            smallWindow.requestLayout();
+//            smallWindow.invalidate();
+//			windowManager.addView(bigWindow, bigWindowParams);
 		}
 	}
 
