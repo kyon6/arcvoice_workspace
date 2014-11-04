@@ -71,7 +71,6 @@ public class FloatWindowSmallView extends RelativeLayout {
         View view = findViewById(R.id.small_window_layout);
         viewWidth = view.getLayoutParams().width;
         viewHeight = view.getLayoutParams().height;
-        TextView percentView = (TextView) findViewById(R.id.percent);
     }
 
     @Override
