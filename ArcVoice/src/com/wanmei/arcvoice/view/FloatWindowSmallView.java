@@ -113,7 +113,12 @@ public class FloatWindowSmallView extends RelativeLayout {
                         }
                         mParams.y = (int) (yInScreen - yInView);
                     }else{
-
+                        if(yInScreen < screenHeight/2){
+                            mParams.y = 0;
+                        }else{
+                            mParams.y = (int)(screenHeight - yInView);
+                        }
+                        mParams.x = (int)(xInScreen - xInView);
                     }
 
                     windowManager.updateViewLayout(this, mParams);

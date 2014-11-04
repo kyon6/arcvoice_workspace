@@ -77,6 +77,7 @@ public class ArcVoiceHelper {
     public void stop(){
         if(arcVoice != null){
             arcVoice.leaveSession();
+            arcVoice = null;
         }
         mInstance = null;
     }
