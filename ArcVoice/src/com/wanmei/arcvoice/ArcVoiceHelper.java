@@ -78,6 +78,7 @@ public class ArcVoiceHelper {
         if(arcVoice != null){
             arcVoice.leaveSession();
         }
+        mInstance = null;
     }
 
     public void muteMyself(){
