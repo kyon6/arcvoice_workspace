@@ -4,4 +4,6 @@
     <color name="dark">#FF222222</color>
     <color name="light">#FFEEEEEE</color>
 
+    <color name="transparent">#0000</color>
+    <drawable name="transparent">#0000</drawable>
 </resources>

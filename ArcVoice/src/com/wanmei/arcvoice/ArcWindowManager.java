@@ -21,7 +21,11 @@ import com.wanmei.arcvoice.view.FloatWindowSmallView;
  */
 public class ArcWindowManager {
 
-	/**
+    public static FloatWindowSmallView getSmallWindow() {
+        return smallWindow;
+    }
+
+    /**
 	 * 小悬浮窗View的实例
 	 */
 	private static FloatWindowSmallView smallWindow;
@@ -72,7 +76,7 @@ public class ArcWindowManager {
 				smallWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
 				smallWindowParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;//FloatWindowSmallView.viewWidth;
 				smallWindowParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-				smallWindowParams.x = screenWidth;
+				smallWindowParams.x = 0;
 				smallWindowParams.y = screenHeight / 2;
 			}
 			smallWindow.setParams(smallWindowParams);

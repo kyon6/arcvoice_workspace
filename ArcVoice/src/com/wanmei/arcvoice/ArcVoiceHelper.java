@@ -151,10 +151,14 @@ public class ArcVoiceHelper {
             public void onCallStatusUpdate(final Map memberStatusMap) {
                 LogUtils.e("onCallStatusUpdate");
                 //TODO 更新用户状态
+                ArcWindowManager.getSmallWindow().getDefaultBigView().getMembersAdapter().clear();
                 Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
                 while(callStatusItera.hasNext()){
                     MemberCallStatus status = callStatusItera.next();
-                   LogUtils.e(status.getUserId()+":"+ status.getUserState());
+                    LogUtils.e(status.getUserId()+":"+ status.getUserState());
+                    ArcWindowManager.getSmallWindow().getDefaultBigView().getMembersAdapter().add(status);
+                    callStatusItera.remove();
+                    ArcWindowManager.getSmallWindow().getDefaultBigView().getMembersAdapter().notifyDataSetChanged();
                 }
             }
 

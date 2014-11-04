@@ -1,13 +1,17 @@
 package com.wanmei.arcvoice.view;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.wanmei.arcvoice.ArcWindowManager;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.utils.DeviceUtils;
@@ -64,6 +68,23 @@ public class FloatWindowSmallView extends RelativeLayout {
      */
     private float yInView;
 
+    public DefaultFloatWindowBigView getDefaultBigView() {
+        return defaultBigView;
+    }
+
+    private DefaultFloatWindowBigView defaultBigView = new DefaultFloatWindowBigView(getContext());
+
+    public void setBigWindow(FloatWindowBigView bigWindow) {
+        this.bigWindow = bigWindow;
+    }
+
+    public View getBigWindow() {
+        return bigWindow;
+    }
+
+    private View bigWindow;
+    private WindowManager.LayoutParams bigWindowParams;
+
     public FloatWindowSmallView(Context context) {
         super(context);
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -71,6 +92,14 @@ public class FloatWindowSmallView extends RelativeLayout {
         View view = findViewById(R.id.small_window_layout);
         viewWidth = view.getLayoutParams().width;
         viewHeight = view.getLayoutParams().height;
+        View percentView = findViewById(R.id.hub);
+//        percentView.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openBigWindow();
+//            }
+//        });
+//        addBigView();
     }
 
     @Override
@@ -126,7 +155,7 @@ public class FloatWindowSmallView extends RelativeLayout {
             default:
                 break;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -151,8 +180,37 @@ public class FloatWindowSmallView extends RelativeLayout {
      * 打开大悬浮窗，同时关闭小悬浮窗。
      */
     private void openBigWindow() {
-        ArcWindowManager.createBigWindow(getContext());
-//        ArcWindowManager.removeSmallWindow(getContext());
+//        addBigView();
+        if (bigWindow!=null) {
+            removeView(bigWindow);
+            bigWindow = null;
+        }
+        else
+            addBigView();
+    }
+
+    private void addBigView() {
+//        int screenWidth = windowManager.getDefaultDisplay().getWidth();
+//        int screenHeight = windowManager.getDefaultDisplay().getHeight();
+        if (bigWindow == null) {
+//            bigWindow = new FloatWindowBigView(getContext());
+            bigWindow = defaultBigView;
+//            if (bigWindowParams == null) {
+//                bigWindowParams = new WindowManager.LayoutParams();
+//                bigWindowParams.x = screenWidth / 2 - FloatWindowBigView.viewWidth / 2;
+//                bigWindowParams.y = screenHeight / 2 - FloatWindowBigView.viewHeight / 2;
+//                bigWindowParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+//                bigWindowParams.format = PixelFormat.RGBA_8888;
+//                bigWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
+//                bigWindowParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                bigWindowParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//            }
+//            bigWindow.setLayoutParams(bigWindowParams);
+        }
+        setGravity(Gravity.CENTER);
+        addView(bigWindow, 0);
+        invalidate();
+        defaultBigView.getMembersAdapter().notifyDataSetChanged();
     }
 
 
