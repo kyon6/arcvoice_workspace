@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/small_window_layout"
+        android:layout_width="50dip"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        >
+    <com.wanmei.arcvoice.view.CircleImageView
+            android:id="@+id/hub"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/hugh"
+            app:border_width="2dp"
+            app:border_color="@color/light"/>
+
+    <ListView
+            android:id="@+id/mlistview"
+            android:layout_below="@+id/hub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:cacheColorHint="@color/transparent"
+            android:divider="@color/transparent"
+            android:dividerHeight="10dp"
+            android:listSelector="@color/transparent"
+        android:visibility="visible"
+            />
+</RelativeLayout>

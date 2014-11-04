@@ -14,6 +14,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 import com.wanmei.arcvoice.view.FloatWindowBigView;
 import com.wanmei.arcvoice.view.FloatWindowSmallView;
+import com.wanmei.arcvoice.view.HubDetailView;
 
 /**
  * ArcVoice悬浮框 界面类
@@ -21,14 +22,18 @@ import com.wanmei.arcvoice.view.FloatWindowSmallView;
  */
 public class ArcWindowManager {
 
-    public static FloatWindowSmallView getSmallWindow() {
+//    public static FloatWindowSmallView getSmallWindow() {
+//        return smallWindow;
+//    }
+    public static HubDetailView getSmallWindow() {
         return smallWindow;
     }
 
     /**
 	 * 小悬浮窗View的实例
 	 */
-	private static FloatWindowSmallView smallWindow;
+//	private static FloatWindowSmallView smallWindow;
+	private static HubDetailView smallWindow;
 
 	/**
 	 * 大悬浮窗View的实例
@@ -66,7 +71,7 @@ public class ArcWindowManager {
 		int screenWidth = windowManager.getDefaultDisplay().getWidth();
 		int screenHeight = windowManager.getDefaultDisplay().getHeight();
 		if (smallWindow == null) {
-			smallWindow = new FloatWindowSmallView(context);
+			smallWindow = new HubDetailView(context);
 			if (smallWindowParams == null) {
 				smallWindowParams = new LayoutParams();
 				smallWindowParams.type = LayoutParams.TYPE_PHONE;
