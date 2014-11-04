@@ -5,7 +5,6 @@
         android:id="@+id/small_window_layout"
         android:layout_width="50dip"
         android:layout_height="50dip"
-        android:background="@drawable/bg_small"
         >
     <com.wanmei.arcvoice.view.CircleImageView
             android:id="@+id/hub"
