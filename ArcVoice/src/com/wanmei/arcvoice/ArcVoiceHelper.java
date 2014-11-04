@@ -37,6 +37,8 @@ public class ArcVoiceHelper {
     private String ARC_APP_CREDENTIALS;
     private ArcRegion ARC_REGION;
     private String USER_ID;
+    private String USER_NAME;
+    private String USER_LOGO;
 
     /**
      * should call after init
@@ -46,11 +48,14 @@ public class ArcVoiceHelper {
      * @param arcRegion
      * @param userId
      */
-    public void init(String arcAppId,String appCredentials,ArcRegion arcRegion,String userId){
+    public void init(String arcAppId,String appCredentials,ArcRegion arcRegion,String userId
+            ,String userName,String userLogo){
         this.ARC_APP_ID = arcAppId;
         this.ARC_APP_CREDENTIALS = appCredentials;
         this.ARC_REGION = arcRegion;
         this.USER_ID = userId;
+        this.USER_NAME = userName;
+        this.USER_LOGO = userLogo;
 
         setupArc();
     }
