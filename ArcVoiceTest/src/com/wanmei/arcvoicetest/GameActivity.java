@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import com.talkray.arcvoice.ArcRegion;
 import com.wanmei.arcvoice.ArcVoiceHelper;
 
@@ -15,7 +16,7 @@ public class GameActivity extends Activity {
 
     public static final String ARC_APP_ID = "AFSIBQV2";
     public static final String ARC_APP_CREDENTIALS = "EP95V2XMWK1OCZVQNVCYIHBFLY1XGYWG";
-    public static final ArcRegion ARC_REGION = ArcRegion.BEIJING;
+    public static final ArcRegion ARC_REGION = ArcRegion.VIRGINIA;
 
     public static void start(Context context,String sessionId,String userId){
         Intent mIntent = new Intent(context,GameActivity.class);
@@ -29,6 +30,7 @@ public class GameActivity extends Activity {
     String mSessionId;
     String mUserId;
 
+    Button mChatBtn;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +39,12 @@ public class GameActivity extends Activity {
         mSessionId = getIntent().getStringExtra("sessionId");
         mUserId = getIntent().getStringExtra("userId");
 
-        (findViewById(R.id.btnChat)).setOnClickListener(new View.OnClickListener() {
+        mChatBtn = (Button)findViewById(R.id.btnChat);
+        mChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mHelper.start(mSessionId);
+                mChatBtn.setVisibility(View.INVISIBLE);
             }
         });
         mHelper = ArcVoiceHelper.getInstance(getApplicationContext());

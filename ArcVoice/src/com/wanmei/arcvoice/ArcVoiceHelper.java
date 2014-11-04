@@ -147,7 +147,8 @@ public class ArcVoiceHelper {
                 //TODO 更新用户状态
                 Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
                 while(callStatusItera.hasNext()){
-
+                    MemberCallStatus status = callStatusItera.next();
+                   LogUtils.e(status.getUserId()+":"+ status.getUserState());
                 }
             }
 
