@@ -83,15 +83,16 @@ public class HubDetailView extends RelativeLayout {
 //                isDrag = !isDrag;
                 LogUtils.e("HubView click!");
 //                Toast.makeText(getContext(),"hub click!",Toast.LENGTH_SHORT).show();
-                if (isListViewShow) {
-                    ArcVoiceHelper.getInstance(getContext()).min();
-                    mListView.setVisibility(View.GONE);
-                    isListViewShow = false;
-                } else {
-                    ArcVoiceHelper.getInstance(getContext()).max();
-                    mListView.setVisibility(View.VISIBLE);
-                    isListViewShow = true;
-                }
+//                if (isListViewShow) {
+//                    ArcVoiceHelper.getInstance(getContext()).hiddenAvatars();
+//                    mListView.setVisibility(View.GONE);
+//                    isListViewShow = false;
+//                } else {
+//                    ArcVoiceHelper.getInstance(getContext()).showAvatars();
+//                    mListView.setVisibility(View.VISIBLE);
+//                    isListViewShow = true;
+//                }
+                ArcVoiceHelper.getInstance(getContext()).doShowAvatars();
             }
         });
         mHubView.setOnLongClickListener(new OnLongClickListener() {
@@ -131,7 +132,14 @@ public class HubDetailView extends RelativeLayout {
 //    }
 
     public void updateAdapter(List<Player> list) {
-        membersAdapter.update(list);
+        if(list == null){
+            membersAdapter.clear();
+        }else{
+            membersAdapter.setNotifyOnChange(false);
+            membersAdapter.clear();
+            membersAdapter.setNotifyOnChange(true);
+            membersAdapter.addAll(list);
+        }
     }
 
     @Override

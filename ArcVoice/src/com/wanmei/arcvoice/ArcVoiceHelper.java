@@ -28,8 +28,6 @@ public class ArcVoiceHelper {
     private static ArcVoiceHelper mInstance = null;
     private Context mContext;
 
-    private Handler mainThreadHandler;
-
     /**
      * params needed
      */
@@ -40,10 +38,17 @@ public class ArcVoiceHelper {
 
     private boolean isMuteMyself = false;
     private boolean isMuteOthers = false;
+    private boolean isAvatarShow = true;//默认显示头像
+    /**
+     * 用来记录头像是否显示
+     * 如果头像从没显示到显示，立马更新adapter
+     * 如果头像一直显示，则延迟更新adapter
+     */
+    private boolean isStatusUpdateRunning = false;
     /**
      * record user's name and avatar
      */
-    private Map<String, Player> mPlayerList;
+    private Map<String, Player> mPlayerInfoList;
 
     /**
      * ArcVoice and ArcVoiceEventHandler useed to talk to the ArcVoiceSDK
@@ -78,7 +83,7 @@ public class ArcVoiceHelper {
         this.ARC_APP_CREDENTIALS = appCredentials;
         this.ARC_REGION = arcRegion;
         this.USER_ID = userId;
-        this.mPlayerList = new HashMap<String, Player>();
+        this.mPlayerInfoList = new HashMap<String, Player>();
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
         setupArc();
     }
@@ -93,7 +98,7 @@ public class ArcVoiceHelper {
      * show ArcVoice HUD
      */
     public void show() {
-        ArcWindowManager.createSmallWindow(mContext);
+        ArcWindowManager.createHubDetailWindow(mContext);
     }
 
     /**
@@ -101,22 +106,55 @@ public class ArcVoiceHelper {
      * include the Arc Icon and user avatars
      */
     public void hidden() {
-        ArcWindowManager.removeBigWindow(mContext);
-        ArcWindowManager.removeSmallWindow(mContext);
+        ArcWindowManager.removeHubDetailWindow(mContext);
+    }
+
+    /**
+     * stop ArcVoiceHelper
+     */
+    public void stop() {
+        if (arcVoice != null) {
+            arcVoice.leaveSession();
+            arcVoice = null;
+        }
+        mInstance = null;
+    }
+
+    /**
+     * show or hidden avatars
+     */
+    public void doShowAvatars(){
+        if(isAvatarShow) {
+            hiddenAvatars();
+        }else{
+            showAvatars();
+        }
     }
 
     /**
      * show user avatars
      */
-    public void max() {
-        //todo
+    public void showAvatars() {
+        if(isAvatarShow)
+            return;
+
+        isAvatarShow = true;
     }
 
     /**
      * hidden user avatars
      */
-    public void min() {
-        //todo
+    public void hiddenAvatars() {
+        if(!isAvatarShow)
+            return;
+
+        isAvatarShow = false;
+
+        mainThreadHandler.removeCallbacks(runnable);
+        mPlayerList = null;
+        mainThreadHandler.post(runnable);
+
+        isStatusUpdateRunning = false;
     }
 
     /**
@@ -140,17 +178,6 @@ public class ArcVoiceHelper {
     public String getUserId(){
         return USER_ID;
     }
-    /**
-     * stop ArcVoiceHelper
-     */
-    public void stop() {
-        if (arcVoice != null) {
-            arcVoice.leaveSession();
-            arcVoice = null;
-        }
-        mInstance = null;
-    }
-
     /**
      * mute all
      */
@@ -266,7 +293,6 @@ public class ArcVoiceHelper {
 
             @Override
             public void onCallStatusUpdate(final Map memberStatusMap) {
-                LogUtils.e("onCallStatusUpdate");
                 // 更新用户状态
 //                mainThreadHandler.post(new Runnable() {
 //                    @Override
@@ -275,36 +301,37 @@ public class ArcVoiceHelper {
 //                        while(callStatusItera.hasNext()){
 //                            MemberCallStatus status = callStatusItera.next();
 //                            LogUtils.e(status.getUserId()+":"+ status.getUserState());
-//                            ArcWindowManager.getSmallWindow().getMembersAdapter().add(status);
+//                            ArcWindowManager.getHubDetailView().getMembersAdapter().add(status);
 //                            callStatusItera.remove();
 //                        }
 //                    }
 //                });
-                final List<Player> mList = new ArrayList<Player>();
-                Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
+                if(isAvatarShow){
+                    LogUtils.e("onCallStatusUpdate");
+                    mPlayerList = new ArrayList<Player>();
+                    Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
 
-                Player mPlayer = null;
-                while (callStatusItera.hasNext()) {
-                    MemberCallStatus status = callStatusItera.next();
-                    Player player = new Player();
-                    player.setUserId(status.getUserId());
-                    player.setUserState(status.getUserState());
-                    if (mPlayerList.get(status.getUserId()) != null) {
-                        mPlayer = mPlayerList.get(status.getUserId());
-                        player.setUserName(mPlayer.getUserName());
-                        player.setUserAvatar(mPlayer.getUserAvatar());
-                    }
-                    mList.add(player);
-                }
-
-                mainThreadHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (ArcWindowManager.getSmallWindow() != null) {
-                            ArcWindowManager.getSmallWindow().updateAdapter(mList);
+                    Player mPlayer = null;
+                    while (callStatusItera.hasNext()) {
+                        MemberCallStatus status = callStatusItera.next();
+                        Player player = new Player();
+                        player.setUserId(status.getUserId());
+                        player.setUserState(status.getUserState());
+                        if (mPlayerInfoList.get(status.getUserId()) != null) {
+                            mPlayer = mPlayerInfoList.get(status.getUserId());
+                            player.setUserName(mPlayer.getUserName());
+                            player.setUserAvatar(mPlayer.getUserAvatar());
                         }
+                        mPlayerList.add(player);
                     }
-                });
+
+                    if(isStatusUpdateRunning){
+                        mainThreadHandler.postDelayed(runnable, 1000);
+                    }else{
+                        mainThreadHandler.post(runnable);
+                        isStatusUpdateRunning = true;
+                    }
+                }
             }
 
             @Override
@@ -314,4 +341,16 @@ public class ArcVoiceHelper {
         };
         arcVoice = ArcVoice.getInstance(mContext, ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, USER_ID, eventHandler);
     }
+
+    private Handler mainThreadHandler;
+    private List<Player> mPlayerList;
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if(ArcWindowManager.getHubDetailView() != null){
+                ArcWindowManager.getHubDetailView().updateAdapter(mPlayerList);
+            }
+        }
+    };
 }

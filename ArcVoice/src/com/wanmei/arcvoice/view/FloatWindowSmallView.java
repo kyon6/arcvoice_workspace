@@ -74,9 +74,9 @@ public class FloatWindowSmallView extends RelativeLayout {
 
     private DefaultFloatWindowBigView defaultBigView = new DefaultFloatWindowBigView(getContext());
 
-    public void setBigWindow(FloatWindowBigView bigWindow) {
-        this.bigWindow = bigWindow;
-    }
+//    public void setBigWindow(FloatWindowBigView bigWindow) {
+//        this.bigWindow = bigWindow;
+//    }
 
     public View getBigWindow() {
         return bigWindow;

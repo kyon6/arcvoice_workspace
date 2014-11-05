@@ -74,12 +74,4 @@ public class MembersAdapter extends ArrayAdapter<Player> {
         });
         return v;
     }
-
-    public void update(List plays) {
-        setNotifyOnChange(false);
-        clear();
-        setNotifyOnChange(true);
-        addAll(plays);
-    }
-
 }
