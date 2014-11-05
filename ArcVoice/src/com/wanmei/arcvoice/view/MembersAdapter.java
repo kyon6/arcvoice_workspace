@@ -7,10 +7,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.talkray.arcvoice.MemberCallStatus;
 import com.wanmei.arcvoice.R;
+import com.wanmei.arcvoice.model.Player;
 
-public class MembersAdapter extends ArrayAdapter<MemberCallStatus> {
+import java.util.List;
+
+public class MembersAdapter extends ArrayAdapter<Player> {
 
 
     public MembersAdapter(Context context, int layoutResourceId, int textViewResourceId) {
@@ -21,7 +23,7 @@ public class MembersAdapter extends ArrayAdapter<MemberCallStatus> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = super.getView(position, null, parent);
 
-        MemberCallStatus memberStatus = this.getItem(position);
+        Player player = this.getItem(position);
 
         TextView nameView = (TextView) v.findViewById(R.id.playerName);
         ImageView avatarView = (ImageView) v.findViewById(R.id.avatar);
@@ -30,26 +32,34 @@ public class MembersAdapter extends ArrayAdapter<MemberCallStatus> {
         // getUserId() will return the unique userId for that client.
         // getUserState() will return an enum for the current state of that user.
 
-        nameView.setText(memberStatus.getUserId());
+        nameView.setText(player.getUserId());
 
-        switch(memberStatus.getUserState()) {
+        switch (player.getUserState()) {
             case CONNECTED:
                 // Connected refers to users who are on the voice session, but not currently speaking.
-                avatarView.setImageResource(R.drawable.connected);
+                avatarView.setBackgroundResource(R.drawable.connected);
                 break;
 
             case DISCONNECTED:
                 // Disconnected means the user is not on the voice session and will not hear any sound.
-                avatarView.setImageResource(R.drawable.disconnected);
+                avatarView.setBackgroundResource(R.drawable.disconnected);
                 break;
 
             case SPEAKING:
                 // Speaking means the user is currently connected and talking on the voice session.
-                avatarView.setImageResource(R.drawable.talking);
+                avatarView.setBackgroundResource(R.drawable.talking);
                 break;
         }
 
+
         return v;
+    }
+
+    public void update(List plays) {
+        setNotifyOnChange(false);
+        clear();
+        setNotifyOnChange(true);
+        addAll(plays);
     }
 
 }

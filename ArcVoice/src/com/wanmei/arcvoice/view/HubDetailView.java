@@ -10,16 +10,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.talkray.arcvoice.MemberCallStatus;
-import com.talkray.arcvoice.UserState;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.model.Player;
 import com.wanmei.arcvoice.utils.DeviceUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class HubDetailView extends RelativeLayout {
 
@@ -120,10 +116,10 @@ public class HubDetailView extends RelativeLayout {
         });
         membersAdapter = new MembersAdapter(getContext(), R.layout.voice_member, R.id.playerName);
         //test
-        MemberCallStatus status = new MemberCallStatus("12", UserState.CONNECTED);
-        membersAdapter.add(status);
-        MemberCallStatus status1 = new MemberCallStatus("13", UserState.CONNECTED);
-        membersAdapter.add(status1);
+//        MemberCallStatus status = new MemberCallStatus("12", UserState.CONNECTED);
+//        membersAdapter.add(status);
+//        MemberCallStatus status1 = new MemberCallStatus("13", UserState.CONNECTED);
+//        membersAdapter.add(status1);
         mListView.setAdapter(membersAdapter);
     }
 
@@ -131,7 +127,9 @@ public class HubDetailView extends RelativeLayout {
 //        return membersAdapter;
 //    }
 
-    public void updateAdapter(List<Player> list){}
+    public void updateAdapter(List<Player> list) {
+        membersAdapter.update(list);
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
