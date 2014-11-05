@@ -1,9 +1,5 @@
 package com.wanmei.arcvoice;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -11,9 +7,8 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.widget.TextView;
+
 import com.wanmei.arcvoice.view.FloatWindowBigView;
-import com.wanmei.arcvoice.view.FloatWindowSmallView;
 import com.wanmei.arcvoice.view.HubDetailView;
 
 /**
@@ -22,43 +17,38 @@ import com.wanmei.arcvoice.view.HubDetailView;
  */
 public class ArcWindowManager {
 
-//    public static FloatWindowSmallView getSmallWindow() {
-//        return smallWindow;
-//    }
-    public static HubDetailView getSmallWindow() {
-        return smallWindow;
-    }
-
     /**
 	 * 小悬浮窗View的实例
 	 */
 //	private static FloatWindowSmallView smallWindow;
 	private static HubDetailView smallWindow;
+    /**
+     * 大悬浮窗View的实例
+     */
+    private static FloatWindowBigView bigWindow;
+    /**
+     * 小悬浮窗View的参数
+     */
+    private static LayoutParams smallWindowParams;
+    /**
+     * 大悬浮窗View的参数
+     */
+    private static LayoutParams bigWindowParams;
+    /**
+     * 用于控制在屏幕上添加或移除悬浮窗
+     */
+    private static WindowManager mWindowManager;
+    /**
+     * 用于获取手机可用内存
+     */
+    private static ActivityManager mActivityManager;
 
-	/**
-	 * 大悬浮窗View的实例
-	 */
-	private static FloatWindowBigView bigWindow;
-
-	/**
-	 * 小悬浮窗View的参数
-	 */
-	private static LayoutParams smallWindowParams;
-
-	/**
-	 * 大悬浮窗View的参数
-	 */
-	private static LayoutParams bigWindowParams;
-
-	/**
-	 * 用于控制在屏幕上添加或移除悬浮窗
-	 */
-	private static WindowManager mWindowManager;
-
-	/**
-	 * 用于获取手机可用内存
-	 */
-	private static ActivityManager mActivityManager;
+    //    public static FloatWindowSmallView getSmallWindow() {
+//        return smallWindow;
+//    }
+    public static HubDetailView getSmallWindow() {
+        return smallWindow;
+    }
 
 	/**
 	 * 创建一个小悬浮窗。初始位置为屏幕的右部中间位置。
@@ -78,8 +68,8 @@ public class ArcWindowManager {
 				smallWindowParams.format = PixelFormat.RGBA_8888;
 				smallWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
 						| LayoutParams.FLAG_NOT_FOCUSABLE;
-				smallWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
-				smallWindowParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;//FloatWindowSmallView.viewWidth;
+                smallWindowParams.gravity = Gravity.START | Gravity.TOP;
+                smallWindowParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;//FloatWindowSmallView.viewWidth;
 				smallWindowParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 				smallWindowParams.x = 0;
 				smallWindowParams.y = screenHeight / 2;
@@ -121,16 +111,16 @@ public class ArcWindowManager {
 				bigWindowParams.y = screenHeight / 2 - FloatWindowBigView.viewHeight / 2;
 				bigWindowParams.type = LayoutParams.TYPE_PHONE;
 				bigWindowParams.format = PixelFormat.RGBA_8888;
-				bigWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
-				bigWindowParams.width = FloatWindowBigView.viewWidth;
-				bigWindowParams.height = FloatWindowBigView.viewHeight;
-			}
+                bigWindowParams.gravity = Gravity.START | Gravity.TOP;
+                bigWindowParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                bigWindowParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            }
             bigWindow.setLayoutParams(bigWindowParams);
-            smallWindow.addView(bigWindow,0);
+//            smallWindow.addView(bigWindow,0);
 //            smallWindow.requestLayout();
 //            smallWindow.invalidate();
-//			windowManager.addView(bigWindow, bigWindowParams);
-		}
+            windowManager.addView(bigWindow, bigWindowParams);
+        }
 	}
 
 	/**

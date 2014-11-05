@@ -1,11 +1,15 @@
 package com.wanmei.arcvoice.view;
 
 import android.content.Context;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
 import com.talkray.arcvoice.MemberCallStatus;
 import com.talkray.arcvoice.UserState;
 import com.wanmei.arcvoice.R;
@@ -23,54 +27,44 @@ public class HubDetailView extends RelativeLayout {
      * 记录小悬浮窗的高度
      */
     public static int viewHeight;
-
+    View mMainView;
+    View mHubView;
+    ListView mListView;
+    boolean isListViewShow = false;
+    boolean isDrag = false;
     /**
      * 用于更新小悬浮窗的位置
      */
     private WindowManager windowManager;
-
     /**
      * 小悬浮窗的参数
      */
     private WindowManager.LayoutParams mParams;
-
     /**
      * 记录当前手指位置在屏幕上的横坐标值
      */
     private float xInScreen;
-
     /**
      * 记录当前手指位置在屏幕上的纵坐标值
      */
     private float yInScreen;
-
     /**
      * 记录手指按下时在屏幕上的横坐标的值
      */
     private float xDownInScreen;
-
     /**
      * 记录手指按下时在屏幕上的纵坐标的值
      */
     private float yDownInScreen;
-
     /**
      * 记录手指按下时在小悬浮窗的View上的横坐标的值
      */
     private float xInView;
-
     /**
      * 记录手指按下时在小悬浮窗的View上的纵坐标的值
      */
     private float yInView;
-
-
-    View mMainView;
-    View mHubView;
-    ListView mListView;
     private MembersAdapter membersAdapter;
-
-    boolean isListViewShow = false;
 
     public HubDetailView(Context context) {
         super(context);
@@ -87,10 +81,10 @@ public class HubDetailView extends RelativeLayout {
 //                isDrag = !isDrag;
                 LogUtils.e("HubView click!");
 //                Toast.makeText(getContext(),"hub click!",Toast.LENGTH_SHORT).show();
-                if(isListViewShow){
-                    mListView.setVisibility(View.INVISIBLE);
+                if (isListViewShow) {
+                    mListView.setVisibility(View.GONE);
                     isListViewShow = false;
-                }else{
+                } else {
                     mListView.setVisibility(View.VISIBLE);
                     isListViewShow = true;
                 }
@@ -104,7 +98,7 @@ public class HubDetailView extends RelativeLayout {
                 return true;
             }
         });
-        mListView = (ListView)findViewById(R.id.mlistview);
+        mListView = (ListView) findViewById(R.id.mlistview);
 //        mListView.setOnTouchListener(new OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View v, MotionEvent event) {
@@ -116,7 +110,7 @@ public class HubDetailView extends RelativeLayout {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(),"item click:" + position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "item click:" + position, Toast.LENGTH_SHORT).show();
             }
         });
         membersAdapter = new MembersAdapter(getContext(), R.layout.voice_member, R.id.playerName);
@@ -128,19 +122,18 @@ public class HubDetailView extends RelativeLayout {
         mListView.setAdapter(membersAdapter);
     }
 
-    public MembersAdapter getMembersAdapter(){
+    public MembersAdapter getMembersAdapter() {
         return membersAdapter;
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if(isDrag){
+        if (isDrag) {
             return onTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
     }
 
-    boolean isDrag = false;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {

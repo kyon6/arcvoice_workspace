@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.talkray.arcvoice.MemberCallStatus;
 import com.wanmei.arcvoice.R;
 
-import java.util.Collection;
-
 public class MembersAdapter extends ArrayAdapter<MemberCallStatus> {
 
 
@@ -21,13 +19,9 @@ public class MembersAdapter extends ArrayAdapter<MemberCallStatus> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        View v = super.getView(position, null, parent);
 
         MemberCallStatus memberStatus = this.getItem(position);
-
-        View v = convertView;
-        if (v == null) {
-            v = super.getView(position, convertView, parent);
-        }
 
         TextView nameView = (TextView) v.findViewById(R.id.playerName);
         ImageView avatarView = (ImageView) v.findViewById(R.id.avatar);
