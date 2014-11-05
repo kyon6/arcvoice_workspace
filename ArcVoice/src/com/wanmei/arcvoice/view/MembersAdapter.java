@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.model.Player;
 
@@ -61,6 +61,17 @@ public class MembersAdapter extends ArrayAdapter<Player> {
         }
 
         ImageLoader.getInstance().displayImage(player.getUserAvatar(), avatarView, options);
+        avatarView.setTag(position);
+        avatarView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (v.getTag().equals(ArcVoiceHelper.getInstance(getContext()).getUserId())) {
+                    ArcVoiceHelper.getInstance(getContext()).doMuteMyself();
+                } else
+                    ArcVoiceHelper.getInstance(getContext()).doMuteOthers();
+                return true;
+            }
+        });
         return v;
     }
 

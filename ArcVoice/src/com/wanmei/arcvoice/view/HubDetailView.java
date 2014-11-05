@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.model.Player;
 import com.wanmei.arcvoice.utils.DeviceUtils;
@@ -83,9 +84,11 @@ public class HubDetailView extends RelativeLayout {
                 LogUtils.e("HubView click!");
 //                Toast.makeText(getContext(),"hub click!",Toast.LENGTH_SHORT).show();
                 if (isListViewShow) {
+                    ArcVoiceHelper.getInstance(getContext()).min();
                     mListView.setVisibility(View.GONE);
                     isListViewShow = false;
                 } else {
+                    ArcVoiceHelper.getInstance(getContext()).max();
                     mListView.setVisibility(View.VISIBLE);
                     isListViewShow = true;
                 }
