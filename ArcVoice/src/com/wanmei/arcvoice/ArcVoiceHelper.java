@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * ArcVoice悬浮框 主工具类
+ * ArcVoice HUD
  * Created by liang on 14/10/31.
  */
 public class ArcVoiceHelper {
@@ -20,6 +20,7 @@ public class ArcVoiceHelper {
 
     private static ArcVoiceHelper mInstance = null;
     private Context mContext;
+    private Handler mainThreadHandler;
 
     public static ArcVoiceHelper getInstance(Context context){
         if(mInstance == null){
@@ -31,6 +32,7 @@ public class ArcVoiceHelper {
 
     private ArcVoiceHelper(Context context){
         this.mContext = context;
+        this.mainThreadHandler = new Handler();
     }
 
     private String ARC_APP_ID;
@@ -66,19 +68,50 @@ public class ArcVoiceHelper {
         }
     }
     /**
-     * show ArcVoiceHelper
+     * show ArcVoice HUD
      */
     public void show(){
         ArcWindowManager.createSmallWindow(mContext);
     }
     /**
-     * hidden ArcVoiceHelper
+     * hidden ArcVoice HUD
+     * include the Arc Icon and user avatars
      */
     public void hidden(){
         ArcWindowManager.removeBigWindow(mContext);
         ArcWindowManager.removeSmallWindow(mContext);
     }
 
+    /**
+     * show user avatars
+     */
+    public void max(){
+        //todo
+    }
+    /**
+     * hidden user avatars
+     */
+    public void min(){
+        //todo
+    }
+
+    /**
+     * show user's name
+     */
+    public void showUserNames(){
+        //todo
+    }
+
+    /**
+     * hidden user's name
+     */
+    public void hiddenUserNames(){
+        //todo
+    }
+
+    /**
+     * stop ArcVoiceHelper
+     */
     public void stop(){
         if(arcVoice != null){
             arcVoice.leaveSession();
@@ -87,42 +120,60 @@ public class ArcVoiceHelper {
         mInstance = null;
     }
 
+    /**
+     * mute all
+     */
+    public void muteAll(){
+        if(arcVoice != null){
+            arcVoice.muteSelf();
+            arcVoice.muteOthers();
+        }
+    }
+
+    /**
+     * unmute all
+     */
+    public void unMuteAll(){
+        if(arcVoice != null){
+            arcVoice.unmuteSelf();
+            arcVoice.unmuteOthers();
+        }
+    }
+
+    /**
+     * mute myself
+     */
     public void muteMyself(){
         if(arcVoice != null){
             arcVoice.muteSelf();
         }
     }
 
+    /**
+     * umnute myself
+     */
     public void unMuteMyself(){
         if(arcVoice != null){
             arcVoice.unmuteSelf();
         }
     }
 
+    /**
+     * mute others
+     */
     public void muteOthers(){
         if(arcVoice != null){
             arcVoice.muteOthers();
         }
     }
 
+    /**
+     * unmute others
+     */
     public void unMuteOthers(){
         if(arcVoice != null){
             arcVoice.unmuteOthers();
         }
-    }
-
-    /**
-     * 显示用户名称
-     */
-    public void showUserName(){
-
-    }
-
-    /**
-     * 隐藏用户名称
-     */
-    public void hiddenUserName(){
-
     }
 
     private ArcVoice arcVoice;
@@ -150,15 +201,19 @@ public class ArcVoiceHelper {
             @Override
             public void onCallStatusUpdate(final Map memberStatusMap) {
                 LogUtils.e("onCallStatusUpdate");
-                //TODO 更新用户状态
-                //ArcWindowManager.getSmallWindow().getMembersAdapter().clear();
-                Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
-                while(callStatusItera.hasNext()){
-                    MemberCallStatus status = callStatusItera.next();
-                    LogUtils.e(status.getUserId()+":"+ status.getUserState());
-                    ArcWindowManager.getSmallWindow().getMembersAdapter().add(status);
-                    callStatusItera.remove();
-                }
+                // 更新用户状态
+                mainThreadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
+                        while(callStatusItera.hasNext()){
+                            MemberCallStatus status = callStatusItera.next();
+                            LogUtils.e(status.getUserId()+":"+ status.getUserState());
+                            ArcWindowManager.getSmallWindow().getMembersAdapter().add(status);
+                            callStatusItera.remove();
+                        }
+                    }
+                });
             }
 
             @Override
