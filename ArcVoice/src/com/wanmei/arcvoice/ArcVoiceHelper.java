@@ -10,7 +10,10 @@ import com.wanmei.arcvoice.model.Player;
 import com.wanmei.arcvoice.utils.LogUtils;
 
 import java.lang.reflect.Member;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,7 +44,7 @@ public class ArcVoiceHelper {
     private String ARC_APP_CREDENTIALS;
     private ArcRegion ARC_REGION;
     private String USER_ID;
-    private SparseArray<Player> mPlayerList;
+    private Map<String,Player> mPlayerList;
     /**
      * should call after init
      * Arc appId and appCredentials assigned to the app.
@@ -55,7 +58,7 @@ public class ArcVoiceHelper {
         this.ARC_APP_CREDENTIALS = appCredentials;
         this.ARC_REGION = arcRegion;
         this.USER_ID = userId;
-        this.mPlayerList = new SparseArray<Player>();
+        this.mPlayerList = new HashMap<String, Player>();
 
         setupArc();
     }
@@ -200,18 +203,35 @@ public class ArcVoiceHelper {
             public void onCallStatusUpdate(final Map memberStatusMap) {
                 LogUtils.e("onCallStatusUpdate");
                 // 更新用户状态
-                mainThreadHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
-                        while(callStatusItera.hasNext()){
-                            MemberCallStatus status = callStatusItera.next();
-                            LogUtils.e(status.getUserId()+":"+ status.getUserState());
-                            ArcWindowManager.getSmallWindow().getMembersAdapter().add(status);
-                            callStatusItera.remove();
-                        }
+//                mainThreadHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
+//                        while(callStatusItera.hasNext()){
+//                            MemberCallStatus status = callStatusItera.next();
+//                            LogUtils.e(status.getUserId()+":"+ status.getUserState());
+//                            ArcWindowManager.getSmallWindow().getMembersAdapter().add(status);
+//                            callStatusItera.remove();
+//                        }
+//                    }
+//                });
+                List<Player> mList = new ArrayList<Player>();
+                Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
+
+                Player mPlayer = null;
+                while(callStatusItera.hasNext()){
+                    MemberCallStatus status = callStatusItera.next();
+                    Player player = new Player();
+                    player.setUserId(status.getUserId());
+                    player.setUserState(status.getUserState());
+                    if(mPlayerList.get(status.getUserId()) != null){
+                        mPlayer = mPlayerList.get(status.getUserId());
+                        player.setUserName(mPlayer.getUserName());
+                        player.setUserAvatar(mPlayer.getUserAvatar());
                     }
-                });
+                    mList.add(player);
+                }
+                ArcWindowManager.getSmallWindow().updateAdapter(mList);
             }
 
             @Override

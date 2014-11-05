@@ -48,7 +48,8 @@ public class GameActivity extends Activity {
             }
         });
         mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
-        mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, mUserId,"Leon","http://ecx.images-amazon.com/images/I/41X0uJ4jbcL._AC_UY370_SX420.jpg");
+        mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, mUserId);
+        //Leon","http://ecx.images-amazon.com/images/I/41X0uJ4jbcL._AC_UY370_SX420.jpg"
     }
 
     @Override

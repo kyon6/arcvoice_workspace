@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.talkray.arcvoice.MemberCallStatus;
 import com.talkray.arcvoice.UserState;
 import com.wanmei.arcvoice.R;
+import com.wanmei.arcvoice.model.Player;
 import com.wanmei.arcvoice.utils.DeviceUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
 
@@ -126,11 +127,11 @@ public class HubDetailView extends RelativeLayout {
         mListView.setAdapter(membersAdapter);
     }
 
-    public MembersAdapter getMembersAdapter() {
-        return membersAdapter;
-    }
+//    public MembersAdapter getMembersAdapter() {
+//        return membersAdapter;
+//    }
 
-    public void updateAdapter(List list){}
+    public void updateAdapter(List<Player> list){}
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
