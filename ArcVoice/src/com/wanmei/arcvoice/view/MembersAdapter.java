@@ -14,6 +14,8 @@ import com.wanmei.arcvoice.model.Player;
 
 import java.util.List;
 
+
+
 public class MembersAdapter extends ArrayAdapter<Player> {
     DisplayImageOptions options = new DisplayImageOptions.Builder()
             .showImageOnFail(R.drawable.connected)
@@ -33,7 +35,7 @@ public class MembersAdapter extends ArrayAdapter<Player> {
         Player player = this.getItem(position);
 
         TextView nameView = (TextView) v.findViewById(R.id.playerName);
-        ImageView avatarView = (ImageView) v.findViewById(R.id.avatar);
+        CircleImageView avatarView = (CircleImageView) v.findViewById(R.id.avatar);
 
         // Each MemberCallStatus object represents a single user of the current voice session.
         // getUserId() will return the unique userId for that client.
