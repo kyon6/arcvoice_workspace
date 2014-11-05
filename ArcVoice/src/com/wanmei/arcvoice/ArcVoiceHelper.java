@@ -50,7 +50,7 @@ public class ArcVoiceHelper {
     }
 
     /**
-     * should call after init
+     * MUST call first
      * Arc appId and appCredentials assigned to the app.
      *
      * @param arcAppId
@@ -118,6 +118,13 @@ public class ArcVoiceHelper {
         //todo
     }
 
+    /**
+     * get user id
+     * @return
+     */
+    public String getUserId(){
+        return USER_ID;
+    }
     /**
      * stop ArcVoiceHelper
      */
