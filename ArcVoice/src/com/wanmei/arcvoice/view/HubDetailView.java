@@ -16,6 +16,10 @@ import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.utils.DeviceUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class HubDetailView extends RelativeLayout {
 
     /**
@@ -125,6 +129,8 @@ public class HubDetailView extends RelativeLayout {
     public MembersAdapter getMembersAdapter() {
         return membersAdapter;
     }
+
+    public void updateAdapter(List list){}
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

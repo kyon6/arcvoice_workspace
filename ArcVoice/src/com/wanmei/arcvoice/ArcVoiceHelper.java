@@ -3,8 +3,10 @@ package com.wanmei.arcvoice;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.SparseArray;
 import android.widget.Toast;
 import com.talkray.arcvoice.*;
+import com.wanmei.arcvoice.model.Player;
 import com.wanmei.arcvoice.utils.LogUtils;
 
 import java.lang.reflect.Member;
@@ -39,9 +41,7 @@ public class ArcVoiceHelper {
     private String ARC_APP_CREDENTIALS;
     private ArcRegion ARC_REGION;
     private String USER_ID;
-    private String USER_NAME;
-    private String USER_LOGO;
-
+    private SparseArray<Player> mPlayerList;
     /**
      * should call after init
      * Arc appId and appCredentials assigned to the app.
@@ -50,14 +50,12 @@ public class ArcVoiceHelper {
      * @param arcRegion
      * @param userId
      */
-    public void init(String arcAppId,String appCredentials,ArcRegion arcRegion,String userId
-            ,String userName,String userLogo){
+    public void init(String arcAppId,String appCredentials,ArcRegion arcRegion,String userId){
         this.ARC_APP_ID = arcAppId;
         this.ARC_APP_CREDENTIALS = appCredentials;
         this.ARC_REGION = arcRegion;
         this.USER_ID = userId;
-        this.USER_NAME = userName;
-        this.USER_LOGO = userLogo;
+        this.mPlayerList = new SparseArray<Player>();
 
         setupArc();
     }
