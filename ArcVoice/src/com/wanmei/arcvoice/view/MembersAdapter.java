@@ -7,12 +7,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.model.Player;
 
 import java.util.List;
 
 public class MembersAdapter extends ArrayAdapter<Player> {
+    DisplayImageOptions options = new DisplayImageOptions.Builder()
+            .showImageOnFail(R.drawable.connected)
+            .showImageForEmptyUri(R.drawable.connected)
+            .showImageOnLoading(R.drawable.connected)
+            .build();
 
 
     public MembersAdapter(Context context, int layoutResourceId, int textViewResourceId) {
@@ -37,21 +44,21 @@ public class MembersAdapter extends ArrayAdapter<Player> {
         switch (player.getUserState()) {
             case CONNECTED:
                 // Connected refers to users who are on the voice session, but not currently speaking.
-                avatarView.setBackgroundResource(R.drawable.connected);
+                avatarView.setBackgroundResource(R.drawable.grey);
                 break;
 
             case DISCONNECTED:
                 // Disconnected means the user is not on the voice session and will not hear any sound.
-                avatarView.setBackgroundResource(R.drawable.disconnected);
+                avatarView.setBackgroundResource(R.drawable.red);
                 break;
 
             case SPEAKING:
                 // Speaking means the user is currently connected and talking on the voice session.
-                avatarView.setBackgroundResource(R.drawable.talking);
+                avatarView.setBackgroundResource(R.drawable.green);
                 break;
         }
 
-
+        ImageLoader.getInstance().displayImage(player.getUserAvatar(), avatarView, options);
         return v;
     }
 

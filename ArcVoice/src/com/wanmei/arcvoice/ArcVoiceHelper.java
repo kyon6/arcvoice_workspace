@@ -1,16 +1,17 @@
 package com.wanmei.arcvoice;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
-import android.util.SparseArray;
-import android.widget.Toast;
 
-import com.talkray.arcvoice.*;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.talkray.arcvoice.ArcRegion;
+import com.talkray.arcvoice.ArcVoice;
+import com.talkray.arcvoice.ArcVoiceEventHandler;
+import com.talkray.arcvoice.MemberCallStatus;
 import com.wanmei.arcvoice.model.Player;
 import com.wanmei.arcvoice.utils.LogUtils;
 
-import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,6 +28,18 @@ public class ArcVoiceHelper {
     private static ArcVoiceHelper mInstance = null;
     private Context mContext;
     private Handler mainThreadHandler;
+    private String ARC_APP_ID;
+    private String ARC_APP_CREDENTIALS;
+    private ArcRegion ARC_REGION;
+    private String USER_ID;
+    private Map<String, Player> mPlayerList;
+    private ArcVoice arcVoice;
+    private ArcVoiceEventHandler eventHandler;
+
+    private ArcVoiceHelper(Context context) {
+        this.mContext = context;
+        this.mainThreadHandler = new Handler();
+    }
 
     public static ArcVoiceHelper getInstance(Context context) {
         if (mInstance == null) {
@@ -35,17 +48,6 @@ public class ArcVoiceHelper {
 
         return mInstance;
     }
-
-    private ArcVoiceHelper(Context context) {
-        this.mContext = context;
-        this.mainThreadHandler = new Handler();
-    }
-
-    private String ARC_APP_ID;
-    private String ARC_APP_CREDENTIALS;
-    private ArcRegion ARC_REGION;
-    private String USER_ID;
-    private Map<String, Player> mPlayerList;
 
     /**
      * should call after init
@@ -62,7 +64,7 @@ public class ArcVoiceHelper {
         this.ARC_REGION = arcRegion;
         this.USER_ID = userId;
         this.mPlayerList = new HashMap<String, Player>();
-
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
         setupArc();
     }
 
@@ -182,9 +184,6 @@ public class ArcVoiceHelper {
             arcVoice.unmuteOthers();
         }
     }
-
-    private ArcVoice arcVoice;
-    private ArcVoiceEventHandler eventHandler;
 
     private void setupArc() {
         eventHandler = new ArcVoiceEventHandler() {

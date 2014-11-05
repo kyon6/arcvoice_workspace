@@ -3,6 +3,9 @@
 
     <color name="dark">#FF222222</color>
     <color name="light">#FFEEEEEE</color>
+    <color name="green">#0f0</color>
+    <color name="grey">#ccc</color>
+    <color name="red">#f00</color>
 
     <color name="transparent">#0000</color>
     <drawable name="transparent">#0000</drawable>
