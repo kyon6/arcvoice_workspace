@@ -27,12 +27,27 @@ public class ArcVoiceHelper {
 
     private static ArcVoiceHelper mInstance = null;
     private Context mContext;
+
     private Handler mainThreadHandler;
+
+    /**
+     * params needed
+     */
     private String ARC_APP_ID;
     private String ARC_APP_CREDENTIALS;
     private ArcRegion ARC_REGION;
     private String USER_ID;
+
+    private boolean isMuteMyself = false;
+    private boolean isMuteOthers = false;
+    /**
+     * record user's name and avatar
+     */
     private Map<String, Player> mPlayerList;
+
+    /**
+     * ArcVoice and ArcVoiceEventHandler useed to talk to the ArcVoiceSDK
+     */
     private ArcVoice arcVoice;
     private ArcVoiceEventHandler eventHandler;
 
@@ -156,10 +171,48 @@ public class ArcVoiceHelper {
         }
     }
 
+    public boolean isMuteMyself(){
+        return isMuteMyself;
+    }
+
+    public boolean isMuteOthers(){
+        return isMuteOthers;
+    }
+    /**
+     * mute or unmute myself
+     */
+    public void doMuteMyself(){
+        if(arcVoice == null)
+            return;
+
+        if(isMuteMyself){
+            unMuteMyself();
+            isMuteMyself = false;
+        }else{
+            muteMyself();
+            isMuteMyself = true;
+        }
+    }
+
+    /**
+     * mute or unmute others
+     */
+    public void doMuteOthers(){
+        if(arcVoice == null)
+            return;
+
+        if(isMuteOthers){
+            unMuteOthers();
+            isMuteOthers = false;
+        }else{
+            muteOthers();
+            isMuteOthers = true;
+        }
+    }
     /**
      * mute myself
      */
-    public void muteMyself() {
+    private void muteMyself() {
         if (arcVoice != null) {
             arcVoice.muteSelf();
         }
@@ -168,7 +221,7 @@ public class ArcVoiceHelper {
     /**
      * umnute myself
      */
-    public void unMuteMyself() {
+    private void unMuteMyself() {
         if (arcVoice != null) {
             arcVoice.unmuteSelf();
         }
@@ -177,7 +230,7 @@ public class ArcVoiceHelper {
     /**
      * mute others
      */
-    public void muteOthers() {
+    private void muteOthers() {
         if (arcVoice != null) {
             arcVoice.muteOthers();
         }
@@ -186,7 +239,7 @@ public class ArcVoiceHelper {
     /**
      * unmute others
      */
-    public void unMuteOthers() {
+    private void unMuteOthers() {
         if (arcVoice != null) {
             arcVoice.unmuteOthers();
         }
