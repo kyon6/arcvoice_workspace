@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.util.SparseArray;
 import android.widget.Toast;
+
 import com.talkray.arcvoice.*;
 import com.wanmei.arcvoice.model.Player;
 import com.wanmei.arcvoice.utils.LogUtils;
@@ -27,15 +28,15 @@ public class ArcVoiceHelper {
     private Context mContext;
     private Handler mainThreadHandler;
 
-    public static ArcVoiceHelper getInstance(Context context){
-        if(mInstance == null){
+    public static ArcVoiceHelper getInstance(Context context) {
+        if (mInstance == null) {
             mInstance = new ArcVoiceHelper(context);
         }
 
         return mInstance;
     }
 
-    private ArcVoiceHelper(Context context){
+    private ArcVoiceHelper(Context context) {
         this.mContext = context;
         this.mainThreadHandler = new Handler();
     }
@@ -44,16 +45,18 @@ public class ArcVoiceHelper {
     private String ARC_APP_CREDENTIALS;
     private ArcRegion ARC_REGION;
     private String USER_ID;
-    private Map<String,Player> mPlayerList;
+    private Map<String, Player> mPlayerList;
+
     /**
      * should call after init
      * Arc appId and appCredentials assigned to the app.
+     *
      * @param arcAppId
      * @param appCredentials
      * @param arcRegion
      * @param userId
      */
-    public void init(String arcAppId,String appCredentials,ArcRegion arcRegion,String userId){
+    public void init(String arcAppId, String appCredentials, ArcRegion arcRegion, String userId) {
         this.ARC_APP_ID = arcAppId;
         this.ARC_APP_CREDENTIALS = appCredentials;
         this.ARC_REGION = arcRegion;
@@ -63,22 +66,24 @@ public class ArcVoiceHelper {
         setupArc();
     }
 
-    public void start(String sessionId){
-        if(arcVoice != null){
+    public void start(String sessionId) {
+        if (arcVoice != null) {
             arcVoice.joinSession(sessionId);
         }
     }
+
     /**
      * show ArcVoice HUD
      */
-    public void show(){
+    public void show() {
         ArcWindowManager.createSmallWindow(mContext);
     }
+
     /**
      * hidden ArcVoice HUD
      * include the Arc Icon and user avatars
      */
-    public void hidden(){
+    public void hidden() {
         ArcWindowManager.removeBigWindow(mContext);
         ArcWindowManager.removeSmallWindow(mContext);
     }
@@ -86,35 +91,36 @@ public class ArcVoiceHelper {
     /**
      * show user avatars
      */
-    public void max(){
+    public void max() {
         //todo
     }
+
     /**
      * hidden user avatars
      */
-    public void min(){
+    public void min() {
         //todo
     }
 
     /**
      * show user's name
      */
-    public void showUserNames(){
+    public void showUserNames() {
         //todo
     }
 
     /**
      * hidden user's name
      */
-    public void hiddenUserNames(){
+    public void hiddenUserNames() {
         //todo
     }
 
     /**
      * stop ArcVoiceHelper
      */
-    public void stop(){
-        if(arcVoice != null){
+    public void stop() {
+        if (arcVoice != null) {
             arcVoice.leaveSession();
             arcVoice = null;
         }
@@ -124,8 +130,8 @@ public class ArcVoiceHelper {
     /**
      * mute all
      */
-    public void muteAll(){
-        if(arcVoice != null){
+    public void muteAll() {
+        if (arcVoice != null) {
             arcVoice.muteSelf();
             arcVoice.muteOthers();
         }
@@ -134,8 +140,8 @@ public class ArcVoiceHelper {
     /**
      * unmute all
      */
-    public void unMuteAll(){
-        if(arcVoice != null){
+    public void unMuteAll() {
+        if (arcVoice != null) {
             arcVoice.unmuteSelf();
             arcVoice.unmuteOthers();
         }
@@ -144,8 +150,8 @@ public class ArcVoiceHelper {
     /**
      * mute myself
      */
-    public void muteMyself(){
-        if(arcVoice != null){
+    public void muteMyself() {
+        if (arcVoice != null) {
             arcVoice.muteSelf();
         }
     }
@@ -153,8 +159,8 @@ public class ArcVoiceHelper {
     /**
      * umnute myself
      */
-    public void unMuteMyself(){
-        if(arcVoice != null){
+    public void unMuteMyself() {
+        if (arcVoice != null) {
             arcVoice.unmuteSelf();
         }
     }
@@ -162,8 +168,8 @@ public class ArcVoiceHelper {
     /**
      * mute others
      */
-    public void muteOthers(){
-        if(arcVoice != null){
+    public void muteOthers() {
+        if (arcVoice != null) {
             arcVoice.muteOthers();
         }
     }
@@ -171,8 +177,8 @@ public class ArcVoiceHelper {
     /**
      * unmute others
      */
-    public void unMuteOthers(){
-        if(arcVoice != null){
+    public void unMuteOthers() {
+        if (arcVoice != null) {
             arcVoice.unmuteOthers();
         }
     }
@@ -180,7 +186,7 @@ public class ArcVoiceHelper {
     private ArcVoice arcVoice;
     private ArcVoiceEventHandler eventHandler;
 
-    private void setupArc(){
+    private void setupArc() {
         eventHandler = new ArcVoiceEventHandler() {
             @Override
             public void onCallConnected() {
@@ -215,23 +221,31 @@ public class ArcVoiceHelper {
 //                        }
 //                    }
 //                });
-                List<Player> mList = new ArrayList<Player>();
+                final List<Player> mList = new ArrayList<Player>();
                 Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
 
                 Player mPlayer = null;
-                while(callStatusItera.hasNext()){
+                while (callStatusItera.hasNext()) {
                     MemberCallStatus status = callStatusItera.next();
                     Player player = new Player();
                     player.setUserId(status.getUserId());
                     player.setUserState(status.getUserState());
-                    if(mPlayerList.get(status.getUserId()) != null){
+                    if (mPlayerList.get(status.getUserId()) != null) {
                         mPlayer = mPlayerList.get(status.getUserId());
                         player.setUserName(mPlayer.getUserName());
                         player.setUserAvatar(mPlayer.getUserAvatar());
                     }
                     mList.add(player);
                 }
-                ArcWindowManager.getSmallWindow().updateAdapter(mList);
+
+                mainThreadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ArcWindowManager.getSmallWindow() != null) {
+                            ArcWindowManager.getSmallWindow().updateAdapter(mList);
+                        }
+                    }
+                });
             }
 
             @Override
@@ -239,6 +253,6 @@ public class ArcVoiceHelper {
                 LogUtils.e("onError");
             }
         };
-        arcVoice = ArcVoice.getInstance(mContext,ARC_APP_ID,ARC_APP_CREDENTIALS,ARC_REGION,USER_ID,eventHandler);
+        arcVoice = ArcVoice.getInstance(mContext, ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, USER_ID, eventHandler);
     }
 }
