@@ -12,16 +12,48 @@
         android:layout_width="40dip"
         android:layout_height="40dip"
         android:background="@drawable/grey"
+        android:layout_toRightOf="@+id/playerName_left"
+        android:layout_below="@+id/playerName_up"
         android:src="@drawable/connected"
         app:border_width="2dp" />
 
     <TextView
-        android:id="@+id/playerName"
+        android:id="@+id/playerName_right"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_toEndOf="@+id/avatar"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/avatar"
+        android:layout_centerVertical="true"
         android:gravity="center"
         android:text="player_name"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/playerName_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="player_name"
+        android:visibility="gone"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/playerName_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="player_name"
+        android:visibility="gone"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/playerName_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/avatar"
+        android:text="player_name"
+        android:visibility="gone"
         android:textSize="18sp" />
 
 </RelativeLayout>

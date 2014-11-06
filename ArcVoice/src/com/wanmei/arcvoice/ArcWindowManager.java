@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
 import com.wanmei.arcvoice.view.HubDetailView;
+import com.wanmei.arcvoice.view.MembersAdapter;
 
 /**
  * ArcVoice悬浮框 界面类

@@ -66,11 +66,23 @@ public class HubDetailView extends RelativeLayout {
      * 记录手指按下时在小悬浮窗的View上的纵坐标的值
      */
     private float yInView;
+    /**
+     * 屏幕宽度
+     */
+    private int screenWidth;
+    /**
+     * 屏幕高度
+     */
+    private int screenHeight;
+
     private MembersAdapter membersAdapter;
 
     public HubDetailView(Context context) {
         super(context);
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        screenWidth = windowManager.getDefaultDisplay().getWidth();
+        screenHeight = windowManager.getDefaultDisplay().getHeight();
+
         mMainView = LayoutInflater.from(context).inflate(R.layout.layout_hub_detail_view, this);
         View view = findViewById(R.id.small_window_layout);
         viewWidth = view.getLayoutParams().width;
@@ -80,18 +92,8 @@ public class HubDetailView extends RelativeLayout {
         mHubView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                isDrag = !isDrag;
                 LogUtils.e("HubView click!");
-//                Toast.makeText(getContext(),"hub click!",Toast.LENGTH_SHORT).show();
-//                if (isListViewShow) {
-//                    ArcVoiceHelper.getInstance(getContext()).hiddenAvatars();
-//                    mRecylerView.setVisibility(View.GONE);
-//                    isListViewShow = false;
-//                } else {
-//                    ArcVoiceHelper.getInstance(getContext()).showAvatars();
-//                    mRecylerView.setVisibility(View.VISIBLE);
-//                    isListViewShow = true;
-//                }
+                updateDirection();
                 ArcVoiceHelper.getInstance(getContext()).doShowAvatars();
             }
         });
@@ -124,29 +126,45 @@ public class HubDetailView extends RelativeLayout {
 //    public MembersAdapter getMembersAdapter() {
 //        return membersAdapter;
 //    }
-private void showDate() {
-    // 创建一个线性布局管理器
-    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-    // 设置垂直布局，目前仅支持LinearLayout(有垂直和横向)
-    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-    // 设置缓冲池最大循环使用view数
-    mRecylerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
-    // 设置布局管理器
-    mRecylerView.setLayoutManager(layoutManager);
-    // 创建Adapter，并指定数据集
-    membersAdapter = new MembersAdapter(getContext());
-    // 设置Adapter
-    mRecylerView.setAdapter(membersAdapter);
-    // 设置默认动画
-    mRecylerView.setItemAnimator(new DefaultItemAnimator());
-    // 还有下面这上三种动画FlipDownItemAnimator, SlideItemAnimator, FromTopItemAnimator
-}
+    private void showDate() {
+        // 创建一个线性布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        // 设置垂直布局，目前仅支持LinearLayout(有垂直和横向)
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        // 设置缓冲池最大循环使用view数
+        mRecylerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
+        // 设置布局管理器
+        mRecylerView.setLayoutManager(layoutManager);
+        // 创建Adapter，并指定数据集
+        membersAdapter = new MembersAdapter(getContext());
+        // 设置Adapter
+        mRecylerView.setAdapter(membersAdapter);
+        // 设置默认动画
+        mRecylerView.setItemAnimator(new DefaultItemAnimator());
+        // 还有下面这上三种动画FlipDownItemAnimator, SlideItemAnimator, FromTopItemAnimator
+    }
 
     public void updateAdapter(List<Player> list) {
         if (list == null) {
             membersAdapter.clear();
         } else {
             membersAdapter.setData(list);
+        }
+    }
+
+    public void updateDirection(){
+        if(mParams.x < screenWidth/2){
+            //todo change the hub align
+
+            //change the adapter align
+            membersAdapter.setDirection(MembersAdapter.Direction.RIGHT);
+            membersAdapter.notifyDataSetChanged();
+        }else{
+            //todo change the hub align
+
+            //change the adapter align
+            membersAdapter.setDirection(MembersAdapter.Direction.LEFT);
+            membersAdapter.notifyDataSetChanged();
         }
     }
 
@@ -182,12 +200,11 @@ private void showDate() {
 
                 } else {
                     /*
-                     * release the HUD will anchor to the left or right
-                     */
-                    /*int screenWidth = windowManager.getDefaultDisplay().getWidth();
+                     //靠边停靠
+                     //release the HUD will anchor to the left or right
+                    int screenWidth = windowManager.getDefaultDisplay().getWidth();
                     int screenHeight = windowManager.getDefaultDisplay().getHeight();
 
-                    //todo 判断是横屏显示还是竖屏显示
                     boolean isPortrait = true;
                     if(isPortrait){
                         if(xInScreen < screenWidth/2){

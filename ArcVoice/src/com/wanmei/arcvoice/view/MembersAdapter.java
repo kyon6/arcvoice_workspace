@@ -19,20 +19,29 @@ import java.util.List;
 
 
 public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final Context mContext;
 
-    DisplayImageOptions options = new DisplayImageOptions.Builder()
-            .cacheInMemory(true)
-            .cacheOnDisk(true)
-            .showImageOnFail(R.drawable.connected)
-            .showImageForEmptyUri(R.drawable.connected)
-            .showImageOnLoading(R.drawable.connected)
-            .build();
+    public static enum Direction {LEFT,RIGHT,UP,DOWN};
+
+    private final Context mContext;
+    private DisplayImageOptions options;
 
     private List<Player> mData = new ArrayList<Player>();
 
+    private Direction mDirection = Direction.RIGHT;
+
     public MembersAdapter(Context context) {
         mContext = context;
+        options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .showImageOnFail(R.drawable.connected)
+                .showImageForEmptyUri(R.drawable.connected)
+                .showImageOnLoading(R.drawable.connected)
+                .build();
+    }
+
+    public void setDirection(Direction direction){
+        this.mDirection = direction;
     }
 
     public void setData(List<Player> list) {
@@ -45,53 +54,6 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mData.clear();
         notifyDataSetChanged();
     }
-
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        View v = super.getView(position, null, parent);
-//
-//        Player player = this.getItem(position);
-//
-//        TextView nameView = (TextView) v.findViewById(R.id.playerName);
-//        CircleImageView avatarView = (CircleImageView) v.findViewById(R.id.avatar);
-//
-//        // Each MemberCallStatus object represents a single user of the current voice session.
-//        // getUserId() will return the unique userId for that client.
-//        // getUserState() will return an enum for the current state of that user.
-//
-//        nameView.setText(player.getUserId());
-//
-//        switch (player.getUserState()) {
-//            case CONNECTED:
-//                // Connected refers to users who are on the voice session, but not currently speaking.
-//                avatarView.setBackgroundResource(R.drawable.grey);
-//                break;
-//
-//            case DISCONNECTED:
-//                // Disconnected means the user is not on the voice session and will not hear any sound.
-//                avatarView.setBackgroundResource(R.drawable.red);
-//                break;
-//
-//            case SPEAKING:
-//                // Speaking means the user is currently connected and talking on the voice session.
-//                avatarView.setBackgroundResource(R.drawable.green);
-//                break;
-//        }
-//
-//        ImageLoader.getInstance().displayImage(player.getUserAvatar(), avatarView, options);
-//        avatarView.setTag(position);
-//        avatarView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                if (v.getTag().equals(ArcVoiceHelper.getInstance(getContext()).getUserId())) {
-//                    ArcVoiceHelper.getInstance(getContext()).doMuteMyself();
-//                } else
-//                    ArcVoiceHelper.getInstance(getContext()).doMuteOthers();
-//                return true;
-//            }
-//        });
-//        return v;
-//    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -110,7 +72,17 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // getUserState() will return an enum for the current state of that user.
 
         PlayerHolder playerHolder = (PlayerHolder) viewHolder;
-        playerHolder.playerName.setText(player.getUserId()+"-"+player.getUserName());
+
+        String name = player.getUserId()+":"+player.getUserName();
+        if(mDirection == Direction.RIGHT){
+            playerHolder.playerNameLeft.setVisibility(View.GONE);
+            playerHolder.playerNameRight.setVisibility(View.VISIBLE);
+            playerHolder.playerNameRight.setText(name);
+        }else if(mDirection == Direction.LEFT){
+            playerHolder.playerNameRight.setVisibility(View.GONE);
+            playerHolder.playerNameLeft.setVisibility(View.VISIBLE);
+            playerHolder.playerNameLeft.setText(name);
+        }
 
         switch (player.getUserState()) {
             case CONNECTED:
@@ -154,12 +126,14 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     class PlayerHolder extends RecyclerView.ViewHolder {
         ImageView avatar;
-        TextView playerName;
+        TextView playerNameRight;
+        TextView playerNameLeft;
 
         public PlayerHolder(View itemView) {
             super(itemView);
             avatar = (ImageView) itemView.findViewById(R.id.avatar);
-            playerName = (TextView) itemView.findViewById(R.id.playerName);
+            playerNameRight = (TextView) itemView.findViewById(R.id.playerName_right);
+            playerNameLeft = (TextView)itemView.findViewById(R.id.playerName_left);
         }
     }
 }

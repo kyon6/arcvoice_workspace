@@ -18,7 +18,8 @@
             android:id="@+id/et_sessionid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:text="66"/>
     </LinearLayout>
 
     <LinearLayout
@@ -34,7 +35,8 @@
             android:id="@+id/et_userid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:text="123"/>
     </LinearLayout>
 
     <Button

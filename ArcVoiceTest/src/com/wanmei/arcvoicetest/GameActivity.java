@@ -67,8 +67,8 @@ public class GameActivity extends Activity {
     }
 
     private void initUserInfo(){
-        mHelper.addPlayerInfo(mUserId,"Leon","http://ecx.images-amazon.com/images/I/41X0uJ4jbcL._AC_UY370_SX420.jpg");
-        mHelper.addPlayerInfo("99","周有为","http://ecx.images-amazon.com/images/I/41X0uJ4jbcL._AC_UY370_SX420.jpg");
+        mHelper.addPlayerInfo(mUserId,"Leon","https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
+        mHelper.addPlayerInfo("99","周有为","http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
     }
 
     @Override
