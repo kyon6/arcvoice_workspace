@@ -28,14 +28,7 @@ public class ArcWindowManager {
      * 用于控制在屏幕上添加或移除悬浮窗
      */
     private static WindowManager mWindowManager;
-    /**
-     * 用于获取手机可用内存
-     */
-    private static ActivityManager mActivityManager;
 
-    //    public static FloatWindowSmallView getHubDetailView() {
-//        return hubDetailView;
-//    }
     public static HubDetailView getHubDetailView() {
         return hubDetailView;
     }
@@ -101,18 +94,5 @@ public class ArcWindowManager {
             mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         }
         return mWindowManager;
-    }
-
-    /**
-     * 如果ActivityManager还未创建，则创建一个新的ActivityManager返回。否则返回当前已创建的ActivityManager。
-     *
-     * @param context 可传入应用程序上下文。
-     * @return ActivityManager的实例，用于获取手机可用内存。
-     */
-    private static ActivityManager getActivityManager(Context context) {
-        if (mActivityManager == null) {
-            mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        }
-        return mActivityManager;
     }
 }

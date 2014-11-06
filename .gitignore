@@ -237,3 +237,11 @@ libs/arcvoice-1.1.jar
 #ArcVoiceTest/.idea/misc.xml
 
 ArcVoiceTest/classes
+
+ArcVoice/libs/arcvoice-1.1.jar
+
+ArcVoice/libs/armeabi-v7a/libtalkraytwo.so
+
+ArcVoice/libs/x86/libtalkraytwo.so
+
+ArcVoice/libs/armeabi/libtalkraytwo.so
