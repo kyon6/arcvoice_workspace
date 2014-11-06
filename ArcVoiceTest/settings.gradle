@@ -1,3 +1,0 @@
-include ':library:ArcVoice'
-
-project(':library:ArcVoice').projectDir = new File('../ArcVoice');

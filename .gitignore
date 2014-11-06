@@ -217,18 +217,20 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
-.idea/misc.xml
+#.idea/misc.xml
 
-.idea/vcs.xml
+#.idea/vcs.xml
 
-.idea/workspace.xml
+#.idea/workspace.xml
 
-project.properties
+#project.properties
 
 libs/
 
-ArcVoiceTest/.idea/workspace.xml
+#ArcVoiceTest/.idea/workspace.xml
 
-ArcVoiceTest/.idea/copyright/profiles_settings.xml
+#ArcVoiceTest/.idea/copyright/profiles_settings.xml
 
-ArcVoiceTest/.idea/misc.xml
+#ArcVoiceTest/.idea/misc.xml
+
+ArcVoiceTest/classes
