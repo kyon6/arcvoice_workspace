@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
 import com.talkray.arcvoice.ArcRegion;
 import com.wanmei.arcvoice.ArcVoiceHelper;
+
 
 /**
  * Created by liang on 14/11/3.
@@ -22,6 +24,8 @@ public class GameActivity extends Activity {
     String mSessionId;
     String mUserId;
     Button mChatBtn;
+
+    Handler mHandler = new Handler();
 
     public static void start(Context context, String sessionId, String userId) {
         Intent mIntent = new Intent(context, GameActivity.class);
@@ -47,9 +51,24 @@ public class GameActivity extends Activity {
                 mChatBtn.setVisibility(View.INVISIBLE);
             }
         });
+        mChatBtn.setVisibility(View.INVISIBLE);
+
         mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
         mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, mUserId);
+
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mHelper.start(mSessionId);
+                initUserInfo();
+            }
+        });
         //Leon","http://ecx.images-amazon.com/images/I/41X0uJ4jbcL._AC_UY370_SX420.jpg"
+    }
+
+    private void initUserInfo(){
+        mHelper.addPlayerInfo(mUserId,"Leon","http://ecx.images-amazon.com/images/I/41X0uJ4jbcL._AC_UY370_SX420.jpg");
+        mHelper.addPlayerInfo("99","周有为","http://ecx.images-amazon.com/images/I/41X0uJ4jbcL._AC_UY370_SX420.jpg");
     }
 
     @Override

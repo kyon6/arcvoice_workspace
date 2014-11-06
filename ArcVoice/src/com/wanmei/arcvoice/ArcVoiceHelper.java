@@ -56,7 +56,7 @@ public class ArcVoiceHelper {
     private ArcVoice arcVoice;
     private ArcVoiceEventHandler eventHandler;
     private Handler mainThreadHandler;
-    private List<Player> mPlayerList;
+    private List<Player> mPlayerList = null;
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -93,14 +93,42 @@ public class ArcVoiceHelper {
         this.ARC_APP_CREDENTIALS = appCredentials;
         this.ARC_REGION = arcRegion;
         this.USER_ID = userId;
+
         this.mPlayerInfoList = new HashMap<String, Player>();
+        this.mPlayerList = new ArrayList<Player>();
+
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
+
         setupArc();
     }
 
+    /**
+     * 启动，加入到会话当中
+     * @param sessionId
+     */
     public void start(String sessionId) {
         if (arcVoice != null) {
             arcVoice.joinSession(sessionId);
+        }
+    }
+
+    /**
+     * 由于arcVoice只返回userId和userStatus
+     *
+     * 这里需要游戏开发者将朋友信息传递进来（包括userId，userName，userAvatar），这样通过userId关联可以显示用户信息
+     *
+     * todo 如果是进入某个区域形成会话，游戏开发者能不能获得其他玩家的相关信息？？需要确认
+     * @param userId
+     * @param userName
+     * @param userAvatar
+     */
+    public void addPlayerInfo(String userId,String userName,String userAvatar){
+        if(!mPlayerInfoList.containsKey(userId)){
+            Player mPlayer = new Player();
+            mPlayer.setUserId(userId);
+            mPlayer.setUserName(userName);
+            mPlayer.setUserAvatar(userAvatar);
+            mPlayerInfoList.put(userId,mPlayer);
         }
     }
 

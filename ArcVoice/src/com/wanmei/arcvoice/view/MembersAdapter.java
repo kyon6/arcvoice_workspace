@@ -108,7 +108,7 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // getUserState() will return an enum for the current state of that user.
 
         PlayerHolder playerHolder = (PlayerHolder) viewHolder;
-        playerHolder.playerName.setText(player.getUserId());
+        playerHolder.playerName.setText(player.getUserId()+"-"+player.getUserName());
 
         switch (player.getUserState()) {
             case CONNECTED:
