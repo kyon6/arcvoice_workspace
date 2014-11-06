@@ -20,12 +20,14 @@ import java.util.List;
 
 public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final Context mContext;
+
     DisplayImageOptions options = new DisplayImageOptions.Builder()
+            .cacheInMemory(true)
+            .cacheOnDisk(true)
             .showImageOnFail(R.drawable.connected)
             .showImageForEmptyUri(R.drawable.connected)
             .showImageOnLoading(R.drawable.connected)
             .build();
-
 
     private List<Player> mData = new ArrayList<Player>();
 
