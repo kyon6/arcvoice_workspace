@@ -1,14 +1,14 @@
 package com.wanmei.arcvoice.view;
 
 import android.content.Context;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
@@ -31,7 +31,7 @@ public class HubDetailView extends RelativeLayout {
     public static int viewHeight;
     View mMainView;
     View mHubView;
-    ListView mListView;
+    RecyclerView mRecylerView;
     boolean isListViewShow = false;
     boolean isDrag = false;
     /**
@@ -85,11 +85,11 @@ public class HubDetailView extends RelativeLayout {
 //                Toast.makeText(getContext(),"hub click!",Toast.LENGTH_SHORT).show();
 //                if (isListViewShow) {
 //                    ArcVoiceHelper.getInstance(getContext()).hiddenAvatars();
-//                    mListView.setVisibility(View.GONE);
+//                    mRecylerView.setVisibility(View.GONE);
 //                    isListViewShow = false;
 //                } else {
 //                    ArcVoiceHelper.getInstance(getContext()).showAvatars();
-//                    mListView.setVisibility(View.VISIBLE);
+//                    mRecylerView.setVisibility(View.VISIBLE);
 //                    isListViewShow = true;
 //                }
                 ArcVoiceHelper.getInstance(getContext()).doShowAvatars();
@@ -103,8 +103,8 @@ public class HubDetailView extends RelativeLayout {
                 return true;
             }
         });
-        mListView = (ListView) findViewById(R.id.mlistview);
-//        mListView.setOnTouchListener(new OnTouchListener() {
+        mRecylerView = (RecyclerView) findViewById(R.id.mlistview);
+//        mRecylerView.setOnTouchListener(new OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View v, MotionEvent event) {
 //                LogUtils.e("listview ontouch");
@@ -112,33 +112,41 @@ public class HubDetailView extends RelativeLayout {
 //                return false;
 //            }
 //        });
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "item click:" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
-        membersAdapter = new MembersAdapter(getContext(), R.layout.voice_member, R.id.playerName);
-        //test
-//        MemberCallStatus status = new MemberCallStatus("12", UserState.CONNECTED);
-//        membersAdapter.add(status);
-//        MemberCallStatus status1 = new MemberCallStatus("13", UserState.CONNECTED);
-//        membersAdapter.add(status1);
-        mListView.setAdapter(membersAdapter);
+//        mRecylerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getContext(), "item click:" + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        showDate();
     }
 
 //    public MembersAdapter getMembersAdapter() {
 //        return membersAdapter;
 //    }
+private void showDate() {
+    // 创建一个线性布局管理器
+    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+    // 设置垂直布局，目前仅支持LinearLayout(有垂直和横向)
+    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+    // 设置缓冲池最大循环使用view数
+    mRecylerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
+    // 设置布局管理器
+    mRecylerView.setLayoutManager(layoutManager);
+    // 创建Adapter，并指定数据集
+    membersAdapter = new MembersAdapter(getContext());
+    // 设置Adapter
+    mRecylerView.setAdapter(membersAdapter);
+    // 设置默认动画
+    mRecylerView.setItemAnimator(new DefaultItemAnimator());
+    // 还有下面这上三种动画FlipDownItemAnimator, SlideItemAnimator, FromTopItemAnimator
+}
 
     public void updateAdapter(List<Player> list) {
         if (list == null) {
             membersAdapter.clear();
         } else {
-            membersAdapter.setNotifyOnChange(false);
-            membersAdapter.clear();
-            membersAdapter.setNotifyOnChange(true);
-            membersAdapter.addAll(list);
+            membersAdapter.setData(list);
         }
     }
 

@@ -225,7 +225,10 @@ pip-log.txt
 
 #project.properties
 
-libs/
+libs/armeabi/
+libs/x86/
+libs/armeabi-v7a/
+libs/arcvoice-1.1.jar
 
 #ArcVoiceTest/.idea/workspace.xml
 

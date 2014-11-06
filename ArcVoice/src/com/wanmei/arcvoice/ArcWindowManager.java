@@ -57,7 +57,7 @@ public class ArcWindowManager {
                 hubViewWindowParams.format = PixelFormat.RGBA_8888;
                 hubViewWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
                         | LayoutParams.FLAG_NOT_FOCUSABLE;
-                hubViewWindowParams.gravity = Gravity.START | Gravity.TOP;
+                hubViewWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
                 hubViewWindowParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;//FloatWindowSmallView.viewWidth;
                 hubViewWindowParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 hubViewWindowParams.x = 0;
