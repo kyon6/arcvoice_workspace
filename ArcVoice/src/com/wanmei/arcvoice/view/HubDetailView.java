@@ -1,6 +1,8 @@
 package com.wanmei.arcvoice.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -152,16 +154,25 @@ public class HubDetailView extends RelativeLayout {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void updateDirection(){
         if(mParams.x < screenWidth/2){
             //todo change the hub align
+            RelativeLayout.LayoutParams params = (LayoutParams) mHubView.getLayoutParams();
+            params.removeRule(RelativeLayout.ALIGN_RIGHT);
+            params.addRule(RelativeLayout.ALIGN_LEFT,R.id.mlistview);
 
+            mHubView.setLayoutParams(params);
             //change the adapter align
             membersAdapter.setDirection(MembersAdapter.Direction.RIGHT);
             membersAdapter.notifyDataSetChanged();
         }else{
             //todo change the hub align
+            RelativeLayout.LayoutParams params = (LayoutParams) mHubView.getLayoutParams();
+            params.removeRule(RelativeLayout.ALIGN_LEFT);
+            params.addRule(RelativeLayout.ALIGN_RIGHT,R.id.mlistview);
 
+            mHubView.setLayoutParams(params);
             //change the adapter align
             membersAdapter.setDirection(MembersAdapter.Direction.LEFT);
             membersAdapter.notifyDataSetChanged();
