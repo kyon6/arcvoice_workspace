@@ -10,22 +10,22 @@
         android:id="@+id/hub"
         android:layout_width="50dip"
         android:layout_height="50dip"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/red"
         android:src="@drawable/hugh"
         app:border_color="@color/light"
-        android:layout_centerHorizontal="true"
         app:border_width="2dp" />
 
 
-    <RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/mlistview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
+        android:layout_alignLeft="@+id/hub"
         android:layout_below="@+id/hub"
         android:cacheColorHint="@color/transparent"
         android:divider="@color/transparent"
         android:dividerHeight="10dp"
-        android:layout_alignLeft="@+id/hub"
         android:listSelector="@color/transparent"
         android:scrollbars="none"
         android:visibility="visible" />

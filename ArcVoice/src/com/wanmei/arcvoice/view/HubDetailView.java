@@ -9,12 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.model.Player;
+import com.wanmei.arcvoice.utils.DensityUtils;
 import com.wanmei.arcvoice.utils.DeviceUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
 
@@ -150,9 +152,17 @@ public class HubDetailView extends RelativeLayout {
         if (list == null) {
             membersAdapter.clear();
             mRecylerView.setVisibility(GONE);
+            ViewGroup.LayoutParams params = getLayoutParams();
+            params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            setLayoutParams(params);
+            requestLayout();
+            invalidate();
         } else {
             membersAdapter.setData(list);
             mRecylerView.setVisibility(VISIBLE);
+            getLayoutParams().width = DensityUtils.dip2px(getContext(), 400);
+            requestLayout();
+            invalidate();
         }
     }
 
