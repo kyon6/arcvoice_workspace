@@ -160,21 +160,21 @@ public class HubDetailView extends RelativeLayout {
     public void updateDirection(){
         if(mParams.x < screenWidth/2){
             //todo change the hub align
-            RelativeLayout.LayoutParams params = (LayoutParams) mHubView.getLayoutParams();
+            RelativeLayout.LayoutParams params = (LayoutParams) mRecylerView.getLayoutParams();
             params.removeRule(RelativeLayout.ALIGN_RIGHT);
-            params.addRule(RelativeLayout.ALIGN_LEFT,R.id.mlistview);
+            params.addRule(RelativeLayout.ALIGN_LEFT,R.id.hub);
 
-            mHubView.setLayoutParams(params);
+            mRecylerView.setLayoutParams(params);
             //change the adapter align
             membersAdapter.setDirection(MembersAdapter.Direction.RIGHT);
             membersAdapter.notifyDataSetChanged();
         }else{
             //todo change the hub align
-            RelativeLayout.LayoutParams params = (LayoutParams) mHubView.getLayoutParams();
+            RelativeLayout.LayoutParams params = (LayoutParams) mRecylerView.getLayoutParams();
             params.removeRule(RelativeLayout.ALIGN_LEFT);
-            params.addRule(RelativeLayout.ALIGN_RIGHT,R.id.mlistview);
+            params.addRule(RelativeLayout.ALIGN_RIGHT,R.id.hub);
 
-            mHubView.setLayoutParams(params);
+            mRecylerView.setLayoutParams(params);
             //change the adapter align
             membersAdapter.setDirection(MembersAdapter.Direction.LEFT);
             membersAdapter.notifyDataSetChanged();
