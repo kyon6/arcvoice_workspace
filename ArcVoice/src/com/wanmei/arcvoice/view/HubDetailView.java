@@ -147,8 +147,10 @@ public class HubDetailView extends RelativeLayout {
     public void updateAdapter(List<Player> list) {
         if (list == null) {
             membersAdapter.clear();
+            mRecylerView.setVisibility(GONE);
         } else {
             membersAdapter.setData(list);
+            mRecylerView.setVisibility(VISIBLE);
         }
     }
 
