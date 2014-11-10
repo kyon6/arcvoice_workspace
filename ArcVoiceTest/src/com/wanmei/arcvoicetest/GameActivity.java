@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.talkray.arcvoice.ArcRegion;
 import com.wanmei.arcvoice.ArcVoiceHelper;
+import com.wanmei.arcvoice.utils.LogUtils;
 
 
 /**
@@ -38,6 +40,7 @@ public class GameActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtils.e("onCreate");
         setContentView(R.layout.activity_game);
 
         mSessionId = getIntent().getStringExtra("sessionId");
@@ -47,11 +50,11 @@ public class GameActivity extends Activity {
         mChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHelper.start(mSessionId);
-                mChatBtn.setVisibility(View.INVISIBLE);
+//                mHelper.start(mSessionId);
+//                mChatBtn.setVisibility(View.INVISIBLE);
+                Toast.makeText(GameActivity.this,"游戏操作输入",Toast.LENGTH_SHORT).show();
             }
         });
-        mChatBtn.setVisibility(View.INVISIBLE);
 
         mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
         mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, mUserId);
@@ -74,12 +77,14 @@ public class GameActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        LogUtils.e("onResume");
         mHelper.show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        LogUtils.e("onPause");
         mHelper.hidden();
     }
 

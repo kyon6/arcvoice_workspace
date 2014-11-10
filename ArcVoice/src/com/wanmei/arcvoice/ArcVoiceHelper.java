@@ -9,7 +9,7 @@ import com.talkray.arcvoice.ArcRegion;
 import com.talkray.arcvoice.ArcVoice;
 import com.talkray.arcvoice.ArcVoiceEventHandler;
 import com.talkray.arcvoice.MemberCallStatus;
-import com.wanmei.arcvoice.model.Player;
+import com.wanmei.arcvoice.model.Member;
 import com.wanmei.arcvoice.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ArcVoice HUD
+ * the view show the member list
  * Created by liang on 14/10/31.
  */
 public class ArcVoiceHelper {
@@ -48,7 +48,7 @@ public class ArcVoiceHelper {
     /**
      * record user's name and avatar
      */
-    private Map<String, Player> mPlayerInfoList;
+    private Map<String, Member> mPlayerInfoList;
 
     /**
      * ArcVoice and ArcVoiceEventHandler useed to talk to the ArcVoiceSDK
@@ -56,12 +56,12 @@ public class ArcVoiceHelper {
     private ArcVoice arcVoice;
     private ArcVoiceEventHandler eventHandler;
     private Handler mainThreadHandler;
-    private List<Player> mPlayerList = null;
+    private List<Member> mPlayerList = null;
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            if (ArcWindowManager.getHubDetailView() != null) {
-                ArcWindowManager.getHubDetailView().updateAdapter(mPlayerList);
+            if (ArcWindowManager.getArcMemberView() != null) {
+                ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
             }
         }
     };
@@ -94,8 +94,8 @@ public class ArcVoiceHelper {
         this.ARC_REGION = arcRegion;
         this.USER_ID = userId;
 
-        this.mPlayerInfoList = new HashMap<String, Player>();
-        this.mPlayerList = new ArrayList<Player>();
+        this.mPlayerInfoList = new HashMap<String, Member>();
+        this.mPlayerList = new ArrayList<Member>();
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
 
@@ -124,7 +124,7 @@ public class ArcVoiceHelper {
      */
     public void addPlayerInfo(String userId,String userName,String userAvatar){
         if(!mPlayerInfoList.containsKey(userId)){
-            Player mPlayer = new Player();
+            Member mPlayer = new Member();
             mPlayer.setUserId(userId);
             mPlayer.setUserName(userName);
             mPlayer.setUserAvatar(userAvatar);
@@ -136,7 +136,8 @@ public class ArcVoiceHelper {
      * show ArcVoice HUD
      */
     public void show() {
-        ArcWindowManager.createHubDetailWindow(mContext);
+        ArcWindowManager.createArcHubWindow(mContext);
+        ArcWindowManager.createArcMemberWindow(mContext);
     }
 
     /**
@@ -144,7 +145,8 @@ public class ArcVoiceHelper {
      * include the Arc Icon and user avatars
      */
     public void hidden() {
-        ArcWindowManager.removeHubDetailWindow(mContext);
+        ArcWindowManager.removeArcHubWindow(mContext);
+        ArcWindowManager.removeArcMemberWindow(mContext);
     }
 
     /**
@@ -176,6 +178,7 @@ public class ArcVoiceHelper {
         if (isAvatarShow)
             return;
 
+        ArcWindowManager.createArcMemberWindow(mContext);
         isAvatarShow = true;
     }
 
@@ -186,11 +189,12 @@ public class ArcVoiceHelper {
         if (!isAvatarShow)
             return;
 
+        ArcWindowManager.removeArcMemberWindow(mContext);
         isAvatarShow = false;
 
         mainThreadHandler.removeCallbacks(runnable);
-        mPlayerList = null;
-        mainThreadHandler.post(runnable);
+        /*mPlayerList = null;
+        mainThreadHandler.post(runnable);*/
 
         isStatusUpdateRunning = false;
     }
@@ -343,20 +347,19 @@ public class ArcVoiceHelper {
 //                        while(callStatusItera.hasNext()){
 //                            MemberCallStatus status = callStatusItera.next();
 //                            LogUtils.e(status.getUserId()+":"+ status.getUserState());
-//                            ArcWindowManager.getHubDetailView().getMembersAdapter().add(status);
+//                            ArcWindowManager.getArcHubView().getMembersAdapter().add(status);
 //                            callStatusItera.remove();
 //                        }
 //                    }
 //                });
                 if (isAvatarShow) {
-                    LogUtils.e("onCallStatusUpdate");
-                    mPlayerList = new ArrayList<Player>();
+                    mPlayerList = new ArrayList<Member>();
                     Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
 
-                    Player mPlayer = null;
+                    Member mPlayer = null;
                     while (callStatusItera.hasNext()) {
                         MemberCallStatus status = callStatusItera.next();
-                        Player player = new Player();
+                        Member player = new Member();
                         player.setUserId(status.getUserId());
                         player.setUserState(status.getUserState());
                         if (mPlayerInfoList.get(status.getUserId()) != null) {
@@ -368,8 +371,9 @@ public class ArcVoiceHelper {
                     }
 
                     if (isStatusUpdateRunning) {
-                        mainThreadHandler.postDelayed(runnable, 1000);
+                        mainThreadHandler.postDelayed(runnable, 2000);
                     } else {
+                        LogUtils.e("onCallStatusUpdate first");
                         mainThreadHandler.post(runnable);
                         isStatusUpdateRunning = true;
                     }

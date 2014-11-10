@@ -6,13 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
-import com.wanmei.arcvoice.model.Player;
+import com.wanmei.arcvoice.model.Member;
+import com.wanmei.arcvoice.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +22,14 @@ import java.util.List;
 
 public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static enum Direction {LEFT,RIGHT,UP,DOWN};
+    public static enum Direction {TEXT_LEFT, TEXT_RIGHT, TEXT_UP, TEXT_DOWN};
 
     private final Context mContext;
     private DisplayImageOptions options;
 
-    private List<Player> mData = new ArrayList<Player>();
+    private List<Member> mData = new ArrayList<Member>();
 
-    private Direction mDirection = Direction.RIGHT;
+    private Direction mDirection = Direction.TEXT_RIGHT;
 
     public MembersAdapter(Context context) {
         mContext = context;
@@ -44,7 +46,7 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.mDirection = direction;
     }
 
-    public void setData(List<Player> list) {
+    public void setData(List<Member> list) {
         mData.clear();
         mData.addAll(list);
         notifyDataSetChanged();
@@ -57,53 +59,67 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.voice_member, null);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.layout_member_item, null);
 
-        return new PlayerHolder(v);
+        return new MemberHolder(v);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        Player player = mData.get(i);
+        final Member player = mData.get(i);
 
 
         // Each MemberCallStatus object represents a single user of the current voice session.
         // getUserId() will return the unique userId for that client.
         // getUserState() will return an enum for the current state of that user.
 
-        PlayerHolder playerHolder = (PlayerHolder) viewHolder;
+        MemberHolder playerHolder = (MemberHolder) viewHolder;
 
         String name = player.getUserId()+":"+player.getUserName();
-        if(mDirection == Direction.RIGHT){
-            playerHolder.playerNameLeft.setVisibility(View.GONE);
-            playerHolder.playerNameRight.setVisibility(View.VISIBLE);
-            playerHolder.playerNameRight.setText(name);
-        }else if(mDirection == Direction.LEFT){
-            playerHolder.playerNameRight.setVisibility(View.GONE);
-            playerHolder.playerNameLeft.setVisibility(View.VISIBLE);
-            playerHolder.playerNameLeft.setText(name);
+        if(mDirection == Direction.TEXT_RIGHT){
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerHolder.mAvatarView.getLayoutParams();
+            params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            playerHolder.mAvatarView.setLayoutParams(params);
+
+            RelativeLayout.LayoutParams nameParams = (RelativeLayout.LayoutParams) playerHolder.mNameView.getLayoutParams();
+            nameParams.removeRule(RelativeLayout.LEFT_OF);
+            nameParams.addRule(RelativeLayout.RIGHT_OF,R.id.avatar);
+            playerHolder.mAvatarView.setLayoutParams(params);
+
+        }else if(mDirection == Direction.TEXT_LEFT){
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerHolder.mAvatarView.getLayoutParams();
+            params.removeRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            playerHolder.mAvatarView.setLayoutParams(params);
+
+            RelativeLayout.LayoutParams nameParams = (RelativeLayout.LayoutParams) playerHolder.mNameView.getLayoutParams();
+            nameParams.removeRule(RelativeLayout.RIGHT_OF);
+            nameParams.addRule(RelativeLayout.LEFT_OF,R.id.avatar);
+            playerHolder.mAvatarView.setLayoutParams(params);
         }
+        playerHolder.mNameView.setText(name);
 
         switch (player.getUserState()) {
             case CONNECTED:
                 // Connected refers to users who are on the voice session, but not currently speaking.
-                playerHolder.avatar.setBackgroundResource(R.drawable.grey);
+                playerHolder.mAvatarView.setBackgroundResource(R.drawable.grey);
                 break;
 
             case DISCONNECTED:
                 // Disconnected means the user is not on the voice session and will not hear any sound.
-                playerHolder.avatar.setBackgroundResource(R.drawable.red);
+                playerHolder.mAvatarView.setBackgroundResource(R.drawable.red);
                 break;
 
             case SPEAKING:
                 // Speaking means the user is currently connected and talking on the voice session.
-                playerHolder.avatar.setBackgroundResource(R.drawable.green);
+                playerHolder.mAvatarView.setBackgroundResource(R.drawable.green);
                 break;
         }
 
-        ImageLoader.getInstance().displayImage(player.getUserAvatar(), playerHolder.avatar, options);
-        playerHolder.avatar.setTag(i);
-        playerHolder.avatar.setOnLongClickListener(new View.OnLongClickListener() {
+        ImageLoader.getInstance().displayImage(player.getUserAvatar(), playerHolder.mAvatarView, options);
+        playerHolder.mAvatarView.setTag(player.getUserId());
+        playerHolder.mAvatarView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (v.getTag().equals(ArcVoiceHelper.getInstance(getContext()).getUserId())) {
@@ -111,6 +127,12 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 } else
                     ArcVoiceHelper.getInstance(getContext()).doMuteOthers();
                 return true;
+            }
+        });
+        playerHolder.mAvatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtils.e("member mAvatarView click:" + player.getUserName());
             }
         });
     }
@@ -124,16 +146,14 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mContext;
     }
 
-    class PlayerHolder extends RecyclerView.ViewHolder {
-        ImageView avatar;
-        TextView playerNameRight;
-        TextView playerNameLeft;
+    class MemberHolder extends RecyclerView.ViewHolder {
+        ImageView mAvatarView;
+        TextView mNameView;
 
-        public PlayerHolder(View itemView) {
+        public MemberHolder(View itemView) {
             super(itemView);
-            avatar = (ImageView) itemView.findViewById(R.id.avatar);
-            playerNameRight = (TextView) itemView.findViewById(R.id.playerName_right);
-            playerNameLeft = (TextView)itemView.findViewById(R.id.playerName_left);
+            mAvatarView = (ImageView) itemView.findViewById(R.id.avatar);
+            mNameView = (TextView) itemView.findViewById(R.id.playerName);
         }
     }
 }

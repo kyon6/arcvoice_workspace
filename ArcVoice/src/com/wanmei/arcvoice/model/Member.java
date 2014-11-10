@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by liang on 14/11/4.
  */
-public class Player implements Serializable {
+public class Member implements Serializable {
 
     private String userId;
 

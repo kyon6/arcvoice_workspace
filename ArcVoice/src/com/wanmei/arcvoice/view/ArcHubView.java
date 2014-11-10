@@ -1,28 +1,19 @@
 package com.wanmei.arcvoice.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
-import com.wanmei.arcvoice.model.Player;
-import com.wanmei.arcvoice.utils.DensityUtils;
 import com.wanmei.arcvoice.utils.DeviceUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
 
-import java.util.List;
-
-public class HubDetailView extends RelativeLayout {
+public class ArcHubView extends RelativeLayout {
 
     /**
      * 记录小悬浮窗的宽度
@@ -81,7 +72,7 @@ public class HubDetailView extends RelativeLayout {
 
     private MembersAdapter membersAdapter;
 
-    public HubDetailView(Context context) {
+    public ArcHubView(Context context) {
         super(context);
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         screenWidth = windowManager.getDefaultDisplay().getWidth();
@@ -92,7 +83,7 @@ public class HubDetailView extends RelativeLayout {
         viewWidth = view.getLayoutParams().width;
         viewHeight = view.getLayoutParams().height;
 
-        mHubView = findViewById(R.id.hub);
+        /*mHubView = findViewById(R.id.hub);
         mHubView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,29 +99,16 @@ public class HubDetailView extends RelativeLayout {
                 isDrag = true;
                 return true;
             }
-        });
-        mRecylerView = (RecyclerView) findViewById(R.id.mlistview);
-//        mRecylerView.setOnTouchListener(new OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                LogUtils.e("listview ontouch");
-////                HubDetailView.this.onTouchEvent(event);
-//                return false;
-//            }
-//        });
-//        mRecylerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getContext(), "item click:" + position, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-        showDate();
+        });*/
+       /* mRecylerView = (RecyclerView) findViewById(R.id.mlistview);
+        showDate();*/
     }
 
 //    public MembersAdapter getMembersAdapter() {
 //        return membersAdapter;
 //    }
-    private void showDate() {
+
+    /*private void showDate() {
         // 创建一个线性布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         // 设置垂直布局，目前仅支持LinearLayout(有垂直和横向)
@@ -152,52 +130,52 @@ public class HubDetailView extends RelativeLayout {
         if (list == null) {
             membersAdapter.clear();
             mRecylerView.setVisibility(GONE);
+
             ViewGroup.LayoutParams params = getLayoutParams();
-            params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            params.width = DensityUtils.dip2px(getContext(),50);
             setLayoutParams(params);
-            requestLayout();
-            invalidate();
         } else {
             membersAdapter.setData(list);
             mRecylerView.setVisibility(VISIBLE);
-            getLayoutParams().width = DensityUtils.dip2px(getContext(), 400);
-            requestLayout();
-            invalidate();
-        }
-    }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+            ViewGroup.LayoutParams params = getLayoutParams();
+            params.width = DensityUtils.dip2px(getContext(),150);
+            setLayoutParams(params);
+        }
+    }*/
+
+   /* @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void updateDirection(){
         if(mParams.x < screenWidth/2){
-            //todo change the hub align
+            // change the hub align
             RelativeLayout.LayoutParams params = (LayoutParams) mRecylerView.getLayoutParams();
             params.removeRule(RelativeLayout.ALIGN_RIGHT);
             params.addRule(RelativeLayout.ALIGN_LEFT,R.id.hub);
 
             mRecylerView.setLayoutParams(params);
             //change the adapter align
-            membersAdapter.setDirection(MembersAdapter.Direction.RIGHT);
+            membersAdapter.setDirection(MembersAdapter.Direction.TEXT_RIGHT);
             membersAdapter.notifyDataSetChanged();
         }else{
-            //todo change the hub align
+            // change the hub align
             RelativeLayout.LayoutParams params = (LayoutParams) mRecylerView.getLayoutParams();
             params.removeRule(RelativeLayout.ALIGN_LEFT);
             params.addRule(RelativeLayout.ALIGN_RIGHT,R.id.hub);
 
             mRecylerView.setLayoutParams(params);
             //change the adapter align
-            membersAdapter.setDirection(MembersAdapter.Direction.LEFT);
+            membersAdapter.setDirection(MembersAdapter.Direction.TEXT_LEFT);
             membersAdapter.notifyDataSetChanged();
         }
-    }
+    }*/
 
-    @Override
+   /* @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (isDrag) {
             return onTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
-    }
+    }*/
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -220,7 +198,9 @@ public class HubDetailView extends RelativeLayout {
             case MotionEvent.ACTION_UP:
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
                 if (xDownInScreen == xInScreen && yDownInScreen == yInScreen) {
-
+                    //Toast.makeText(getContext(), "显示/隐藏Avatar", Toast.LENGTH_SHORT).show();
+                    LogUtils.e("显示/隐藏Avatar");
+                    ArcVoiceHelper.getInstance(getContext()).doShowAvatars();
                 } else {
                     /*
                      //靠边停靠
@@ -264,6 +244,9 @@ public class HubDetailView extends RelativeLayout {
         mParams = params;
     }
 
+    public WindowManager.LayoutParams getParams(){
+        return mParams;
+    }
     /**
      * 更新小悬浮窗在屏幕中的位置。
      */
