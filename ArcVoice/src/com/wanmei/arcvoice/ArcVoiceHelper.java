@@ -25,6 +25,11 @@ import java.util.Map;
 public class ArcVoiceHelper {
     public static final String TAG = "ArcVoiceDemo";
 
+    /**
+     * zhe arc member show orientation
+     */
+    public static enum Orientation{VERTICAL,HORIZONTAL};
+
     private static ArcVoiceHelper mInstance = null;
     private Context mContext;
 
@@ -39,6 +44,8 @@ public class ArcVoiceHelper {
     private boolean isMuteMyself = false;
     private boolean isMuteOthers = false;
     private boolean isAvatarShow = true;//默认显示头像
+
+    private Orientation mOrientation = Orientation.VERTICAL;
     /**
      * 用来记录头像是否显示
      * 如果头像从没显示到显示，立马更新adapter
@@ -51,7 +58,7 @@ public class ArcVoiceHelper {
     private Map<String, Member> mPlayerInfoList;
 
     /**
-     * ArcVoice and ArcVoiceEventHandler useed to talk to the ArcVoiceSDK
+     * ArcVoice and ArcVoiceEventHandler used to talk to the ArcVoiceSDK
      */
     private ArcVoice arcVoice;
     private ArcVoiceEventHandler eventHandler;
@@ -100,6 +107,14 @@ public class ArcVoiceHelper {
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
 
         setupArc();
+    }
+
+    public void setOrientation(Orientation orientation){
+        mOrientation = orientation;
+    }
+
+    public Orientation getOrientation(){
+        return mOrientation;
     }
 
     /**
@@ -193,8 +208,6 @@ public class ArcVoiceHelper {
         isAvatarShow = false;
 
         mainThreadHandler.removeCallbacks(runnable);
-        /*mPlayerList = null;
-        mainThreadHandler.post(runnable);*/
 
         isStatusUpdateRunning = false;
     }

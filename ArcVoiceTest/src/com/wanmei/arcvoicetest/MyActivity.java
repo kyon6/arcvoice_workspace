@@ -6,12 +6,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class MyActivity extends Activity {
 
     EditText mSessionEditText, mUserIdEditText;
     Button mStartBtn;
+    RadioGroup mRadioGroup;
 
     /**
      * Called when the activity is first created.
@@ -27,6 +29,7 @@ public class MyActivity extends Activity {
     private void initView() {
         mSessionEditText = (EditText) findViewById(R.id.et_sessionid);
         mUserIdEditText = (EditText) findViewById(R.id.et_userid);
+        mRadioGroup = (RadioGroup)findViewById(R.id.rb_orientation);
         mStartBtn = (Button) findViewById(R.id.btnStart);
         mStartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +46,12 @@ public class MyActivity extends Activity {
                     ;
                     return;
                 }
-                GameActivity.start(MyActivity.this, sessionId, userId);
+                int id = mRadioGroup.getCheckedRadioButtonId();
+                boolean isHor = false;
+                if(id == R.id.rb_hor){
+                    isHor = true;
+                }
+                GameActivity.start(MyActivity.this, sessionId, userId,isHor);
             }
         });
     }

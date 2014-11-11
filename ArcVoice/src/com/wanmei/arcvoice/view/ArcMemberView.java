@@ -11,8 +11,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.model.Member;
+import com.wanmei.arcvoice.utils.DensityUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
 
 import java.util.List;
@@ -30,10 +32,20 @@ public class ArcMemberView extends LinearLayout {
 	 */
 	public static int viewHeight;
 
-	public ArcMemberView(final Context context) {
+	public ArcMemberView(final Context context,ArcVoiceHelper.Orientation orientation) {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.layout_member_view, this);
 		View view = findViewById(R.id.big_window_layout);
+
+        LinearLayout.LayoutParams params = (LayoutParams) view.getLayoutParams();
+        if(orientation == ArcVoiceHelper.Orientation.VERTICAL){
+            params.width = DensityUtils.dip2px(context,100);
+            params.height = DensityUtils.dip2px(context,200);
+        }else{
+            params.width = DensityUtils.dip2px(context,300);
+            params.height = DensityUtils.dip2px(context,100);
+        }
+        view.setLayoutParams(params);
 		viewWidth = view.getLayoutParams().width;
 		viewHeight = view.getLayoutParams().height;
 
@@ -41,7 +53,11 @@ public class ArcMemberView extends LinearLayout {
         // 创建一个线性布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         // 设置垂直布局，目前仅支持LinearLayout(有垂直和横向)
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        if(orientation == ArcVoiceHelper.Orientation.VERTICAL) {
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        }else{
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        }
         // 设置缓冲池最大循环使用view数
         mRecylerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
         // 设置布局管理器
@@ -71,14 +87,16 @@ public class ArcMemberView extends LinearLayout {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void updateDirection(MembersAdapter.Direction direction){
+        //change the adapter align
         if(direction == MembersAdapter.Direction.TEXT_RIGHT){
-            //change the adapter align
             membersAdapter.setDirection(MembersAdapter.Direction.TEXT_RIGHT);
-            membersAdapter.notifyDataSetChanged();
         }else if(direction == MembersAdapter.Direction.TEXT_LEFT){
-            //change the adapter align
             membersAdapter.setDirection(MembersAdapter.Direction.TEXT_LEFT);
-            membersAdapter.notifyDataSetChanged();
+        }else if(direction == MembersAdapter.Direction.TEXT_DOWN){
+            membersAdapter.setDirection(MembersAdapter.Direction.TEXT_DOWN);
+        }else if(direction == MembersAdapter.Direction.TEXT_UP){
+            membersAdapter.setDirection(MembersAdapter.Direction.TEXT_UP);
         }
+        membersAdapter.notifyDataSetChanged();
     }
 }

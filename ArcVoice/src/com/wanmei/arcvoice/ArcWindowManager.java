@@ -86,8 +86,9 @@ public class ArcWindowManager {
         WindowManager windowManager = getWindowManager(context);
         int screenWidth = windowManager.getDefaultDisplay().getWidth();
         int screenHeight = windowManager.getDefaultDisplay().getHeight();
+        ArcVoiceHelper.Orientation orientation = ArcVoiceHelper.getInstance(context).getOrientation();
         if (arcMemberView == null) {
-            arcMemberView = new ArcMemberView(context);
+            arcMemberView = new ArcMemberView(context,orientation);
             arcMemberWindowParams = new LayoutParams();
             /**
              * check the hub view postion
@@ -96,28 +97,45 @@ public class ArcWindowManager {
             int hubX = mHubParams.x;
             int hubY = mHubParams.y;
 
-            int direction = 0;//ArcHub所在位置标记。0：左上，1：右上，2：左下，3：右下
-            if(hubX <= screenWidth / 2){
-                arcMemberWindowParams.x = mHubParams.x;
-                if(hubY <= screenHeight /2){
-                    direction = 0;
-                    arcMemberWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
-                }else{
-                    direction = 2;
-                    arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
+            //判断ArcHub所在位置标记。0：左上，1：右上，2：左下，3：右下
+            if(orientation == ArcVoiceHelper.Orientation.VERTICAL) {
+                if (hubX <= screenWidth / 2) {
+                    arcMemberWindowParams.x = mHubParams.x;
+                    if (hubY <= screenHeight / 2) {//左上
+                        arcMemberWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                    } else {//左下
+                        arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
+                    }
+                    arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_RIGHT);
+                } else {
+                    arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth + ArcHubView.viewWidth;
+                    if (hubY <= screenWidth / 2) {//右上
+                        arcMemberWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                    } else {//右下
+                        arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
+                    }
+                    arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_LEFT);
                 }
-                arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_RIGHT);
             }else{
-                arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth + ArcHubView.viewWidth;
-                if(hubY <= screenWidth /2){
-                    direction = 1;
-                    arcMemberWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                if(hubY <= screenHeight / 2){
+                    arcMemberWindowParams.y = mHubParams.y;
+                    if (hubX <= screenWidth / 2) {//左上
+                        arcMemberWindowParams.x = mHubParams.x + ArcHubView.viewWidth;
+                    } else {//右上
+                        arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth;
+                    }
+                    arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_DOWN);
                 }else{
-                    direction = 3;
-                    arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
+                    arcMemberWindowParams.y = mHubParams.y - arcMemberView.viewHeight + arcHubView.viewHeight;
+                    if (hubX <= screenWidth / 2) {//左下
+                        arcMemberWindowParams.x = mHubParams.x + ArcHubView.viewWidth;
+                    } else {//右下
+                        arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth;
+                    }
+                    arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_UP);
                 }
-                arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_LEFT);
             }
+
 
             arcMemberWindowParams.type = LayoutParams.TYPE_PHONE;
             arcMemberWindowParams.format = PixelFormat.RGBA_8888;

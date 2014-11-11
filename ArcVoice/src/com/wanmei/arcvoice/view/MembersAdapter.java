@@ -59,6 +59,7 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        //todo 通过ViewHolder不同的layout实现
         View v = LayoutInflater.from(mContext).inflate(R.layout.layout_member_item, null);
 
         return new MemberHolder(v);
@@ -85,7 +86,7 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             RelativeLayout.LayoutParams nameParams = (RelativeLayout.LayoutParams) playerHolder.mNameView.getLayoutParams();
             nameParams.removeRule(RelativeLayout.LEFT_OF);
             nameParams.addRule(RelativeLayout.RIGHT_OF,R.id.avatar);
-            playerHolder.mAvatarView.setLayoutParams(params);
+            playerHolder.mNameView.setLayoutParams(nameParams);
 
         }else if(mDirection == Direction.TEXT_LEFT){
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerHolder.mAvatarView.getLayoutParams();
@@ -96,7 +97,27 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             RelativeLayout.LayoutParams nameParams = (RelativeLayout.LayoutParams) playerHolder.mNameView.getLayoutParams();
             nameParams.removeRule(RelativeLayout.RIGHT_OF);
             nameParams.addRule(RelativeLayout.LEFT_OF,R.id.avatar);
+            playerHolder.mNameView.setLayoutParams(nameParams);
+        }else if(mDirection == Direction.TEXT_DOWN){
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerHolder.mAvatarView.getLayoutParams();
+            params.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             playerHolder.mAvatarView.setLayoutParams(params);
+
+            RelativeLayout.LayoutParams nameParams = (RelativeLayout.LayoutParams) playerHolder.mNameView.getLayoutParams();
+            nameParams.removeRule(RelativeLayout.ABOVE);
+            nameParams.addRule(RelativeLayout.BELOW,R.id.avatar);
+            playerHolder.mNameView.setLayoutParams(nameParams);
+        }else if(mDirection == Direction.TEXT_UP){
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerHolder.mAvatarView.getLayoutParams();
+            params.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            playerHolder.mAvatarView.setLayoutParams(params);
+
+            RelativeLayout.LayoutParams nameParams = (RelativeLayout.LayoutParams) playerHolder.mNameView.getLayoutParams();
+            nameParams.removeRule(RelativeLayout.BELOW);
+            nameParams.addRule(RelativeLayout.ABOVE,R.id.avatar);
+            playerHolder.mNameView.setLayoutParams(nameParams);
         }
         playerHolder.mNameView.setText(name);
 
