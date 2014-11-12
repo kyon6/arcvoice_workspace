@@ -7,8 +7,9 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
 import com.wanmei.arcvoice.utils.LogUtils;
-import com.wanmei.arcvoice.view.ArcMemberView;
 import com.wanmei.arcvoice.view.ArcHubView;
+import com.wanmei.arcvoice.view.ArcMemberView;
+import com.wanmei.arcvoice.view.ArcSettingsView;
 import com.wanmei.arcvoice.view.MembersAdapter;
 
 /**
@@ -25,6 +26,8 @@ public class ArcWindowManager {
      * 大悬浮窗View的实例
      */
     private static ArcMemberView arcMemberView;
+
+    private static ArcSettingsView arcSettingsView;
     /**
      * 小悬浮窗View的参数
      */
@@ -34,6 +37,9 @@ public class ArcWindowManager {
      * 大悬浮窗View的参数
      */
     private static LayoutParams arcMemberWindowParams;
+
+
+    private static LayoutParams arcSettingsWindowParams;
     /**
      * 用于控制在屏幕上添加或移除悬浮窗
      */
@@ -73,6 +79,68 @@ public class ArcWindowManager {
             arcHubView.setParams(arcHubWindowParams);
             windowManager.addView(arcHubView, arcHubWindowParams);
             LogUtils.e("==HubView:" + arcHubView);
+        }
+    }
+
+    public static void createArcSettingsWindow(Context context) {
+        WindowManager windowManager = getWindowManager(context);
+        int screenWidth = windowManager.getDefaultDisplay().getWidth();
+        int screenHeight = windowManager.getDefaultDisplay().getHeight();
+        ArcVoiceHelper.Orientation orientation = ArcVoiceHelper.getInstance(context).getOrientation();
+        if (arcSettingsView == null) {
+            arcSettingsView = new ArcSettingsView(context);
+            arcSettingsWindowParams = new LayoutParams();
+
+            WindowManager.LayoutParams mHubParams = arcHubView.getParams();
+            int hubX = mHubParams.x;
+            int hubY = mHubParams.y;
+            //判断ArcHub所在位置标记。0：左上，1：右上，2：左下，3：右下
+//            if(orientation == ArcVoiceHelper.Orientation.VERTICAL) {
+            if (hubX <= screenWidth / 2) {
+                arcSettingsWindowParams.x = mHubParams.x;
+                if (hubY <= screenHeight / 2) {//左上
+                    arcSettingsWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                } else {//左下
+                    arcSettingsWindowParams.y = mHubParams.y - ArcSettingsView.viewHeight;
+                }
+            } else {
+                arcSettingsWindowParams.x = mHubParams.x - ArcSettingsView.viewWidth + ArcHubView.viewWidth;
+                if (hubY <= screenHeight / 2) {//右上
+                    arcSettingsWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                } else {//右下
+                    arcSettingsWindowParams.y = mHubParams.y - ArcSettingsView.viewHeight;
+                }
+            }
+//            }else{
+//                if(hubY <= screenHeight / 2){
+//                    arcSettingsWindowParams.y = mHubParams.y;
+//                    if (hubX <= screenWidth / 2) {//左上
+//                        arcSettingsWindowParams.x = mHubParams.x + ArcHubView.viewWidth;
+//                    } else {//右上
+//                        arcSettingsWindowParams.x = mHubParams.x - ArcSettingsView.viewWidth;
+//                    }
+//                }else{
+//                    arcSettingsWindowParams.y = mHubParams.y - ArcSettingsView.viewHeight + arcHubView.viewHeight;
+//                    if (hubX <= screenWidth / 2) {//左下
+//                        arcSettingsWindowParams.x = mHubParams.x + ArcHubView.viewWidth;
+//                    } else {//右下
+//                        arcSettingsWindowParams.x = mHubParams.x - ArcSettingsView.viewWidth;
+//                    }
+//                }
+//            }
+
+
+            arcSettingsWindowParams.type = LayoutParams.TYPE_PHONE;
+            arcSettingsWindowParams.format = PixelFormat.RGBA_8888;
+            arcSettingsWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | LayoutParams.FLAG_NOT_FOCUSABLE;
+            arcSettingsWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
+            arcSettingsWindowParams.width = ArcSettingsView.viewWidth;
+            arcSettingsWindowParams.height = ArcSettingsView.viewHeight;
+            windowManager.addView(arcSettingsView, arcSettingsWindowParams);
+            LogUtils.e("hub position:" + arcHubView.getParams().x + "," + arcHubView.getParams().y);
+            LogUtils.e("settings position:" + arcSettingsWindowParams.x + "," + arcSettingsWindowParams.y);
+
         }
     }
 
@@ -174,6 +242,14 @@ public class ArcWindowManager {
             WindowManager windowManager = getWindowManager(context);
             windowManager.removeView(arcMemberView);
             arcMemberView = null;
+        }
+    }
+
+    public static void removeArcSettingsWindow(Context context) {
+        if (arcSettingsView != null) {
+            WindowManager windowManager = getWindowManager(context);
+            windowManager.removeView(arcSettingsView);
+            arcSettingsView = null;
         }
     }
 

@@ -60,7 +60,7 @@ public class GameActivity extends Activity {
         mChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mHelper.start(mSessionId);
+                mHelper.start(mSessionId);
 //                mChatBtn.setVisibility(View.INVISIBLE);
                 Toast.makeText(GameActivity.this,"游戏操作输入",Toast.LENGTH_SHORT).show();
             }
@@ -78,7 +78,7 @@ public class GameActivity extends Activity {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                mHelper.start(mSessionId);
+//                mHelper.start(mSessionId);
                 initUserInfo();
             }
         });

@@ -24,15 +24,10 @@ import java.util.Map;
  */
 public class ArcVoiceHelper {
     public static final String TAG = "ArcVoiceDemo";
-
-    /**
-     * zhe arc member show orientation
-     */
-    public static enum Orientation{VERTICAL,HORIZONTAL};
-
     private static ArcVoiceHelper mInstance = null;
+    private boolean isStart;
+    ;
     private Context mContext;
-
     /**
      * params needed
      */
@@ -40,11 +35,10 @@ public class ArcVoiceHelper {
     private String ARC_APP_CREDENTIALS;
     private ArcRegion ARC_REGION;
     private String USER_ID;
-
     private boolean isMuteMyself = false;
     private boolean isMuteOthers = false;
     private boolean isAvatarShow = true;//默认显示头像
-
+    private boolean isSettingsShow = true;//show settings default
     private Orientation mOrientation = Orientation.VERTICAL;
     /**
      * 用来记录头像是否显示
@@ -56,7 +50,6 @@ public class ArcVoiceHelper {
      * record user's name and avatar
      */
     private Map<String, Member> mPlayerInfoList;
-
     /**
      * ArcVoice and ArcVoiceEventHandler used to talk to the ArcVoiceSDK
      */
@@ -109,41 +102,50 @@ public class ArcVoiceHelper {
         setupArc();
     }
 
-    public void setOrientation(Orientation orientation){
-        mOrientation = orientation;
+    public Orientation getOrientation() {
+        return mOrientation;
     }
 
-    public Orientation getOrientation(){
-        return mOrientation;
+    public void setOrientation(Orientation orientation) {
+        mOrientation = orientation;
     }
 
     /**
      * 启动，加入到会话当中
+     *
      * @param sessionId
      */
     public void start(String sessionId) {
         if (arcVoice != null) {
             arcVoice.joinSession(sessionId);
+            isStart = true;
+            ArcWindowManager.removeArcSettingsWindow(mContext);
+            ArcWindowManager.createArcMemberWindow(mContext);
         }
+    }
+
+    public boolean isStart() {
+        return isStart;
     }
 
     /**
      * 由于arcVoice只返回userId和userStatus
-     *
+     * <p/>
      * 这里需要游戏开发者将朋友信息传递进来（包括userId，userName，userAvatar），这样通过userId关联可以显示用户信息
-     *
+     * <p/>
      * todo 如果是进入某个区域形成会话，游戏开发者能不能获得其他玩家的相关信息？？需要确认
+     *
      * @param userId
      * @param userName
      * @param userAvatar
      */
-    public void addPlayerInfo(String userId,String userName,String userAvatar){
-        if(!mPlayerInfoList.containsKey(userId)){
+    public void addPlayerInfo(String userId, String userName, String userAvatar) {
+        if (!mPlayerInfoList.containsKey(userId)) {
             Member mPlayer = new Member();
             mPlayer.setUserId(userId);
             mPlayer.setUserName(userName);
             mPlayer.setUserAvatar(userAvatar);
-            mPlayerInfoList.put(userId,mPlayer);
+            mPlayerInfoList.put(userId, mPlayer);
         }
     }
 
@@ -152,7 +154,7 @@ public class ArcVoiceHelper {
      */
     public void show() {
         ArcWindowManager.createArcHubWindow(mContext);
-        ArcWindowManager.createArcMemberWindow(mContext);
+        ArcWindowManager.createArcSettingsWindow(mContext);
     }
 
     /**
@@ -162,6 +164,7 @@ public class ArcVoiceHelper {
     public void hidden() {
         ArcWindowManager.removeArcHubWindow(mContext);
         ArcWindowManager.removeArcMemberWindow(mContext);
+        ArcWindowManager.removeArcSettingsWindow(mContext);
     }
 
     /**
@@ -210,6 +213,40 @@ public class ArcVoiceHelper {
         mainThreadHandler.removeCallbacks(runnable);
 
         isStatusUpdateRunning = false;
+    }
+
+    /**
+     * show or hidden settings
+     */
+    public void doShowSettings() {
+        if (isSettingsShow) {
+            hiddenSettings();
+        } else {
+            showSettings();
+        }
+    }
+
+    /**
+     * show user avatars
+     */
+    public void showSettings() {
+        if (isSettingsShow)
+            return;
+
+        ArcWindowManager.createArcSettingsWindow(mContext);
+        isSettingsShow = true;
+    }
+
+    /**
+     * hidden user avatars
+     */
+    public void hiddenSettings() {
+        if (!isSettingsShow)
+            return;
+
+        ArcWindowManager.removeArcSettingsWindow(mContext);
+        isSettingsShow = false;
+
     }
 
     /**
@@ -399,5 +436,12 @@ public class ArcVoiceHelper {
             }
         };
         arcVoice = ArcVoice.getInstance(mContext, ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, USER_ID, eventHandler);
+    }
+
+    /**
+     * zhe arc member show orientation
+     */
+    public static enum Orientation {
+        VERTICAL, HORIZONTAL
     }
 }

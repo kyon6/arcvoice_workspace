@@ -199,8 +199,12 @@ public class ArcHubView extends RelativeLayout {
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
                 if (xDownInScreen == xInScreen && yDownInScreen == yInScreen) {
                     //Toast.makeText(getContext(), "显示/隐藏Avatar", Toast.LENGTH_SHORT).show();
-                    LogUtils.e("显示/隐藏Avatar");
-                    ArcVoiceHelper.getInstance(getContext()).doShowAvatars();
+                    if (ArcVoiceHelper.getInstance(getContext()).isStart()) {
+                        LogUtils.e("显示/隐藏Avatar");
+                        ArcVoiceHelper.getInstance(getContext()).doShowAvatars();
+                    } else {
+                        ArcVoiceHelper.getInstance(getContext()).doShowSettings();
+                    }
                 } else {
                     /*
                      //靠边停靠
@@ -235,6 +239,10 @@ public class ArcHubView extends RelativeLayout {
         return false;
     }
 
+    public WindowManager.LayoutParams getParams() {
+        return mParams;
+    }
+
     /**
      * 将小悬浮窗的参数传入，用于更新小悬浮窗的位置。
      *
@@ -244,9 +252,6 @@ public class ArcHubView extends RelativeLayout {
         mParams = params;
     }
 
-    public WindowManager.LayoutParams getParams(){
-        return mParams;
-    }
     /**
      * 更新小悬浮窗在屏幕中的位置。
      */
