@@ -65,6 +65,8 @@ public class ArcVoiceHelper {
             }
         }
     };
+    private boolean mEnable;
+    private boolean mMicEnable;
 
     private ArcVoiceHelper(Context context) {
         this.mContext = context;
@@ -147,6 +149,19 @@ public class ArcVoiceHelper {
             mPlayer.setUserAvatar(userAvatar);
             mPlayerInfoList.put(userId, mPlayer);
         }
+    }
+
+    public void setArcEnable(boolean enable) {
+        mEnable = enable;
+    }
+
+    public void setMicEnable(boolean enable) {
+        mMicEnable = enable;
+        if (mMicEnable)
+            unMuteMyself();
+        else
+            muteMyself();
+        isMuteMyself = mMicEnable;
     }
 
     /**
