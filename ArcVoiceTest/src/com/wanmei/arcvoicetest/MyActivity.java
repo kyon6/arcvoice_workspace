@@ -66,6 +66,9 @@ public class MyActivity extends Activity {
 
         userId = String.valueOf((int) (Math.random()*10 + 1));
         mUserIdEditText.setText(userId);
+        mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
+        mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, userId);
+        
 //        ListView mListView = (ListView)findViewById(R.id.mlistview);
 //        String[] objects = new String[]{"A"};
 //        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1,objects);
@@ -79,8 +82,6 @@ public class MyActivity extends Activity {
     protected void onResume() {
         super.onResume();
         LogUtils.e("onResume");
-        mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
-        mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, userId);
         mHelper.show();
     }
 
