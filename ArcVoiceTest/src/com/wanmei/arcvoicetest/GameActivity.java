@@ -32,11 +32,11 @@ public class GameActivity extends Activity {
 
     Handler mHandler = new Handler();
 
-    public static void start(Context context, String sessionId, String userId,boolean isHorizontal) {
+    public static void start(Context context, String sessionId, String userId, boolean isHorizontal) {
         Intent mIntent = new Intent(context, GameActivity.class);
         mIntent.putExtra("sessionId", sessionId);
         mIntent.putExtra("userId", userId);
-        mIntent.putExtra("horizontal",isHorizontal);
+        mIntent.putExtra("horizontal", isHorizontal);
 
         context.startActivity(mIntent);
     }
@@ -49,10 +49,10 @@ public class GameActivity extends Activity {
 
         mSessionId = getIntent().getStringExtra("sessionId");
         mUserId = getIntent().getStringExtra("userId");
-        isHorizontal = getIntent().getBooleanExtra("horizontal",false);
-        if(isHorizontal){
+        isHorizontal = getIntent().getBooleanExtra("horizontal", false);
+        if (isHorizontal) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }else{
+        } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
@@ -60,17 +60,16 @@ public class GameActivity extends Activity {
         mChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHelper.start(mSessionId);
 //                mChatBtn.setVisibility(View.INVISIBLE);
-                Toast.makeText(GameActivity.this,"游戏操作输入",Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameActivity.this, "游戏操作输入", Toast.LENGTH_SHORT).show();
             }
         });
 
         mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
-        mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, mUserId);
-        if(isHorizontal){
+        //mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, mUserId);
+        if (isHorizontal) {
             mHelper.setOrientation(ArcVoiceHelper.Orientation.HORIZONTAL);
-        }else{
+        } else {
             mHelper.setOrientation(ArcVoiceHelper.Orientation.VERTICAL);
         }
 
@@ -78,16 +77,24 @@ public class GameActivity extends Activity {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-//                mHelper.start(mSessionId);
+                mHelper.startSession(mSessionId);
                 initUserInfo();
             }
         });
         //Leon","http://ecx.images-amazon.com/images/I/41X0uJ4jbcL._AC_UY370_SX420.jpg"
     }
 
-    private void initUserInfo(){
-        mHelper.addPlayerInfo(mUserId,"Leon","https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
-        mHelper.addPlayerInfo("99","周有为","http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+    private void initUserInfo() {
+        mHelper.addPlayerInfo("1", "Ironman", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
+        mHelper.addPlayerInfo("2", "Hulk", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+        mHelper.addPlayerInfo("3", "Batman", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+        mHelper.addPlayerInfo("4", "Superman", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+        mHelper.addPlayerInfo("5", "Flash", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+        mHelper.addPlayerInfo("6", "Thor", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+        mHelper.addPlayerInfo("7", "Captain America", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+        mHelper.addPlayerInfo("8", "Wonder Woman", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+        mHelper.addPlayerInfo("9", "Green Lantern", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+        mHelper.addPlayerInfo("10", "Aquaman", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
     }
 
     @Override
@@ -105,8 +112,8 @@ public class GameActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mHelper.stop();
+    public void onBackPressed() {
+        mHelper.quiteSession();
+        super.onBackPressed();
     }
 }

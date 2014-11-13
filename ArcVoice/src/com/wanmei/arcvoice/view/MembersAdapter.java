@@ -19,17 +19,15 @@ import com.wanmei.arcvoice.utils.LogUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Deprecated
 public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    public static enum Direction {TEXT_LEFT, TEXT_RIGHT, TEXT_UP, TEXT_DOWN};
 
     private final Context mContext;
     private DisplayImageOptions options;
 
     private List<Member> mData = new ArrayList<Member>();
 
-    private Direction mDirection = Direction.TEXT_RIGHT;
+    private ArcMemberView.Direction mDirection = ArcMemberView.Direction.TEXT_RIGHT;
 
     public MembersAdapter(Context context) {
         mContext = context;
@@ -42,7 +40,7 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .build();
     }
 
-    public void setDirection(Direction direction){
+    public void setDirection(ArcMemberView.Direction direction){
         this.mDirection = direction;
     }
 
@@ -77,7 +75,7 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         MemberHolder playerHolder = (MemberHolder) viewHolder;
 
         String name = player.getUserId()+":"+player.getUserName();
-        if(mDirection == Direction.TEXT_RIGHT){
+        if(mDirection == ArcMemberView.Direction.TEXT_RIGHT){
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerHolder.mAvatarView.getLayoutParams();
             params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -88,7 +86,7 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             nameParams.addRule(RelativeLayout.RIGHT_OF,R.id.avatar);
             playerHolder.mNameView.setLayoutParams(nameParams);
 
-        }else if(mDirection == Direction.TEXT_LEFT){
+        }else if(mDirection == ArcMemberView.Direction.TEXT_LEFT){
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerHolder.mAvatarView.getLayoutParams();
             params.removeRule(RelativeLayout.ALIGN_PARENT_LEFT);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -98,7 +96,7 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             nameParams.removeRule(RelativeLayout.RIGHT_OF);
             nameParams.addRule(RelativeLayout.LEFT_OF,R.id.avatar);
             playerHolder.mNameView.setLayoutParams(nameParams);
-        }else if(mDirection == Direction.TEXT_DOWN){
+        }else if(mDirection == ArcMemberView.Direction.TEXT_DOWN){
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerHolder.mAvatarView.getLayoutParams();
             params.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -108,7 +106,7 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             nameParams.removeRule(RelativeLayout.ABOVE);
             nameParams.addRule(RelativeLayout.BELOW,R.id.avatar);
             playerHolder.mNameView.setLayoutParams(nameParams);
-        }else if(mDirection == Direction.TEXT_UP){
+        }else if(mDirection == ArcMemberView.Direction.TEXT_UP){
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) playerHolder.mAvatarView.getLayoutParams();
             params.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);

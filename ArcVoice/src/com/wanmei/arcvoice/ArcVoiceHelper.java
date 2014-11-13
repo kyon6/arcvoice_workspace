@@ -25,7 +25,7 @@ import java.util.Map;
 public class ArcVoiceHelper {
     public static final String TAG = "ArcVoiceDemo";
     private static ArcVoiceHelper mInstance = null;
-    private boolean isStart;
+    private boolean isInSession;
     ;
     private Context mContext;
     /**
@@ -114,20 +114,16 @@ public class ArcVoiceHelper {
 
     /**
      * 启动，加入到会话当中
-     *
+     * 显示同一个session中用户状态
      * @param sessionId
      */
-    public void start(String sessionId) {
+    public void startSession(String sessionId) {
         if (arcVoice != null) {
             arcVoice.joinSession(sessionId);
-            isStart = true;
+            isInSession = true;
             ArcWindowManager.removeArcSettingsWindow(mContext);
             ArcWindowManager.createArcMemberWindow(mContext);
         }
-    }
-
-    public boolean isStart() {
-        return isStart;
     }
 
     /**
@@ -166,15 +162,16 @@ public class ArcVoiceHelper {
 
     /**
      * show ArcVoice HUD
+     * 显示 ArcVoice HUB
      */
     public void show() {
         ArcWindowManager.createArcHubWindow(mContext);
-        ArcWindowManager.createArcSettingsWindow(mContext);
     }
 
     /**
      * hidden ArcVoice HUD
      * include the Arc Icon and user avatars
+     * 隐藏所有的view
      */
     public void hidden() {
         ArcWindowManager.removeArcHubWindow(mContext);
@@ -182,6 +179,15 @@ public class ArcVoiceHelper {
         ArcWindowManager.removeArcSettingsWindow(mContext);
     }
 
+    /**
+     * 退出会话
+     */
+    public void quiteSession(){
+        if(arcVoice != null){
+            arcVoice.leaveSession();
+            isInSession = false;
+        }
+    }
     /**
      * stop ArcVoiceHelper
      */
@@ -194,9 +200,22 @@ public class ArcVoiceHelper {
     }
 
     /**
+     * Arc Hub 点击事件
+     *
+     * 显示/隐藏 Arc Setting View
+     * 显示/隐藏 Arc Member View
+     */
+    public void onClick(){
+        if(isInSession){
+            doShowAvatars();
+        }else{
+            doShowSettings();
+        }
+    }
+    /**
      * show or hidden avatars
      */
-    public void doShowAvatars() {
+    private void doShowAvatars() {
         if (isAvatarShow) {
             hiddenAvatars();
         } else {
@@ -207,7 +226,7 @@ public class ArcVoiceHelper {
     /**
      * show user avatars
      */
-    public void showAvatars() {
+    private void showAvatars() {
         if (isAvatarShow)
             return;
 
@@ -218,7 +237,7 @@ public class ArcVoiceHelper {
     /**
      * hidden user avatars
      */
-    public void hiddenAvatars() {
+    private void hiddenAvatars() {
         if (!isAvatarShow)
             return;
 
@@ -233,7 +252,7 @@ public class ArcVoiceHelper {
     /**
      * show or hidden settings
      */
-    public void doShowSettings() {
+    private void doShowSettings() {
         if (isSettingsShow) {
             hiddenSettings();
         } else {
@@ -244,7 +263,7 @@ public class ArcVoiceHelper {
     /**
      * show user avatars
      */
-    public void showSettings() {
+    private void showSettings() {
         if (isSettingsShow)
             return;
 
@@ -255,7 +274,7 @@ public class ArcVoiceHelper {
     /**
      * hidden user avatars
      */
-    public void hiddenSettings() {
+    private void hiddenSettings() {
         if (!isSettingsShow)
             return;
 

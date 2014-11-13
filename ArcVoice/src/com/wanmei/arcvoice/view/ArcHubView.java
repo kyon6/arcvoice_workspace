@@ -198,13 +198,7 @@ public class ArcHubView extends RelativeLayout {
             case MotionEvent.ACTION_UP:
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
                 if (xDownInScreen == xInScreen && yDownInScreen == yInScreen) {
-                    //Toast.makeText(getContext(), "显示/隐藏Avatar", Toast.LENGTH_SHORT).show();
-                    if (ArcVoiceHelper.getInstance(getContext()).isStart()) {
-                        LogUtils.e("显示/隐藏Avatar");
-                        ArcVoiceHelper.getInstance(getContext()).doShowAvatars();
-                    } else {
-                        ArcVoiceHelper.getInstance(getContext()).doShowSettings();
-                    }
+                    ArcVoiceHelper.getInstance(getContext()).onClick();
                 } else {
                     /*
                      //靠边停靠

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.wanmei.arcvoice.view.CircleImageView
+        android:id="@+id/avatar"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:background="@drawable/grey"
+        android:src="@drawable/connected"
+        android:layout_alignParentRight="true"
+        app:border_width="2dp" />
+
+    <TextView
+        android:id="@+id/playerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/avatar"
+        android:text="player_name"
+        android:singleLine="true"
+        android:ellipsize="marquee" />
+
+</RelativeLayout>

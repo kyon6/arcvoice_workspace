@@ -156,54 +156,62 @@ public class ArcWindowManager {
         int screenHeight = windowManager.getDefaultDisplay().getHeight();
         ArcVoiceHelper.Orientation orientation = ArcVoiceHelper.getInstance(context).getOrientation();
         if (arcMemberView == null) {
-            arcMemberView = new ArcMemberView(context,orientation);
-            arcMemberWindowParams = new LayoutParams();
             /**
-             * check the hub view postion
+             * check the hub view position
              */
             WindowManager.LayoutParams mHubParams = arcHubView.getParams();
             int hubX = mHubParams.x;
             int hubY = mHubParams.y;
 
+            arcMemberView = new ArcMemberView(context,orientation);
+            arcMemberWindowParams = new LayoutParams();
+            ArcMemberView.Direction direction = ArcMemberView.Direction.TEXT_RIGHT;
             //判断ArcHub所在位置标记。0：左上，1：右上，2：左下，3：右下
             if(orientation == ArcVoiceHelper.Orientation.VERTICAL) {
                 if (hubX <= screenWidth / 2) {
                     arcMemberWindowParams.x = mHubParams.x;
                     if (hubY <= screenHeight / 2) {//左上
                         arcMemberWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                        arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_UP);
                     } else {//左下
                         arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
+                        arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_DOWN);
                     }
-                    arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_RIGHT);
+                    //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_RIGHT);
                 } else {
                     arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth + ArcHubView.viewWidth;
                     if (hubY <= screenWidth / 2) {//右上
                         arcMemberWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                        arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_UP);
                     } else {//右下
                         arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
+                        arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_DOWN);
                     }
-                    arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_LEFT);
+                    //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_LEFT);
                 }
             }else{
                 if(hubY <= screenHeight / 2){
                     arcMemberWindowParams.y = mHubParams.y;
                     if (hubX <= screenWidth / 2) {//左上
                         arcMemberWindowParams.x = mHubParams.x + ArcHubView.viewWidth;
+                        arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_UP);
                     } else {//右上
                         arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth;
+                        arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_UP);
                     }
-                    arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_DOWN);
+                    //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_DOWN);
                 }else{
                     arcMemberWindowParams.y = mHubParams.y - arcMemberView.viewHeight + arcHubView.viewHeight;
                     if (hubX <= screenWidth / 2) {//左下
                         arcMemberWindowParams.x = mHubParams.x + ArcHubView.viewWidth;
+                        arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_DOWN);
                     } else {//右下
                         arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth;
+                        arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_DOWN);
                     }
-                    arcMemberView.updateDirection(MembersAdapter.Direction.TEXT_UP);
+                    //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_UP);
                 }
             }
-
 
             arcMemberWindowParams.type = LayoutParams.TYPE_PHONE;
             arcMemberWindowParams.format = PixelFormat.RGBA_8888;
