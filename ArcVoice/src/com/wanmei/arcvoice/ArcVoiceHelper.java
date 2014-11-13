@@ -47,11 +47,11 @@ public class ArcVoiceHelper {
     /**
      * 用户头像是否显示
      */
-    private boolean isAvatarShow = true;//默认显示头像
+    private boolean isAvatarShow = false;//默认显示头像
     /**
      * setting view  是否显示状态
      */
-    private boolean isSettingsShow = true;//show settings default
+    private boolean isSettingsShow = false;//show settings default
     private Orientation mOrientation = Orientation.VERTICAL;
     /**
      * 用来记录头像是否显示
@@ -183,7 +183,7 @@ public class ArcVoiceHelper {
      * 显示 ArcVoice HUB
      */
     public void show() {
-        ArcWindowManager.createArcHubWindow(mContext);
+        ArcWindowManager.createArcHudWindow(mContext);
     }
 
     /**
@@ -192,7 +192,7 @@ public class ArcVoiceHelper {
      * 隐藏所有的view
      */
     public void hidden() {
-        ArcWindowManager.removeArcHubWindow(mContext);
+        ArcWindowManager.removeArcHudWindow(mContext);
 //        ArcWindowManager.removeArcMemberWindow(mContext);
 //        ArcWindowManager.removeArcSettingsWindow(mContext);
         hiddenAvatars();

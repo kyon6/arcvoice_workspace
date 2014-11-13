@@ -57,7 +57,7 @@ public class ArcWindowManager {
      *
      * @param context 必须为应用程序的Context.
      */
-    public static void createArcHubWindow(Context context) {
+    public static void createArcHudWindow(Context context) {
         WindowManager windowManager = getWindowManager(context);
         int screenWidth = windowManager.getDefaultDisplay().getWidth();
         int screenHeight = windowManager.getDefaultDisplay().getHeight();
@@ -229,7 +229,7 @@ public class ArcWindowManager {
      *
      * @param context 必须为应用程序的Context.
      */
-    public static void removeArcHubWindow(Context context) {
+    public static void removeArcHudWindow(Context context) {
         if (arcHudView != null) {
             WindowManager windowManager = getWindowManager(context);
             windowManager.removeView(arcHudView);
