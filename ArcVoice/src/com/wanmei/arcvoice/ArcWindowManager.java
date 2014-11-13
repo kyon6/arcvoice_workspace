@@ -7,10 +7,9 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
 import com.wanmei.arcvoice.utils.LogUtils;
-import com.wanmei.arcvoice.view.ArcHubView;
+import com.wanmei.arcvoice.view.ArcHudView;
 import com.wanmei.arcvoice.view.ArcMemberView;
 import com.wanmei.arcvoice.view.ArcSettingsView;
-import com.wanmei.arcvoice.view.MembersAdapter;
 
 /**
  * ArcVoice悬浮框 界面类
@@ -21,7 +20,7 @@ public class ArcWindowManager {
     /**
      * 小悬浮窗View的实例
      */
-    private static ArcHubView arcHubView;
+    private static ArcHudView arcHudView;
     /**
      * 大悬浮窗View的实例
      */
@@ -45,11 +44,11 @@ public class ArcWindowManager {
      */
     private static WindowManager mWindowManager;
 
-    public static ArcHubView getArcHubView() {
-        return arcHubView;
+    public static ArcHudView getArcHudView() {
+        return arcHudView;
     }
 
-    public static ArcMemberView getArcMemberView(){
+    public static ArcMemberView getArcMemberView() {
         return arcMemberView;
     }
 
@@ -62,8 +61,8 @@ public class ArcWindowManager {
         WindowManager windowManager = getWindowManager(context);
         int screenWidth = windowManager.getDefaultDisplay().getWidth();
         int screenHeight = windowManager.getDefaultDisplay().getHeight();
-        if (arcHubView == null) {
-            arcHubView = new ArcHubView(context);
+        if (arcHudView == null) {
+            arcHudView = new ArcHudView(context);
             if (arcHubWindowParams == null) {
                 arcHubWindowParams = new LayoutParams();
                 arcHubWindowParams.type = LayoutParams.TYPE_PHONE;
@@ -71,14 +70,14 @@ public class ArcWindowManager {
                 arcHubWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
                         | LayoutParams.FLAG_NOT_FOCUSABLE;
                 arcHubWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
-                arcHubWindowParams.width = ArcHubView.viewWidth;
-                arcHubWindowParams.height = arcHubView.viewHeight;
+                arcHubWindowParams.width = ArcHudView.viewWidth;
+                arcHubWindowParams.height = arcHudView.viewHeight;
                 arcHubWindowParams.x = 0;
-                arcHubWindowParams.y = screenHeight/2;
+                arcHubWindowParams.y = screenHeight / 2;
             }
-            arcHubView.setParams(arcHubWindowParams);
-            windowManager.addView(arcHubView, arcHubWindowParams);
-            LogUtils.e("==HubView:" + arcHubView);
+            arcHudView.setParams(arcHubWindowParams);
+            windowManager.addView(arcHudView, arcHubWindowParams);
+            LogUtils.e("==HubView:" + arcHudView);
         }
     }
 
@@ -91,7 +90,7 @@ public class ArcWindowManager {
             arcSettingsView = new ArcSettingsView(context);
             arcSettingsWindowParams = new LayoutParams();
 
-            WindowManager.LayoutParams mHubParams = arcHubView.getParams();
+            WindowManager.LayoutParams mHubParams = arcHudView.getParams();
             int hubX = mHubParams.x;
             int hubY = mHubParams.y;
             //判断ArcHub所在位置标记。0：左上，1：右上，2：左下，3：右下
@@ -99,14 +98,14 @@ public class ArcWindowManager {
             if (hubX <= screenWidth / 2) {
                 arcSettingsWindowParams.x = mHubParams.x;
                 if (hubY <= screenHeight / 2) {//左上
-                    arcSettingsWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                    arcSettingsWindowParams.y = mHubParams.y + ArcHudView.viewHeight;
                 } else {//左下
                     arcSettingsWindowParams.y = mHubParams.y - ArcSettingsView.viewHeight;
                 }
             } else {
-                arcSettingsWindowParams.x = mHubParams.x - ArcSettingsView.viewWidth + ArcHubView.viewWidth;
+                arcSettingsWindowParams.x = mHubParams.x - ArcSettingsView.viewWidth + ArcHudView.viewWidth;
                 if (hubY <= screenHeight / 2) {//右上
-                    arcSettingsWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                    arcSettingsWindowParams.y = mHubParams.y + ArcHudView.viewHeight;
                 } else {//右下
                     arcSettingsWindowParams.y = mHubParams.y - ArcSettingsView.viewHeight;
                 }
@@ -138,7 +137,7 @@ public class ArcWindowManager {
             arcSettingsWindowParams.width = ArcSettingsView.viewWidth;
             arcSettingsWindowParams.height = ArcSettingsView.viewHeight;
             windowManager.addView(arcSettingsView, arcSettingsWindowParams);
-            LogUtils.e("hub position:" + arcHubView.getParams().x + "," + arcHubView.getParams().y);
+            LogUtils.e("hub position:" + arcHudView.getParams().x + "," + arcHudView.getParams().y);
             LogUtils.e("settings position:" + arcSettingsWindowParams.x + "," + arcSettingsWindowParams.y);
 
         }
@@ -147,8 +146,7 @@ public class ArcWindowManager {
     /**
      * 创建一个大悬浮窗。位置为屏幕正中间。
      *
-     * @param context
-     *            必须为应用程序的Context.
+     * @param context 必须为应用程序的Context.
      */
     public static void createArcMemberWindow(Context context) {
         WindowManager windowManager = getWindowManager(context);
@@ -159,19 +157,19 @@ public class ArcWindowManager {
             /**
              * check the hub view position
              */
-            WindowManager.LayoutParams mHubParams = arcHubView.getParams();
+            WindowManager.LayoutParams mHubParams = arcHudView.getParams();
             int hubX = mHubParams.x;
             int hubY = mHubParams.y;
 
-            arcMemberView = new ArcMemberView(context,orientation);
+            arcMemberView = new ArcMemberView(context, orientation);
             arcMemberWindowParams = new LayoutParams();
             ArcMemberView.Direction direction = ArcMemberView.Direction.TEXT_RIGHT;
             //判断ArcHub所在位置标记。0：左上，1：右上，2：左下，3：右下
-            if(orientation == ArcVoiceHelper.Orientation.VERTICAL) {
+            if (orientation == ArcVoiceHelper.Orientation.VERTICAL) {
                 if (hubX <= screenWidth / 2) {
                     arcMemberWindowParams.x = mHubParams.x;
                     if (hubY <= screenHeight / 2) {//左上
-                        arcMemberWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                        arcMemberWindowParams.y = mHubParams.y + ArcHudView.viewHeight;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_UP);
                     } else {//左下
                         arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
@@ -179,9 +177,9 @@ public class ArcWindowManager {
                     }
                     //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_RIGHT);
                 } else {
-                    arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth + ArcHubView.viewWidth;
+                    arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth + ArcHudView.viewWidth;
                     if (hubY <= screenWidth / 2) {//右上
-                        arcMemberWindowParams.y = mHubParams.y + ArcHubView.viewHeight;
+                        arcMemberWindowParams.y = mHubParams.y + ArcHudView.viewHeight;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_UP);
                     } else {//右下
                         arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
@@ -189,21 +187,21 @@ public class ArcWindowManager {
                     }
                     //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_LEFT);
                 }
-            }else{
-                if(hubY <= screenHeight / 2){
+            } else {
+                if (hubY <= screenHeight / 2) {
                     arcMemberWindowParams.y = mHubParams.y;
                     if (hubX <= screenWidth / 2) {//左上
-                        arcMemberWindowParams.x = mHubParams.x + ArcHubView.viewWidth;
+                        arcMemberWindowParams.x = mHubParams.x + ArcHudView.viewWidth;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_UP);
                     } else {//右上
                         arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_UP);
                     }
                     //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_DOWN);
-                }else{
-                    arcMemberWindowParams.y = mHubParams.y - arcMemberView.viewHeight + arcHubView.viewHeight;
+                } else {
+                    arcMemberWindowParams.y = mHubParams.y - arcMemberView.viewHeight + arcHudView.viewHeight;
                     if (hubX <= screenWidth / 2) {//左下
-                        arcMemberWindowParams.x = mHubParams.x + ArcHubView.viewWidth;
+                        arcMemberWindowParams.x = mHubParams.x + ArcHudView.viewWidth;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_DOWN);
                     } else {//右下
                         arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth;
@@ -221,8 +219,8 @@ public class ArcWindowManager {
             arcMemberWindowParams.width = ArcMemberView.viewWidth;
             arcMemberWindowParams.height = ArcMemberView.viewHeight;
             windowManager.addView(arcMemberView, arcMemberWindowParams);
-            LogUtils.e("hub position:" + arcHubView.getParams().x+","+arcHubView.getParams().y);
-            LogUtils.e("big position:" + arcMemberWindowParams.x+","+arcMemberWindowParams.y+"-["+ArcMemberView.viewWidth+","+ArcMemberView.viewHeight+"]");
+            LogUtils.e("hub position:" + arcHudView.getParams().x + "," + arcHudView.getParams().y);
+            LogUtils.e("big position:" + arcMemberWindowParams.x + "," + arcMemberWindowParams.y + "-[" + ArcMemberView.viewWidth + "," + ArcMemberView.viewHeight + "]");
         }
     }
 
@@ -232,18 +230,17 @@ public class ArcWindowManager {
      * @param context 必须为应用程序的Context.
      */
     public static void removeArcHubWindow(Context context) {
-        if (arcHubView != null) {
+        if (arcHudView != null) {
             WindowManager windowManager = getWindowManager(context);
-            windowManager.removeView(arcHubView);
-            arcHubView = null;
+            windowManager.removeView(arcHudView);
+            arcHudView = null;
         }
     }
 
     /**
      * 将大悬浮窗从屏幕上移除。
      *
-     * @param context
-     *            必须为应用程序的Context.
+     * @param context 必须为应用程序的Context.
      */
     public static void removeArcMemberWindow(Context context) {
         if (arcMemberView != null) {
@@ -268,16 +265,17 @@ public class ArcWindowManager {
      * @return 有悬浮窗显示在桌面上返回true，没有的话返回false。
      */
     public static boolean isWindowShowing() {
-        return arcHubView != null;
+        return arcHudView != null;
     }
 
-    public static boolean isArcHubShowing(){
-        return arcHubView != null;
+    public static boolean isArcHubShowing() {
+        return arcHudView != null;
     }
 
-    public static boolean isArcMemberShowing(){
+    public static boolean isArcMemberShowing() {
         return arcMemberView != null;
     }
+
     /**
      * 如果WindowManager还未创建，则创建一个新的WindowManager返回。否则返回当前已创建的WindowManager。
      *

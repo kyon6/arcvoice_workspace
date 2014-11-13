@@ -13,7 +13,7 @@ import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.utils.DeviceUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
 
-public class ArcHubView extends RelativeLayout {
+public class ArcHudView extends RelativeLayout {
 
     /**
      * 记录小悬浮窗的宽度
@@ -72,7 +72,7 @@ public class ArcHubView extends RelativeLayout {
 
     private MembersAdapter membersAdapter;
 
-    public ArcHubView(Context context) {
+    public ArcHudView(Context context) {
         super(context);
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         screenWidth = windowManager.getDefaultDisplay().getWidth();

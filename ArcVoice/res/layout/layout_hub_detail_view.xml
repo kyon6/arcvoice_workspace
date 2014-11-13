@@ -11,7 +11,7 @@
         android:layout_height="50dip"
         android:layout_centerHorizontal="true"
         android:background="@drawable/red"
-        android:src="@drawable/hugh"
+        android:src="@drawable/arc_hud"
         app:border_color="@color/light"
         app:border_width="2dp" />
 

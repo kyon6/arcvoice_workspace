@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:src="@drawable/hugh"
+        android:src="@drawable/arc_hud"
         app:border_color="@color/light"
         app:border_width="2dp" />
 </RelativeLayout>
