@@ -44,7 +44,7 @@ public class MyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String sessionId = mSessionEditText.getText().toString().trim();
-                //String userId = mUserIdEditText.getText().toString().trim();
+                String userId = mUserIdEditText.getText().toString().trim();
                 if (TextUtils.isEmpty(sessionId)) {
                     Toast.makeText(MyActivity.this, "pls input the sessionId!", Toast.LENGTH_SHORT).show();
                     ;
@@ -60,14 +60,13 @@ public class MyActivity extends Activity {
                 if(id == R.id.rb_hor){
                     isHor = true;
                 }
+                mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, userId);
                 GameActivity.start(MyActivity.this, sessionId, userId,isHor);
             }
         });
 
-        userId = String.valueOf((int) (Math.random()*10 + 1));
-        mUserIdEditText.setText(userId);
+        mUserIdEditText.setText(String.valueOf((int) (Math.random()*10 + 1)));
         mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
-        mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, userId);
 
 //        ListView mListView = (ListView)findViewById(R.id.mlistview);
 //        String[] objects = new String[]{"A"};

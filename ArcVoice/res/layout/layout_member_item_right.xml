@@ -11,7 +11,7 @@
         android:layout_height="40dip"
         android:background="@drawable/grey"
         android:src="@drawable/connected"
-        app:border_width="2dp" />
+        app:border_width="3dp" />
 
     <TextView
         android:id="@+id/playerName"

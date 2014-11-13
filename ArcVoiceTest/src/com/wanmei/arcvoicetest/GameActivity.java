@@ -86,15 +86,15 @@ public class GameActivity extends Activity {
 
     private void initUserInfo() {
         mHelper.addPlayerInfo("1", "Ironman", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
-        mHelper.addPlayerInfo("2", "Hulk", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
-        mHelper.addPlayerInfo("3", "Batman", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
-        mHelper.addPlayerInfo("4", "Superman", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
-        mHelper.addPlayerInfo("5", "Flash", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
-        mHelper.addPlayerInfo("6", "Thor", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
-        mHelper.addPlayerInfo("7", "Captain America", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
-        mHelper.addPlayerInfo("8", "Wonder Woman", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
-        mHelper.addPlayerInfo("9", "Green Lantern", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
-        mHelper.addPlayerInfo("10", "Aquaman", "http://wallpho.com/download.php?filename=8589130450113-hulk-face-drawing-wallpaper-hd.jpg");
+        mHelper.addPlayerInfo("2", "Hulk", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
+        mHelper.addPlayerInfo("3", "Batman", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
+        mHelper.addPlayerInfo("4", "Superman", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
+        mHelper.addPlayerInfo("5", "Flash", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
+        mHelper.addPlayerInfo("6", "Thor", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
+        mHelper.addPlayerInfo("7", "Captain America", "drawable://"+R.drawable.hugh);
+        mHelper.addPlayerInfo("8", "Wonder Woman", "drawable://"+ R.drawable.hugh);
+        mHelper.addPlayerInfo("9", "Green Lantern", "drawable://"+R.drawable.hugh);
+        mHelper.addPlayerInfo("10", "Aquaman", "drawable://"+R.drawable.hugh);
     }
 
     @Override

@@ -13,7 +13,7 @@
         android:src="@drawable/connected"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        app:border_width="2dp" />
+        app:border_width="3dp" />
 
     <TextView
         android:id="@+id/playerName"
