@@ -35,9 +35,21 @@ public class ArcVoiceHelper {
     private String ARC_APP_CREDENTIALS;
     private ArcRegion ARC_REGION;
     private String USER_ID;
+    /**
+     * myself mute状态
+     */
     private boolean isMuteMyself = false;
+    /**
+     * others mute状态
+     */
     private boolean isMuteOthers = false;
+    /**
+     * 用户头像是否显示
+     */
     private boolean isAvatarShow = true;//默认显示头像
+    /**
+     * setting view  是否显示状态
+     */
     private boolean isSettingsShow = true;//show settings default
     private Orientation mOrientation = Orientation.VERTICAL;
     /**
@@ -134,8 +146,8 @@ public class ArcVoiceHelper {
      * todo 如果是进入某个区域形成会话，游戏开发者能不能获得其他玩家的相关信息？？需要确认
      *
      * @param userId
-     * @param userName
-     * @param userAvatar
+     * @param userName 用户昵称
+     * @param userAvatar 用户头像
      */
     public void addPlayerInfo(String userId, String userName, String userAvatar) {
         if (!mPlayerInfoList.containsKey(userId)) {
