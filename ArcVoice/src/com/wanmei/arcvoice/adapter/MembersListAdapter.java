@@ -63,6 +63,23 @@ public class MembersListAdapter extends ParentAdapter<Member> {
         sb.append("(").append(TextUtils.isEmpty(member.getUserName()) ? "Guest" : member.getUserName()).append(")");
         mViewHolder.mNameView.setText(sb.toString());
 
+        switch (member.getUserState()) {
+            case CONNECTED:
+                // Connected refers to users who are on the voice session, but not currently speaking.
+                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.grey);
+                break;
+
+            case DISCONNECTED:
+                // Disconnected means the user is not on the voice session and will not hear any sound.
+                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.red);
+                break;
+
+            case SPEAKING:
+                // Speaking means the user is currently connected and talking on the voice session.
+                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.green);
+                break;
+        }
+
         ImageLoader.getInstance().displayImage(member.getUserAvatar(), mViewHolder.mAvatarView, options);
         mViewHolder.mAvatarView.setTag(member.getUserId());
         mViewHolder.mAvatarView.setOnLongClickListener(new View.OnLongClickListener() {
