@@ -249,7 +249,7 @@ public class ArcVoiceHelper {
     /**
      * hidden user avatars
      */
-    private void hiddenAvatars() {
+    public void hiddenAvatars() {
         if (!isAvatarShow)
             return;
 

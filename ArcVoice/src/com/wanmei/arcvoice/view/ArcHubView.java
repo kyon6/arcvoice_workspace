@@ -83,13 +83,12 @@ public class ArcHubView extends RelativeLayout {
         viewWidth = view.getLayoutParams().width;
         viewHeight = view.getLayoutParams().height;
 
-        /*mHubView = findViewById(R.id.hub);
+        mHubView = findViewById(R.id.hub);
         mHubView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 LogUtils.e("HubView click!");
-                updateDirection();
-                ArcVoiceHelper.getInstance(getContext()).doShowAvatars();
+                ArcVoiceHelper.getInstance(getContext()).onClick();
             }
         });
         mHubView.setOnLongClickListener(new OnLongClickListener() {
@@ -97,9 +96,10 @@ public class ArcHubView extends RelativeLayout {
             public boolean onLongClick(View v) {
                 LogUtils.e("HubView is longClick");
                 isDrag = true;
+                ArcVoiceHelper.getInstance(getContext()).hiddenAvatars();
                 return true;
             }
-        });*/
+        });
        /* mRecylerView = (RecyclerView) findViewById(R.id.mlistview);
         showDate();*/
     }
@@ -169,13 +169,13 @@ public class ArcHubView extends RelativeLayout {
         }
     }*/
 
-   /* @Override
+    @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (isDrag) {
             return onTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
-    }*/
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -198,7 +198,7 @@ public class ArcHubView extends RelativeLayout {
             case MotionEvent.ACTION_UP:
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
                 if (xDownInScreen == xInScreen && yDownInScreen == yInScreen) {
-                    ArcVoiceHelper.getInstance(getContext()).onClick();
+                    //ArcVoiceHelper.getInstance(getContext()).onClick();
                 } else {
                     /*
                      //靠边停靠
