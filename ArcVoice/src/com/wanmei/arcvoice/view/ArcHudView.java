@@ -171,6 +171,12 @@ public class ArcHudView extends RelativeLayout {
         if (isDrag) {
             return onTouchEvent(ev);
         }
+        xInView = ev.getX();
+        yInView = ev.getY();
+        xDownInScreen = ev.getRawX();
+        yDownInScreen = ev.getRawY() - DeviceUtils.getStatusBarHeight(getContext());
+        xInScreen = ev.getRawX();
+        yInScreen = ev.getRawY() - DeviceUtils.getStatusBarHeight(getContext());
         return super.dispatchTouchEvent(ev);
     }
 

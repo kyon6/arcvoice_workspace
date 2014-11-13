@@ -27,7 +27,6 @@ public class ArcVoiceHelper {
     public static final String TAG = "ArcVoiceDemo";
     private static ArcVoiceHelper mInstance = null;
     private boolean isInSession;
-    ;
     private Context mContext;
     /**
      * params needed
@@ -128,6 +127,7 @@ public class ArcVoiceHelper {
     /**
      * 启动，加入到会话当中
      * 显示同一个session中用户状态
+     *
      * @param sessionId
      */
     public void startSession(String sessionId) {
@@ -145,14 +145,15 @@ public class ArcVoiceHelper {
      * 这里需要游戏开发者将朋友信息传递进来（包括userId，userName，userAvatar），这样通过userId关联可以显示用户信息
      * <p/>
      * todo 如果是进入某个区域形成会话，游戏开发者能不能获得其他玩家的相关信息？？需要确认
-     *
+     * <p/>
      * String imageUri = "http://site.com/image.png"; // from Web
-       String imageUri = "file:///mnt/sdcard/image.png"; // from SD card
-       String imageUri = "content://media/external/audio/albumart/1"; // from content provider
-       String imageUri = "assets://image.png"; // from assets
-       String imageUri = "drawable://" + R.drawable.img; // from drawables (non-9patch images)
+     * String imageUri = "file:///mnt/sdcard/image.png"; // from SD card
+     * String imageUri = "content://media/external/audio/albumart/1"; // from content provider
+     * String imageUri = "assets://image.png"; // from assets
+     * String imageUri = "drawable://" + R.drawable.img; // from drawables (non-9patch images)
+     *
      * @param userId
-     * @param userName 用户昵称
+     * @param userName   用户昵称
      * @param userAvatar 用户头像
      */
     public void addPlayerInfo(String userId, String userName, String userAvatar) {
@@ -202,12 +203,13 @@ public class ArcVoiceHelper {
     /**
      * 退出会话
      */
-    public void quiteSession(){
-        if(arcVoice != null){
+    public void quiteSession() {
+        if (arcVoice != null) {
             arcVoice.leaveSession();
             isInSession = false;
         }
     }
+
     /**
      * stop ArcVoiceHelper
      */
@@ -221,17 +223,18 @@ public class ArcVoiceHelper {
 
     /**
      * Arc Hub 点击事件
-     *
+     * <p/>
      * 显示/隐藏 Arc Setting View
      * 显示/隐藏 Arc Member View
      */
-    public void onClick(){
-        if(isInSession){
+    public void onClick() {
+        if (isInSession) {
             doShowAvatars();
-        }else{
+        } else {
             doShowSettings();
         }
     }
+
     /**
      * show or hidden avatars
      */

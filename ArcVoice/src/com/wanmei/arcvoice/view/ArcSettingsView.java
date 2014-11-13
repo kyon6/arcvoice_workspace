@@ -39,7 +39,7 @@ public class ArcSettingsView extends LinearLayout {
             }
         });
         CheckBox mic_CheckBox = (CheckBox) findViewById(R.id.arc_mic_check);
-        enable_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mic_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ArcVoiceHelper.getInstance(getContext()).setMicEnable(isChecked);
