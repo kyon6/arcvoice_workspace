@@ -189,14 +189,18 @@ public class ArcVoiceHelper {
     }
 
     /**
-     * hidden ArcVoice HUD
+     * hiddenAll ArcVoice HUD
      * include the Arc Icon and user avatars
      * 隐藏所有的view
      */
-    public void hidden() {
+    public void hiddenAll() {
         ArcWindowManager.removeArcHudWindow(mContext);
 //        ArcWindowManager.removeArcMemberWindow(mContext);
 //        ArcWindowManager.removeArcSettingsWindow(mContext);
+        hiddenOthers();
+    }
+
+    public void hiddenOthers() {
         hiddenAvatars();
         hiddenSettings();
     }
@@ -265,7 +269,7 @@ public class ArcVoiceHelper {
     /**
      * hidden user avatars
      */
-    public void hiddenAvatars() {
+    private void hiddenAvatars() {
         if (!isAvatarShow)
             return;
 

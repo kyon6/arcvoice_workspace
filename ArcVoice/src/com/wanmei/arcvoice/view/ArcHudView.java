@@ -93,7 +93,7 @@ public class ArcHudView extends RelativeLayout {
             public boolean onLongClick(View v) {
                 LogUtils.e("HubView is longClick");
                 isDrag = true;
-                ArcVoiceHelper.getInstance(getContext()).hiddenAvatars();
+                ArcVoiceHelper.getInstance(getContext()).hiddenOthers();
                 return true;
             }
         });
