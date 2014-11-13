@@ -135,7 +135,7 @@ public class ArcVoiceHelper {
             arcVoice.joinSession(sessionId);
             isInSession = true;
             ArcWindowManager.removeArcSettingsWindow(mContext);
-            ArcWindowManager.createArcMemberWindow(mContext);
+            showAvatars();
         }
     }
 
@@ -193,8 +193,8 @@ public class ArcVoiceHelper {
      */
     public void hidden() {
         ArcWindowManager.removeArcHubWindow(mContext);
-        ArcWindowManager.removeArcMemberWindow(mContext);
-        ArcWindowManager.removeArcSettingsWindow(mContext);
+//        ArcWindowManager.removeArcMemberWindow(mContext);
+//        ArcWindowManager.removeArcSettingsWindow(mContext);
         hiddenAvatars();
         hiddenSettings();
     }
