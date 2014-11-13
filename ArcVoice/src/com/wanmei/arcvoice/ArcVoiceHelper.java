@@ -112,6 +112,7 @@ public class ArcVoiceHelper {
         this.mPlayerList = new ArrayList<Member>();
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
+        ArcVoicePersistenceData.getInstance().init(mContext);
 
         setupArc();
     }

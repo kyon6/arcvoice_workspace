@@ -8,6 +8,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
 import com.wanmei.arcvoice.ArcVoiceHelper;
+import com.wanmei.arcvoice.ArcVoicePersistenceData;
 import com.wanmei.arcvoice.R;
 
 /**
@@ -20,6 +21,7 @@ public class ArcSettingsView extends LinearLayout {
     public static int viewWidth;
 
     public static int viewHeight;
+    private CheckBox enable_CheckBox, mic_CheckBox;
 
     public ArcSettingsView(Context context) {
         super(context);
@@ -27,22 +29,33 @@ public class ArcSettingsView extends LinearLayout {
         View view = findViewById(R.id.arc_settings);
         viewWidth = view.getLayoutParams().width;
         viewHeight = view.getLayoutParams().height;
+        initView();
         initActions();
     }
 
+    private void initView() {
+        enable_CheckBox = (CheckBox) findViewById(R.id.arc_enable_check);
+        enable_CheckBox.setChecked(ArcVoicePersistenceData.getInstance().getArcEnable());
+        ArcVoiceHelper.getInstance(getContext()).setArcEnable(enable_CheckBox.isChecked());
+
+        mic_CheckBox = (CheckBox) findViewById(R.id.arc_mic_check);
+        mic_CheckBox.setChecked(ArcVoicePersistenceData.getInstance().getArcMicEnable());
+        ArcVoiceHelper.getInstance(getContext()).setMicEnable(mic_CheckBox.isChecked());
+    }
+
     private void initActions() {
-        CheckBox enable_CheckBox = (CheckBox) findViewById(R.id.arc_enable_check);
         enable_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ArcVoiceHelper.getInstance(getContext()).setArcEnable(isChecked);
+                ArcVoicePersistenceData.getInstance().setArcEnable(isChecked);
             }
         });
-        CheckBox mic_CheckBox = (CheckBox) findViewById(R.id.arc_mic_check);
         mic_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ArcVoiceHelper.getInstance(getContext()).setMicEnable(isChecked);
+                ArcVoicePersistenceData.getInstance().setArcMicEnable(isChecked);
             }
         });
 
