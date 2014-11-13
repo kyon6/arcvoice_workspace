@@ -13,20 +13,20 @@
         android:background="@drawable/red"
         android:src="@drawable/arc_hud"
         app:border_color="@color/light"
-        app:border_width="2dp" />
+        app:border_width="0dp" />
 
 
-   <!-- <android.support.v7.widget.RecyclerView
-        android:id="@+id/mlistview"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignLeft="@+id/hub"
-        android:layout_below="@+id/hub"
-        android:cacheColorHint="@color/transparent"
-        android:divider="@color/transparent"
-        android:dividerHeight="10dp"
-        android:listSelector="@color/transparent"
-        android:scrollbars="none"
-        android:visibility="visible" />-->
+    <!-- <android.support.v7.widget.RecyclerView
+         android:id="@+id/mlistview"
+         android:layout_width="match_parent"
+         android:layout_height="200dp"
+         android:layout_alignLeft="@+id/hub"
+         android:layout_below="@+id/hub"
+         android:cacheColorHint="@color/transparent"
+         android:divider="@color/transparent"
+         android:dividerHeight="10dp"
+         android:listSelector="@color/transparent"
+         android:scrollbars="none"
+         android:visibility="visible" />-->
 
 </RelativeLayout>

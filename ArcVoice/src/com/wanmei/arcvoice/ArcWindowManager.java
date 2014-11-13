@@ -30,7 +30,7 @@ public class ArcWindowManager {
     /**
      * 小悬浮窗View的参数
      */
-    private static LayoutParams arcHubWindowParams;
+    private static LayoutParams arcHudWindowParams;
 
     /**
      * 大悬浮窗View的参数
@@ -63,20 +63,20 @@ public class ArcWindowManager {
         int screenHeight = windowManager.getDefaultDisplay().getHeight();
         if (arcHudView == null) {
             arcHudView = new ArcHudView(context);
-            if (arcHubWindowParams == null) {
-                arcHubWindowParams = new LayoutParams();
-                arcHubWindowParams.type = LayoutParams.TYPE_PHONE;
-                arcHubWindowParams.format = PixelFormat.RGBA_8888;
-                arcHubWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
+            if (arcHudWindowParams == null) {
+                arcHudWindowParams = new LayoutParams();
+                arcHudWindowParams.type = LayoutParams.TYPE_PHONE;
+                arcHudWindowParams.format = PixelFormat.RGBA_8888;
+                arcHudWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
                         | LayoutParams.FLAG_NOT_FOCUSABLE;
-                arcHubWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
-                arcHubWindowParams.width = ArcHudView.viewWidth;
-                arcHubWindowParams.height = arcHudView.viewHeight;
-                arcHubWindowParams.x = 0;
-                arcHubWindowParams.y = screenHeight / 2;
+                arcHudWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
+                arcHudWindowParams.width = ArcHudView.viewWidth;
+                arcHudWindowParams.height = arcHudView.viewHeight;
+                arcHudWindowParams.x = 0;
+                arcHudWindowParams.y = screenHeight / 2;
             }
-            arcHudView.setParams(arcHubWindowParams);
-            windowManager.addView(arcHudView, arcHubWindowParams);
+            arcHudView.setParams(arcHudWindowParams);
+            windowManager.addView(arcHudView, arcHudWindowParams);
             LogUtils.e("==HubView:" + arcHudView);
         }
     }

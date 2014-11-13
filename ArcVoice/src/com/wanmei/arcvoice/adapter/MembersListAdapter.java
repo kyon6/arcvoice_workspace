@@ -1,13 +1,10 @@
 package com.wanmei.arcvoice.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -15,11 +12,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.model.Member;
-import com.wanmei.arcvoice.utils.LogUtils;
 import com.wanmei.arcvoice.view.ArcMemberView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MembersListAdapter extends ParentAdapter<Member> {
@@ -39,7 +32,7 @@ public class MembersListAdapter extends ParentAdapter<Member> {
                 .build();
     }
 
-    public void setDirection(ArcMemberView.Direction direction){
+    public void setDirection(ArcMemberView.Direction direction) {
         this.mDirection = direction;
         this.isNeedRecreate = true;
     }
@@ -95,22 +88,22 @@ public class MembersListAdapter extends ParentAdapter<Member> {
         return convertView;
     }
 
-    private View inflateView(ViewGroup parent){
+    private View inflateView(ViewGroup parent) {
         int viewId = R.layout.layout_member_item_right;
-        if(mDirection == ArcMemberView.Direction.TEXT_DOWN){
+        if (mDirection == ArcMemberView.Direction.TEXT_DOWN) {
             viewId = R.layout.layout_member_item_bottom;
-        }else if(mDirection == ArcMemberView.Direction.TEXT_UP){
+        } else if (mDirection == ArcMemberView.Direction.TEXT_UP) {
             viewId = R.layout.layout_member_item_top;
-        }else if(mDirection == ArcMemberView.Direction.TEXT_LEFT){
+        } else if (mDirection == ArcMemberView.Direction.TEXT_LEFT) {
             viewId = R.layout.layout_member_item_left;
-        }else{
+        } else {
             viewId = R.layout.layout_member_item_right;
         }
 
         return mInflater.inflate(viewId, parent, false);
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         ImageView mAvatarView;
         TextView mNameView;
     }

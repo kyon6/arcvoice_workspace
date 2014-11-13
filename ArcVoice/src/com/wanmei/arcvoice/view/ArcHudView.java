@@ -1,7 +1,6 @@
 package com.wanmei.arcvoice.view;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,8 +24,7 @@ public class ArcHudView extends RelativeLayout {
      */
     public static int viewHeight;
     View mMainView;
-    View mHubView;
-    RecyclerView mRecylerView;
+    View mHudView;
     boolean isListViewShow = false;
     boolean isDrag = false;
     /**
@@ -70,7 +68,6 @@ public class ArcHudView extends RelativeLayout {
      */
     private int screenHeight;
 
-    private MembersAdapter membersAdapter;
 
     public ArcHudView(Context context) {
         super(context);
@@ -78,20 +75,20 @@ public class ArcHudView extends RelativeLayout {
         screenWidth = windowManager.getDefaultDisplay().getWidth();
         screenHeight = windowManager.getDefaultDisplay().getHeight();
 
-        mMainView = LayoutInflater.from(context).inflate(R.layout.layout_hub_detail_view, this);
+        mMainView = LayoutInflater.from(context).inflate(R.layout.layout_hud_detail_view, this);
         View view = findViewById(R.id.small_window_layout);
         viewWidth = view.getLayoutParams().width;
         viewHeight = view.getLayoutParams().height;
 
-        mHubView = findViewById(R.id.hub);
-        mHubView.setOnClickListener(new OnClickListener() {
+        mHudView = findViewById(R.id.hub);
+        mHudView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 LogUtils.e("HubView click!");
                 ArcVoiceHelper.getInstance(getContext()).onClick();
             }
         });
-        mHubView.setOnLongClickListener(new OnLongClickListener() {
+        mHudView.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 LogUtils.e("HubView is longClick");

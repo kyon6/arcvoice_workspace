@@ -190,6 +190,8 @@ public class ArcVoiceHelper {
         ArcWindowManager.removeArcHubWindow(mContext);
         ArcWindowManager.removeArcMemberWindow(mContext);
         ArcWindowManager.removeArcSettingsWindow(mContext);
+        hiddenAvatars();
+        hiddenSettings();
     }
 
     /**
