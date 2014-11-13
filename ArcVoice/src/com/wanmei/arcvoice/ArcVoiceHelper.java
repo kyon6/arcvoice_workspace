@@ -146,6 +146,11 @@ public class ArcVoiceHelper {
      * <p/>
      * todo 如果是进入某个区域形成会话，游戏开发者能不能获得其他玩家的相关信息？？需要确认
      *
+     * String imageUri = "http://site.com/image.png"; // from Web
+       String imageUri = "file:///mnt/sdcard/image.png"; // from SD card
+       String imageUri = "content://media/external/audio/albumart/1"; // from content provider
+       String imageUri = "assets://image.png"; // from assets
+       String imageUri = "drawable://" + R.drawable.img; // from drawables (non-9patch images)
      * @param userId
      * @param userName 用户昵称
      * @param userAvatar 用户头像
