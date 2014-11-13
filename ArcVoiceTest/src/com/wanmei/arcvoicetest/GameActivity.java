@@ -108,7 +108,7 @@ public class GameActivity extends Activity {
     protected void onPause() {
         super.onPause();
         LogUtils.e("onPause");
-        mHelper.hidden();
+        mHelper.hiddenAll();
     }
 
     @Override
