@@ -2,6 +2,7 @@ package com.wanmei.arcvoice;
 
 import android.content.Context;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -244,6 +245,10 @@ public class ArcVoiceHelper {
 
         ArcWindowManager.createArcMemberWindow(mContext);
         isAvatarShow = true;
+
+        if (ArcWindowManager.getArcMemberView() != null && mPlayerList != null) {
+            ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
+        }
     }
 
     /**
@@ -360,6 +365,7 @@ public class ArcVoiceHelper {
             muteMyself();
             isMuteMyself = true;
         }
+        Toast.makeText(mContext, "mute myself:" + isMuteMyself, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -376,6 +382,7 @@ public class ArcVoiceHelper {
             muteOthers();
             isMuteOthers = true;
         }
+        Toast.makeText(mContext, "mute others:" + isMuteOthers, Toast.LENGTH_SHORT).show();
     }
 
     /**
