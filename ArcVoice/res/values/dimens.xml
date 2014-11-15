@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="hub_width">40dip</dimen>
+    <dimen name="hub_height">40dip</dimen>
+
+    <dimen name="avatar_width">40dp</dimen>
+    <dimen name="avatar_height">40dp</dimen>
+</resources>

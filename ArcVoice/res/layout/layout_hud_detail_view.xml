@@ -2,15 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/small_window_layout"
-    android:layout_width="50dp"
-    android:layout_height="50dp">
+    android:layout_width="@dimen/hub_width"
+    android:layout_height="@dimen/hub_height">
 
     <com.wanmei.arcvoice.view.CircleImageView
         android:id="@+id/hub"
-        android:layout_width="50dip"
-        android:layout_height="50dip"
+        android:layout_width="@dimen/hub_width"
+        android:layout_height="@dimen/hub_height"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/red"
         android:src="@drawable/arc_hud"
         app:border_color="@color/light"
         app:border_width="0dp" />

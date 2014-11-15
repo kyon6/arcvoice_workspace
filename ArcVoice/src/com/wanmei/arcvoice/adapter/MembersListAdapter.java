@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -43,6 +44,9 @@ public class MembersListAdapter extends ParentAdapter<Member> {
         if (convertView == null || isNeedRecreate) {
             convertView = inflateView(parent);
             mViewHolder = new ViewHolder();
+            mViewHolder.mLayoutAvatar = (RelativeLayout)convertView.findViewById(R.id.layout_avatar);
+            mViewHolder.mStatusBorder = (ImageView)convertView.findViewById(R.id.status_border);
+            mViewHolder.mStatusIcon = (ImageView)convertView.findViewById(R.id.status_icon);
             mViewHolder.mAvatarView = (ImageView) convertView.findViewById(R.id.avatar);
             mViewHolder.mNameView = (TextView) convertView.findViewById(R.id.playerName);
             convertView.setTag(mViewHolder);
@@ -59,26 +63,42 @@ public class MembersListAdapter extends ParentAdapter<Member> {
         switch (member.getUserState()) {
             case CONNECTED:
                 // Connected refers to users who are on the voice session, but not currently speaking.
-                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.grey);
+//                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.grey);
+                mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_green_border);
                 break;
 
             case DISCONNECTED:
                 // Disconnected means the user is not on the voice session and will not hear any sound.
-                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.red);
+//                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.red);
+                mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_grey_border);
+                mViewHolder.mStatusIcon.setImageResource(R.drawable.status_disconnect_icon);
                 break;
 
             case SPEAKING:
                 // Speaking means the user is currently connected and talking on the voice session.
-                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.green);
+//                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.green);
+                mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_green_border);
+                mViewHolder.mStatusIcon.setImageResource(R.drawable.status_phone_icon);
                 break;
         }
 
+        final String arcUserId = ArcVoiceHelper.getInstance(mContext).getUserId();
+        if(ArcVoiceHelper.getInstance(mContext).isMuteMyself()
+            && member.getUserId().equals(arcUserId)){
+            mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_red_border);
+            mViewHolder.mStatusIcon.setImageResource(R.drawable.status_mute_icon);
+        }
+
+        if(ArcVoiceHelper.getInstance(mContext).isMuteOthers() && !member.getUserId().equals(arcUserId)){
+            mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_red_border);
+            mViewHolder.mStatusIcon.setImageResource(R.drawable.status_mute_icon);
+        }
+
         ImageLoader.getInstance().displayImage(member.getUserAvatar(), mViewHolder.mAvatarView, options);
-        mViewHolder.mAvatarView.setTag(member.getUserId());
-        mViewHolder.mAvatarView.setOnLongClickListener(new View.OnLongClickListener() {
+        mViewHolder.mLayoutAvatar.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (v.getTag().equals(ArcVoiceHelper.getInstance(mContext).getUserId())) {
+                if (member.getUserId().equals(arcUserId)) {
                     ArcVoiceHelper.getInstance(mContext).doMuteMyself();
                 } else
                     ArcVoiceHelper.getInstance(mContext).doMuteOthers();
@@ -104,7 +124,10 @@ public class MembersListAdapter extends ParentAdapter<Member> {
     }
 
     static class ViewHolder {
+        RelativeLayout mLayoutAvatar;
         ImageView mAvatarView;
+        ImageView mStatusBorder;
+        ImageView mStatusIcon;
         TextView mNameView;
     }
 }

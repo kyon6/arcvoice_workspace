@@ -6,11 +6,10 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <com.wanmei.arcvoice.view.CircleImageView
+    <com.wanmei.arcvoice.view.CircleStatusImageView
         android:id="@+id/avatar"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:background="@drawable/grey"
         android:src="@drawable/connected"
         app:border_width="2dp" />
 
