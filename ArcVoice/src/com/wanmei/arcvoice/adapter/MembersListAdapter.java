@@ -65,7 +65,7 @@ public class MembersListAdapter extends ParentAdapter<Member> {
             case CONNECTED:
                 // Connected refers to users who are on the voice session, but not currently speaking.
 //                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.grey);
-                mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_green_border);
+                mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_green_dark_border);
                 break;
 
             case DISCONNECTED:
@@ -78,7 +78,7 @@ public class MembersListAdapter extends ParentAdapter<Member> {
             case SPEAKING:
                 // Speaking means the user is currently connected and talking on the voice session.
 //                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.green);
-                mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_green_border);
+                mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_green_bright_border);
                 mViewHolder.mStatusIcon.setImageResource(R.drawable.status_phone_icon);
                 break;
         }
