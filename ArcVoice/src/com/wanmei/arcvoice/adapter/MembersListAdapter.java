@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.talkray.arcvoice.UserState;
 import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.model.Member;
@@ -90,8 +91,12 @@ public class MembersListAdapter extends ParentAdapter<Member> {
         }
 
         if(ArcVoiceHelper.getInstance(mContext).isMuteOthers() && !member.getUserId().equals(arcUserId)){
-            mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_red_border);
             mViewHolder.mStatusIcon.setImageResource(R.drawable.status_mute_icon);
+            if(member.getUserState() == UserState.DISCONNECTED){
+                mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_grey_border);
+            }else{
+                mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_red_border);
+            }
         }
 
         ImageLoader.getInstance().displayImage(member.getUserAvatar(), mViewHolder.mAvatarView, options);
