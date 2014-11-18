@@ -13,9 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/layout_avatar"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:text="player_name"
-        android:textSize="16sp" />
+        style="@style/member_name_style" />
 
 </RelativeLayout>

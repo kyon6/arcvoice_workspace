@@ -79,7 +79,7 @@ public class MembersListAdapter extends ParentAdapter<Member> {
                 // Speaking means the user is currently connected and talking on the voice session.
 //                mViewHolder.mAvatarView.setBackgroundResource(R.drawable.green);
                 mViewHolder.mStatusBorder.setImageResource(R.drawable.bg_green_bright_border);
-                mViewHolder.mStatusIcon.setImageResource(R.drawable.status_phone_icon);
+                //mViewHolder.mStatusIcon.setImageResource(R.drawable.status_phone_icon);
                 break;
         }
 

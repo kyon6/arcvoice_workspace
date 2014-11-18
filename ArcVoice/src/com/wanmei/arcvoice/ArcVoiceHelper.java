@@ -380,7 +380,7 @@ public class ArcVoiceHelper {
             muteMyself();
             isMuteMyself = true;
         }
-        Toast.makeText(mContext, "mute myself:" + isMuteMyself, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, "mute myself:" + isMuteMyself, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -397,7 +397,7 @@ public class ArcVoiceHelper {
             muteOthers();
             isMuteOthers = true;
         }
-        Toast.makeText(mContext, "mute others:" + isMuteOthers, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, "mute others:" + isMuteOthers, Toast.LENGTH_SHORT).show();
     }
 
     /**

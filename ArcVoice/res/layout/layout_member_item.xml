@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <com.wanmei.arcvoice.view.CircleStatusImageView
+    <com.wanmei.arcvoice.widget.CircleStatusImageView
         android:id="@+id/avatar"
         android:layout_width="40dip"
         android:layout_height="40dip"

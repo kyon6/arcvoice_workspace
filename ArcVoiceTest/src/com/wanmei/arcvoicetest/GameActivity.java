@@ -27,7 +27,6 @@ public class GameActivity extends Activity {
     String mSessionId;
     String mUserId;
     int mOrientation;
-    boolean isHorizontal;
 
     Button mChatBtn;
 
@@ -58,14 +57,13 @@ public class GameActivity extends Activity {
         mChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mChatBtn.setVisibility(View.INVISIBLE);
                 Toast.makeText(GameActivity.this, "游戏操作输入", Toast.LENGTH_SHORT).show();
             }
         });
 
         mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
         //mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, mUserId);
-        if (isHorizontal) {
+        if (mOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             mHelper.setOrientation(ArcVoiceHelper.Orientation.HORIZONTAL);
         } else {
             mHelper.setOrientation(ArcVoiceHelper.Orientation.VERTICAL);

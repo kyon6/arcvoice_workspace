@@ -5,7 +5,7 @@
     android:layout_width="@dimen/hub_width"
     android:layout_height="@dimen/hub_height">
 
-    <com.wanmei.arcvoice.view.CircleImageView
+    <com.wanmei.arcvoice.widget.CircleImageView
         android:id="@+id/hub"
         android:layout_width="@dimen/hub_width"
         android:layout_height="@dimen/hub_height"

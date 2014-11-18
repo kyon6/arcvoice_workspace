@@ -17,8 +17,6 @@
         android:layout_centerVertical="true"
         android:gravity="right"
         android:layout_toLeftOf="@+id/layout_avatar"
-        android:text="player_name"
-        android:singleLine="true"
-        android:ellipsize="marquee" />
+        style="@style/member_name_style" />
 
 </RelativeLayout>
