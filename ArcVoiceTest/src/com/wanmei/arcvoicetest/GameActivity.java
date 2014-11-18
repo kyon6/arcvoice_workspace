@@ -26,17 +26,18 @@ public class GameActivity extends Activity {
     ArcVoiceHelper mHelper;
     String mSessionId;
     String mUserId;
+    int mOrientation;
     boolean isHorizontal;
 
     Button mChatBtn;
 
     Handler mHandler = new Handler();
 
-    public static void start(Context context, String sessionId, String userId, boolean isHorizontal) {
+    public static void start(Context context, String sessionId, String userId, int orientation) {
         Intent mIntent = new Intent(context, GameActivity.class);
         mIntent.putExtra("sessionId", sessionId);
         mIntent.putExtra("userId", userId);
-        mIntent.putExtra("horizontal", isHorizontal);
+        mIntent.putExtra("orientation", orientation);
 
         context.startActivity(mIntent);
     }
@@ -49,12 +50,9 @@ public class GameActivity extends Activity {
 
         mSessionId = getIntent().getStringExtra("sessionId");
         mUserId = getIntent().getStringExtra("userId");
-        isHorizontal = getIntent().getBooleanExtra("horizontal", false);
-        if (isHorizontal) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        mOrientation = getIntent().getIntExtra("orientation", ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        //noinspection ResourceType
+        setRequestedOrientation(mOrientation);
 
         mChatBtn = (Button) findViewById(R.id.btnChat);
         mChatBtn.setOnClickListener(new View.OnClickListener() {

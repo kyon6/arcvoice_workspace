@@ -58,11 +58,18 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/rb_ver"
+                android:id="@+id/rb_auto"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
+                android:text="auto" />
+
+            <RadioButton
+                android:id="@+id/rb_ver"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="vertical" />
 
             <RadioButton
@@ -82,11 +89,11 @@
         android:text="Start Game" />
 
     <ListView
+        android:id="@+id/mlistview"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:id="@+id/mlistview"
-        android:visibility="gone"
-        android:stackFromBottom="true"></ListView>
+        android:stackFromBottom="true"
+        android:visibility="gone"></ListView>
 
 </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.wanmei.arcvoicetest;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -47,7 +48,6 @@ public class MyActivity extends Activity {
                 String userId = mUserIdEditText.getText().toString().trim();
                 if (TextUtils.isEmpty(sessionId)) {
                     Toast.makeText(MyActivity.this, "pls input the sessionId!", Toast.LENGTH_SHORT).show();
-                    ;
                     return;
                 }
 //                if (TextUtils.isEmpty(userId)) {
@@ -56,12 +56,13 @@ public class MyActivity extends Activity {
 //                    return;
 //                }
                 int id = mRadioGroup.getCheckedRadioButtonId();
-                boolean isHor = false;
+                int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
                 if (id == R.id.rb_hor) {
-                    isHor = true;
-                }
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                } else if (id == R.id.rb_ver)
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
                 mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, userId);
-                GameActivity.start(MyActivity.this, sessionId, userId, isHor);
+                GameActivity.start(MyActivity.this, sessionId, userId, orientation);
             }
         });
 
