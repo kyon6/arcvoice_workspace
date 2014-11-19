@@ -85,6 +85,8 @@ public class ArcVoiceHelper {
         this.mContext = context;
         this.mainThreadHandler = new Handler();
         ArcVoicePersistenceData.getInstance().init(mContext);
+        mArcEnable = ArcVoicePersistenceData.getInstance().getArcEnable();
+        mMicEnable = ArcVoicePersistenceData.getInstance().getArcMicEnable();
     }
 
     public static ArcVoiceHelper getInstance(Context context) {
@@ -140,7 +142,6 @@ public class ArcVoiceHelper {
                 ArcWindowManager.removeArcSettingsWindow(mContext);
                 showAvatars();
                 if (!mMicEnable) {
-                    isMuteMyself = true;
                     muteMyself();
                 }
             } else {
