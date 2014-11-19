@@ -12,6 +12,7 @@ import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.adapter.MembersListAdapter;
 import com.wanmei.arcvoice.model.Member;
 import com.wanmei.arcvoice.utils.DensityUtils;
+import com.wanmei.arcvoice.utils.LogUtils;
 import com.wanmei.arcvoice.widget.HorizontalListView;
 
 import java.util.List;
@@ -88,6 +89,7 @@ public class ArcMemberView extends LinearLayout {
 
     public void updateAdapter(List<Member> list) {
         if (list != null && mAdapter != null) {
+            LogUtils.e("updateAdapter");
             mAdapter.setData(list);
             mAdapter.notifyDataSetChanged();
         }

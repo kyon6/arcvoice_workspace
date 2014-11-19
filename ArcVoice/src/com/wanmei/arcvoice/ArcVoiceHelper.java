@@ -24,9 +24,7 @@ import java.util.Map;
  * Created by liang on 14/10/31.
  */
 public class ArcVoiceHelper {
-    public static final String TAG = "ArcVoiceDemo";
     private static ArcVoiceHelper mInstance = null;
-    private boolean isInSession;
     private Context mContext;
     /**
      * params needed
@@ -35,6 +33,11 @@ public class ArcVoiceHelper {
     private String ARC_APP_CREDENTIALS;
     private ArcRegion ARC_REGION;
     private String USER_ID;
+
+    /**
+     * 开始会话
+     */
+    private boolean isInSession;
     /**
      * myself mute状态
      */
@@ -64,7 +67,7 @@ public class ArcVoiceHelper {
      * 如果头像从没显示到显示，立马更新adapter
      * 如果头像一直显示，则延迟更新adapter
      */
-    private boolean isStatusUpdateRunning = false;
+    //private boolean isStatusUpdateRunning = false;
     /**
      * record user's name and avatar
      */
@@ -80,17 +83,13 @@ public class ArcVoiceHelper {
     private static final int MESSAGE_HIDDEN_NAME = 1;
     private static final int MESSAGE_UPDATE_DATA = 2;
 
-    private boolean isUpdating;
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            if (ArcWindowManager.getArcMemberView() != null) {
-                ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
-                isUpdating = false;
-            }
-        }
-    };
+    /**
+     * 是否显示ArcHud控件
+     */
     private boolean mArcEnable;
+    /**
+     * 是否使用Mic
+     */
     private boolean mMicEnable;
 
     private ArcVoiceHelper(Context context) {
@@ -105,14 +104,11 @@ public class ArcVoiceHelper {
                 }else{
                     if (ArcWindowManager.getArcMemberView() != null) {
                         ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
-                        isUpdating = false;
                     }
                 }
             }
         };
         ArcVoicePersistenceData.getInstance().init(mContext);
-        mArcEnable = ArcVoicePersistenceData.getInstance().getArcEnable();
-        mMicEnable = ArcVoicePersistenceData.getInstance().getArcMicEnable();
     }
 
     public static ArcVoiceHelper getInstance(Context context) {
@@ -127,10 +123,10 @@ public class ArcVoiceHelper {
      * MUST call first
      * Arc appId and appCredentials assigned to the app.
      *
-     * @param arcAppId
-     * @param appCredentials
-     * @param arcRegion
-     * @param userId
+     * @param arcAppId arc app id
+     * @param appCredentials app credentials
+     * @param arcRegion arc Region @see ArcRegion
+     * @param userId user id
      */
     public void init(String arcAppId, String appCredentials, ArcRegion arcRegion, String userId) {
         this.ARC_APP_ID = arcAppId;
@@ -140,6 +136,8 @@ public class ArcVoiceHelper {
 
         this.mPlayerInfoList = new HashMap<String, Member>();
         this.mPlayerList = new ArrayList<Member>();
+        this.mArcEnable = ArcVoicePersistenceData.getInstance().getArcEnable();
+        this.mMicEnable = ArcVoicePersistenceData.getInstance().getArcMicEnable();
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
 
@@ -162,7 +160,7 @@ public class ArcVoiceHelper {
      * 启动，加入到会话当中
      * 显示同一个session中用户状态
      *
-     * @param sessionId
+     * @param sessionId session Id
      */
     public void startSession(String sessionId) {
         if (arcVoice != null) {
@@ -199,7 +197,7 @@ public class ArcVoiceHelper {
      * String imageUri = "assets://image.png"; // from assets
      * String imageUri = "drawable://" + R.drawable.img; // from drawables (non-9patch images)
      *
-     * @param userId
+     * @param userId user id
      * @param userName   用户昵称
      * @param userAvatar 用户头像
      */
@@ -265,6 +263,7 @@ public class ArcVoiceHelper {
     public void stop() {
         if (arcVoice != null) {
             arcVoice.leaveSession();
+            isInSession = false;
             arcVoice = null;
         }
         mInstance = null;
@@ -304,6 +303,7 @@ public class ArcVoiceHelper {
 
         ArcWindowManager.createArcMemberWindow(mContext);
         isAvatarShow = true;
+        LogUtils.e("showAvatars:" + isAvatarShow + "=" + this);
 
         if (ArcWindowManager.getArcMemberView() != null && mPlayerList != null) {
             ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
@@ -319,12 +319,13 @@ public class ArcVoiceHelper {
 
         ArcWindowManager.removeArcMemberWindow(mContext);
         isAvatarShow = false;
+        LogUtils.e("hiddenAvatars:" + isAvatarShow + "=" + this);
 
 //        mainThreadHandler.removeCallbacks(runnable);
         mainThreadHandler.removeMessages(MESSAGE_UPDATE_DATA);
         mainThreadHandler.removeMessages(MESSAGE_HIDDEN_NAME);
 
-        isStatusUpdateRunning = false;
+        //isStatusUpdateRunning = false;
     }
 
     /**
@@ -392,7 +393,7 @@ public class ArcVoiceHelper {
     /**
      * mute all
      */
-    public void muteAll() {
+    private void muteAll() {
         if (arcVoice != null) {
             arcVoice.muteSelf();
             arcVoice.muteOthers();
@@ -402,7 +403,7 @@ public class ArcVoiceHelper {
     /**
      * unmute all
      */
-    public void unMuteAll() {
+    private void unMuteAll() {
         if (arcVoice != null) {
             arcVoice.unmuteSelf();
             arcVoice.unmuteOthers();
@@ -426,11 +427,10 @@ public class ArcVoiceHelper {
 
         if (isMuteMyself) {
             unMuteMyself();
-            isMuteMyself = false;
         } else {
             muteMyself();
-            isMuteMyself = true;
         }
+        isMuteMyself = !isMuteMyself;
         //Toast.makeText(mContext, "mute myself:" + isMuteMyself, Toast.LENGTH_SHORT).show();
     }
 
@@ -443,11 +443,10 @@ public class ArcVoiceHelper {
 
         if (isMuteOthers) {
             unMuteOthers();
-            isMuteOthers = false;
         } else {
             muteOthers();
-            isMuteOthers = true;
         }
+        isMuteOthers = !isMuteOthers;
         //Toast.makeText(mContext, "mute others:" + isMuteOthers, Toast.LENGTH_SHORT).show();
     }
 
@@ -488,6 +487,8 @@ public class ArcVoiceHelper {
     }
 
     private void setupArc() {
+        eventHandler = null;
+        arcVoice = null;
         eventHandler = new ArcVoiceEventHandler() {
             @Override
             public void onCallConnected() {
@@ -508,21 +509,9 @@ public class ArcVoiceHelper {
 
             @Override
             public void onCallStatusUpdate(final Map memberStatusMap) {
-                // 更新用户状态
-//                mainThreadHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
-//                        while(callStatusItera.hasNext()){
-//                            MemberCallStatus status = callStatusItera.next();
-//                            LogUtils.e(status.getUserId()+":"+ status.getUserState());
-//                            ArcWindowManager.getArcHubView().getMembersAdapter().add(status);
-//                            callStatusItera.remove();
-//                        }
-//                    }
-//                });
-                if (isAvatarShow) {
-                    mPlayerList = new ArrayList<Member>();
+                LogUtils.w("onCallStatusUpdate:" + isAvatarShow + "," + mInstance.isAvatarShow);
+                if (mInstance.isAvatarShow) {
+                    mInstance.mPlayerList = new ArrayList<Member>();
                     Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
 
                     Member mPlayer = null;
@@ -531,25 +520,22 @@ public class ArcVoiceHelper {
                         Member player = new Member();
                         player.setUserId(status.getUserId());
                         player.setUserState(status.getUserState());
-                        if (mPlayerInfoList.get(status.getUserId()) != null) {
-                            mPlayer = mPlayerInfoList.get(status.getUserId());
+                        if (mInstance.mPlayerInfoList.get(status.getUserId()) != null) {
+                            mPlayer = mInstance.mPlayerInfoList.get(status.getUserId());
                             player.setUserName(mPlayer.getUserName());
                             player.setUserAvatar(mPlayer.getUserAvatar());
                         }
-                        mPlayerList.add(player);
+                        mInstance.mPlayerList.add(player);
                     }
 
-                    if (isStatusUpdateRunning) {
-                        if (!isUpdating) {
-                            isUpdating = true;
-                            mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_UPDATE_DATA, 2000);
-                        }
-                    } else {
-                        LogUtils.e("onCallStatusUpdate first");
-//                        mainThreadHandler.post(runnable);
+                    //if (isStatusUpdateRunning) {
+                        LogUtils.e("onCallStatusUpdate:"+mPlayerInfoList.size()+","+mInstance.mPlayerInfoList.size());
                         mainThreadHandler.sendEmptyMessage(MESSAGE_UPDATE_DATA);
-                        isStatusUpdateRunning = true;
-                    }
+//                    } else {
+//                        LogUtils.e("onCallStatusUpdate first");
+//                        mainThreadHandler.sendEmptyMessage(MESSAGE_UPDATE_DATA);
+//                        isStatusUpdateRunning = true;
+//                    }
                 }
             }
 

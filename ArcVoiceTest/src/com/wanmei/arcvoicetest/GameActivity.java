@@ -44,7 +44,6 @@ public class GameActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtils.e("onCreate");
         setContentView(R.layout.activity_game);
 
         mSessionId = getIntent().getStringExtra("sessionId");
@@ -62,7 +61,6 @@ public class GameActivity extends Activity {
         });
 
         mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
-        //mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, mUserId);
         if (mOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             mHelper.setOrientation(ArcVoiceHelper.Orientation.HORIZONTAL);
         } else {
@@ -77,6 +75,7 @@ public class GameActivity extends Activity {
                 initUserInfo();
             }
         });
+
         //Leon","http://ecx.images-amazon.com/images/I/41X0uJ4jbcL._AC_UY370_SX420.jpg"
     }
 
@@ -87,6 +86,7 @@ public class GameActivity extends Activity {
         mHelper.addPlayerInfo("4", "Superman", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
         mHelper.addPlayerInfo("5", "Flash", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
         mHelper.addPlayerInfo("6", "Thor", "https://cdn4.iconfinder.com/data/icons/ironman_lin/512/ironman_III.png");
+
         mHelper.addPlayerInfo("7", "Captain America", "drawable://"+R.drawable.hugh);
         mHelper.addPlayerInfo("8", "Wonder Woman", "drawable://"+ R.drawable.hugh);
         mHelper.addPlayerInfo("9", "Green Lantern", "drawable://"+R.drawable.hugh);
@@ -95,16 +95,16 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onResume() {
-        super.onResume();
-        LogUtils.e("onResume");
+        LogUtils.e("GameActivity onResume");
         mHelper.show();
+        super.onResume();
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
-        LogUtils.e("onPause");
+        LogUtils.e("GameActivity onPause");
         mHelper.hiddenAll();
+        super.onPause();
     }
 
     @Override

@@ -5,10 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.talkray.arcvoice.ArcRegion;
 import com.wanmei.arcvoice.ArcVoiceHelper;
@@ -19,10 +16,10 @@ public class MyActivity extends Activity {
     public static final String ARC_APP_ID = "AFSIBQV2";
     public static final String ARC_APP_CREDENTIALS = "EP95V2XMWK1OCZVQNVCYIHBFLY1XGYWG";
     public static final ArcRegion ARC_REGION = ArcRegion.VIRGINIA;
-    EditText mSessionEditText, mUserIdEditText;
+    EditText mSessionEditText;
+    EditText mUserIdEditText;
     Button mStartBtn;
     RadioGroup mRadioGroup;
-    String userId = "1";
     ArcVoiceHelper mHelper;
 
     /**
@@ -50,44 +47,35 @@ public class MyActivity extends Activity {
                     Toast.makeText(MyActivity.this, "pls input the sessionId!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                if (TextUtils.isEmpty(userId)) {
-//                    Toast.makeText(MyActivity.this, "pls input the userId!", Toast.LENGTH_SHORT).show();
-//                    ;
-//                    return;
-//                }
                 int id = mRadioGroup.getCheckedRadioButtonId();
                 int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
                 if (id == R.id.rb_hor) {
                     orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
                 } else if (id == R.id.rb_ver)
                     orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, userId);
+
                 GameActivity.start(MyActivity.this, sessionId, userId, orientation);
             }
         });
 
-        mUserIdEditText.setText(String.valueOf((int) (Math.random() * 10 + 1)));
+        String userId = String.valueOf((int) (Math.random() * 10 + 1));
+        mUserIdEditText.setText(userId);
         mHelper = ArcVoiceHelper.getInstance(getApplicationContext());
-
-//        ListView mListView = (ListView)findViewById(R.id.mlistview);
-//        String[] objects = new String[]{"A"};
-//        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1,objects);
-//        mListView.setAdapter(mAdapter);
-//        mListView.setStackFromBottom(true);
+        mHelper.init(ARC_APP_ID, ARC_APP_CREDENTIALS, ARC_REGION, userId);
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
-        LogUtils.e("onResume");
+        LogUtils.e("MyActivity onResume");
         mHelper.show();
+        super.onResume();
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
-        LogUtils.e("onPause");
+        LogUtils.e("MyActivity onPause");
         mHelper.hiddenAll();
+        super.onPause();
     }
 
     @Override

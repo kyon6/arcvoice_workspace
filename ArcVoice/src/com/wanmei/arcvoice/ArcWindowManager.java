@@ -78,7 +78,7 @@ public class ArcWindowManager {
             }
             arcHudView.setParams(arcHudWindowParams);
             windowManager.addView(arcHudView, arcHudWindowParams);
-            LogUtils.e("==HubView:" + arcHudView);
+            //LogUtils.e("==HubView:" + arcHudView);
         }
     }
 
