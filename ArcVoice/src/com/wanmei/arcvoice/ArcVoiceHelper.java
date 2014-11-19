@@ -80,15 +80,17 @@ public class ArcVoiceHelper {
     private static final int MESSAGE_HIDDEN_NAME = 1;
     private static final int MESSAGE_UPDATE_DATA = 2;
 
-//    Runnable runnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            if (ArcWindowManager.getArcMemberView() != null) {
-//                ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
-//            }
-//        }
-//    };
-    private boolean mEnable;
+    private boolean isUpdating;
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (ArcWindowManager.getArcMemberView() != null) {
+                ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
+                isUpdating = false;
+            }
+        }
+    };
+    private boolean mArcEnable;
     private boolean mMicEnable;
 
     private ArcVoiceHelper(Context context) {
@@ -103,10 +105,14 @@ public class ArcVoiceHelper {
                 }else{
                     if (ArcWindowManager.getArcMemberView() != null) {
                         ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
+                        isUpdating = false;
                     }
                 }
             }
         };
+        ArcVoicePersistenceData.getInstance().init(mContext);
+        mArcEnable = ArcVoicePersistenceData.getInstance().getArcEnable();
+        mMicEnable = ArcVoicePersistenceData.getInstance().getArcMicEnable();
     }
 
     public static ArcVoiceHelper getInstance(Context context) {
@@ -136,7 +142,6 @@ public class ArcVoiceHelper {
         this.mPlayerList = new ArrayList<Member>();
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
-        ArcVoicePersistenceData.getInstance().init(mContext);
 
         setupArc();
     }
@@ -161,13 +166,22 @@ public class ArcVoiceHelper {
      */
     public void startSession(String sessionId) {
         if (arcVoice != null) {
-            arcVoice.joinSession(sessionId);
-            isInSession = true;
-            ArcWindowManager.removeArcSettingsWindow(mContext);
+            if (mArcEnable) {
+                arcVoice.joinSession(sessionId);
+                isInSession = true;
+                ArcWindowManager.removeArcSettingsWindow(mContext);
 
-            isNameShowing = true;
-            mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_HIDDEN_NAME,3000);
-            showAvatars();
+                isNameShowing = true;
+                mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_HIDDEN_NAME,3000);
+                showAvatars();
+
+                if (!mMicEnable) {
+                    muteMyself();
+                    isMuteMyself = true;
+                }
+            } else {
+                hiddenAll();
+            }
         }
     }
 
@@ -200,7 +214,7 @@ public class ArcVoiceHelper {
     }
 
     public void setArcEnable(boolean enable) {
-        mEnable = enable;
+        mArcEnable = enable;
     }
 
     public void setMicEnable(boolean enable) {
@@ -209,7 +223,7 @@ public class ArcVoiceHelper {
             unMuteMyself();
         else
             muteMyself();
-        isMuteMyself = mMicEnable;
+        isMuteMyself = !mMicEnable;
     }
 
     /**
@@ -407,7 +421,7 @@ public class ArcVoiceHelper {
      * mute or unmute myself
      */
     public void doMuteMyself() {
-        if (arcVoice == null)
+        if (arcVoice == null || !mMicEnable)
             return;
 
         if (isMuteMyself) {
@@ -526,8 +540,10 @@ public class ArcVoiceHelper {
                     }
 
                     if (isStatusUpdateRunning) {
-//                        mainThreadHandler.postDelayed(runnable, 2000);
-                        mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_UPDATE_DATA, 2000);
+                        if (!isUpdating) {
+                            isUpdating = true;
+                            mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_UPDATE_DATA, 2000);
+                        }
                     } else {
                         LogUtils.e("onCallStatusUpdate first");
 //                        mainThreadHandler.post(runnable);

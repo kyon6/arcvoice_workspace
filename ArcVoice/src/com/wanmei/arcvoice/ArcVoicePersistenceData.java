@@ -29,7 +29,7 @@ public class ArcVoicePersistenceData {
     }
 
     public boolean getArcMicEnable() {
-        return sharedPref.getBoolean("Arc_Mic_Enable", false);
+        return sharedPref.getBoolean("Arc_Mic_Enable", true);
     }
 
     public void setArcMicEnable(boolean enable) {
@@ -37,7 +37,7 @@ public class ArcVoicePersistenceData {
     }
 
     public boolean getArcEnable() {
-        return sharedPref.getBoolean("Arc_Enable", false);
+        return sharedPref.getBoolean("Arc_Enable", true);
     }
 
     public void setArcEnable(boolean enable) {
