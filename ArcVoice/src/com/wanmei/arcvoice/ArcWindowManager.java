@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
+import com.wanmei.arcvoice.utils.DeviceUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
 import com.wanmei.arcvoice.view.ArcHudView;
 import com.wanmei.arcvoice.view.ArcMemberView;
@@ -161,50 +162,68 @@ public class ArcWindowManager {
             int hubX = mHubParams.x;
             int hubY = mHubParams.y;
 
+            /**
+             * 位置校验
+             */
+//            int maxHubX = screenWidth - ArcHudView.viewWidth / 2;
+//            int maxHubY = screenHeight - ArcHudView.viewHeight / 2;
+            if(hubX < 0){
+                hubX = 0;
+            }
+            if(hubX > screenWidth ){
+                hubX = screenWidth;
+            }
+            if(hubY < 0){
+                hubY = 0;
+            }
+            if(hubY > screenHeight){
+                hubY = screenHeight;
+            }
+
             arcMemberView = new ArcMemberView(context, orientation);
             arcMemberWindowParams = new LayoutParams();
             ArcMemberView.Direction direction = ArcMemberView.Direction.TEXT_RIGHT;
             //判断ArcHub所在位置标记。0：左上，1：右上，2：左下，3：右下
             if (orientation == ArcVoiceHelper.Orientation.VERTICAL) {
                 if (hubX <= screenWidth / 2) {
-                    arcMemberWindowParams.x = mHubParams.x;
+                    arcMemberWindowParams.x = hubX;
                     if (hubY <= screenHeight / 2) {//左上
-                        arcMemberWindowParams.y = mHubParams.y + ArcHudView.viewHeight;
+                        arcMemberWindowParams.y = hubY + ArcHudView.viewHeight;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_UP);
                     } else {//左下
-                        arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
+                        arcMemberWindowParams.y = hubY - ArcMemberView.viewHeight;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_DOWN);
                     }
                     //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_RIGHT);
                 } else {
-                    arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth + ArcHudView.viewWidth;
+                    arcMemberWindowParams.x = hubX - ArcMemberView.viewWidth + ArcHudView.viewWidth;
                     if (hubY <= screenWidth / 2) {//右上
-                        arcMemberWindowParams.y = mHubParams.y + ArcHudView.viewHeight;
+                        arcMemberWindowParams.y = hubY + ArcHudView.viewHeight;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_UP);
                     } else {//右下
-                        arcMemberWindowParams.y = mHubParams.y - ArcMemberView.viewHeight;
+                        arcMemberWindowParams.y = hubY - ArcMemberView.viewHeight;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_DOWN);
                     }
                     //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_LEFT);
                 }
             } else {
                 if (hubY <= screenHeight / 2) {
-                    arcMemberWindowParams.y = mHubParams.y;
+                    arcMemberWindowParams.y = hubY;
                     if (hubX <= screenWidth / 2) {//左上
-                        arcMemberWindowParams.x = mHubParams.x + ArcHudView.viewWidth;
+                        arcMemberWindowParams.x = hubX + ArcHudView.viewWidth;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_UP);
                     } else {//右上
-                        arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth;
+                        arcMemberWindowParams.x = hubX - ArcMemberView.viewWidth;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_UP);
                     }
                     //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_DOWN);
                 } else {
-                    arcMemberWindowParams.y = mHubParams.y - arcMemberView.viewHeight + arcHudView.viewHeight;
+                    arcMemberWindowParams.y = hubY - arcMemberView.viewHeight + arcHudView.viewHeight;
                     if (hubX <= screenWidth / 2) {//左下
-                        arcMemberWindowParams.x = mHubParams.x + ArcHudView.viewWidth;
+                        arcMemberWindowParams.x = hubX + ArcHudView.viewWidth;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.LEFT_DOWN);
                     } else {//右下
-                        arcMemberWindowParams.x = mHubParams.x - ArcMemberView.viewWidth;
+                        arcMemberWindowParams.x = hubX - ArcMemberView.viewWidth;
                         arcMemberView.updateHubPosition(ArcMemberView.HubPosition.RIGHT_DOWN);
                     }
                     //arcMemberView.updateDirection(ArcMemberView.Direction.TEXT_UP);
@@ -219,7 +238,11 @@ public class ArcWindowManager {
             arcMemberWindowParams.width = ArcMemberView.viewWidth;
             arcMemberWindowParams.height = ArcMemberView.viewHeight;
             windowManager.addView(arcMemberView, arcMemberWindowParams);
-            LogUtils.e("hub position:" + arcHudView.getParams().x + "," + arcHudView.getParams().y);
+            LogUtils.e("hub position:" + arcHudView.getParams().x + "," + arcHudView.getParams().y+ "-[" + hubX + "," + hubY + "]");
+            LogUtils.e("screenWidthHeight:" + screenWidth + "," + screenHeight);
+            int[] xy = new int[2];
+            arcHudView.getLocationOnScreen(xy);
+            LogUtils.e("locationOnScreen:" + xy[0] + "," + xy[1]);
             LogUtils.e("big position:" + arcMemberWindowParams.x + "," + arcMemberWindowParams.y + "-[" + ArcMemberView.viewWidth + "," + ArcMemberView.viewHeight + "]");
         }
     }

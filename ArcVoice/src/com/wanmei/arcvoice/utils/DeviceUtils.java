@@ -2,6 +2,7 @@ package com.wanmei.arcvoice.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.res.Resources;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class DeviceUtils {
      */
     private static int statusBarHeight;
 
+    private static int navigationBarHeight;
     /**
      * 用于获取状态栏的高度。
      *
@@ -34,6 +36,23 @@ public class DeviceUtils {
             }
         }
         return statusBarHeight;
+    }
+
+    public static int getNavigationBarHeight(Context mContext){
+        if(navigationBarHeight == 0){
+            try{
+                Resources resources = mContext.getResources();
+                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                if (resourceId > 0) {
+                    return resources.getDimensionPixelSize(resourceId);
+                }
+                return 0;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return navigationBarHeight;
     }
 
     public static boolean isServiceRunning(Context context, String packageName) {
