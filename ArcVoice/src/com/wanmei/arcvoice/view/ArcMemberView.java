@@ -39,7 +39,11 @@ public class ArcMemberView extends LinearLayout {
         LinearLayout.LayoutParams params = (LayoutParams) view.getLayoutParams();
         mOrientation = orientation;
         if(mOrientation == ArcVoiceHelper.Orientation.VERTICAL){
-            params.width = DensityUtils.dip2px(context,100);
+            if(ArcVoiceHelper.getInstance(context).isNameShowing()){
+                params.width = DensityUtils.dip2px(context,100);
+            }else{
+                params.width = DensityUtils.dip2px(context,50);
+            }
             params.height = DensityUtils.dip2px(context,200);
         }else{
             params.width = DensityUtils.dip2px(context,300);
@@ -64,11 +68,25 @@ public class ArcMemberView extends LinearLayout {
     }
 
     public void updateAdapter(List<Member> list) {
-        if (list != null) {
+        if (list != null && mAdapter != null) {
             mAdapter.setData(list);
             mAdapter.notifyDataSetChanged();
         }
     }
+
+    public void updateNameShowing(){
+        if(mAdapter != null){
+            mAdapter.updateNameShowing();
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+//    public void showMemberName(){
+//        if(mAdapter != null){
+//            mAdapter.setNameShowing(true);
+//            mAdapter.notifyDataSetChanged();
+//        }
+//    }
 
     public void updateHubPosition(HubPosition position){
         if(mOrientation == ArcVoiceHelper.Orientation.VERTICAL){

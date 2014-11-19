@@ -14,6 +14,7 @@ import com.talkray.arcvoice.UserState;
 import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.R;
 import com.wanmei.arcvoice.model.Member;
+import com.wanmei.arcvoice.utils.LogUtils;
 import com.wanmei.arcvoice.view.ArcMemberView;
 
 
@@ -22,9 +23,11 @@ public class MembersListAdapter extends ParentAdapter<Member> {
     private DisplayImageOptions options;
     private ArcMemberView.Direction mDirection = ArcMemberView.Direction.TEXT_RIGHT;
     private boolean isNeedRecreate = false;
+    private boolean isNameShow = false;
 
     public MembersListAdapter(Context context) {
         super(context);
+        this.isNameShow = ArcVoiceHelper.getInstance(context).isNameShowing();
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
@@ -39,10 +42,16 @@ public class MembersListAdapter extends ParentAdapter<Member> {
         this.isNeedRecreate = true;
     }
 
+    public void updateNameShowing(){
+        this.isNameShow = ArcVoiceHelper.getInstance(mContext).isNameShowing();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder mViewHolder = null;
         if (convertView == null || isNeedRecreate) {
+            //LogUtils.e("MembersListAdapter reCreate:" + (convertView == null) + "==" + position);
+            isNeedRecreate = false;
             convertView = inflateView(parent);
             mViewHolder = new ViewHolder();
             mViewHolder.mLayoutAvatar = (RelativeLayout)convertView.findViewById(R.id.layout_avatar);
@@ -56,10 +65,15 @@ public class MembersListAdapter extends ParentAdapter<Member> {
         }
         final Member member = mData.get(position);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(member.getUserId());
-        sb.append("(").append(TextUtils.isEmpty(member.getUserName()) ? "Guest" : member.getUserName()).append(")");
-        mViewHolder.mNameView.setText(sb.toString());
+        if(isNameShow){
+            StringBuilder sb = new StringBuilder();
+            sb.append(member.getUserId());
+            sb.append("(").append(TextUtils.isEmpty(member.getUserName()) ? "Guest" : member.getUserName()).append(")");
+            mViewHolder.mNameView.setText(sb.toString());
+            mViewHolder.mNameView.setVisibility(View.VISIBLE);
+        }else{
+            mViewHolder.mNameView.setVisibility(View.GONE);
+        }
 
         switch (member.getUserState()) {
             case CONNECTED:

@@ -241,12 +241,12 @@ public class ArcWindowManager {
             windowManager.addView(arcMemberView, arcMemberWindowParams);
             LogUtils.e("hub position:" + arcHudView.getParams().x + "," + arcHudView.getParams().y+ "-[" + hubX + "," + hubY + "]");
             LogUtils.e("screenWidthHeight:" + screenWidth + "," + screenHeight);
-            int[] xy = new int[2];
-            arcHudView.getLocationOnScreen(xy);
-            int[] zn = new int[2];
-            arcHudView.getLocationInWindow(zn);
-            LogUtils.e("getLocationOnScreen:" + xy[0] + "," + xy[1]);
-            LogUtils.e("getLocationInWindow:" + zn[0] + "," + zn[1]);
+//            int[] xy = new int[2];
+//            arcHudView.getLocationOnScreen(xy);
+//            int[] zn = new int[2];
+//            arcHudView.getLocationInWindow(zn);
+//            LogUtils.e("getLocationOnScreen:" + xy[0] + "," + xy[1]);
+//            LogUtils.e("getLocationInWindow:" + zn[0] + "," + zn[1]);
             LogUtils.e("big position:" + arcMemberWindowParams.x + "," + arcMemberWindowParams.y + "-[" + ArcMemberView.viewWidth + "," + ArcMemberView.viewHeight + "]");
         }
     }

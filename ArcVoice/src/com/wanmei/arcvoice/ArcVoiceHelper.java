@@ -3,7 +3,6 @@ package com.wanmei.arcvoice;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -52,7 +51,14 @@ public class ArcVoiceHelper {
      * setting view  是否显示状态
      */
     private boolean isSettingsShow = false;//show settings default
+    /**
+     * 设置hud排列方向
+     */
     private Orientation mOrientation = Orientation.VERTICAL;
+    /**
+     * 设置是否显示名称
+     */
+    private boolean isNameShowing = false;
     /**
      * 用来记录头像是否显示
      * 如果头像从没显示到显示，立马更新adapter
@@ -68,22 +74,39 @@ public class ArcVoiceHelper {
      */
     private ArcVoice arcVoice;
     private ArcVoiceEventHandler eventHandler;
-    private Handler mainThreadHandler;
     private List<Member> mPlayerList = null;
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            if (ArcWindowManager.getArcMemberView() != null) {
-                ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
-            }
-        }
-    };
+
+    private Handler mainThreadHandler;
+    private static final int MESSAGE_HIDDEN_NAME = 1;
+    private static final int MESSAGE_UPDATE_DATA = 2;
+
+//    Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            if (ArcWindowManager.getArcMemberView() != null) {
+//                ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
+//            }
+//        }
+//    };
     private boolean mEnable;
     private boolean mMicEnable;
 
     private ArcVoiceHelper(Context context) {
         this.mContext = context;
-        this.mainThreadHandler = new Handler();
+        this.mainThreadHandler = new Handler(){
+
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what == 1){
+                    isNameShowing = false;
+                    updateNameShowing();
+                }else{
+                    if (ArcWindowManager.getArcMemberView() != null) {
+                        ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
+                    }
+                }
+            }
+        };
     }
 
     public static ArcVoiceHelper getInstance(Context context) {
@@ -122,6 +145,10 @@ public class ArcVoiceHelper {
         return mOrientation;
     }
 
+    public boolean isNameShowing(){
+        return isNameShowing;
+    }
+
     public void setOrientation(Orientation orientation) {
         mOrientation = orientation;
     }
@@ -137,6 +164,9 @@ public class ArcVoiceHelper {
             arcVoice.joinSession(sessionId);
             isInSession = true;
             ArcWindowManager.removeArcSettingsWindow(mContext);
+
+            isNameShowing = true;
+            mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_HIDDEN_NAME,3000);
             showAvatars();
         }
     }
@@ -197,8 +227,6 @@ public class ArcVoiceHelper {
      */
     public void hiddenAll() {
         ArcWindowManager.removeArcHudWindow(mContext);
-//        ArcWindowManager.removeArcMemberWindow(mContext);
-//        ArcWindowManager.removeArcSettingsWindow(mContext);
         hiddenOthers();
     }
 
@@ -278,7 +306,9 @@ public class ArcVoiceHelper {
         ArcWindowManager.removeArcMemberWindow(mContext);
         isAvatarShow = false;
 
-        mainThreadHandler.removeCallbacks(runnable);
+//        mainThreadHandler.removeCallbacks(runnable);
+        mainThreadHandler.removeMessages(MESSAGE_UPDATE_DATA);
+        mainThreadHandler.removeMessages(MESSAGE_HIDDEN_NAME);
 
         isStatusUpdateRunning = false;
     }
@@ -320,21 +350,26 @@ public class ArcVoiceHelper {
     /**
      * show user's name
      */
-    public void showUserNames() {
-        //todo
-    }
+//    public void showMemberNames() {
+//        if (ArcWindowManager.getArcMemberView() != null) {
+//            ArcWindowManager.getArcMemberView().showMemberName();
+//            mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_HIDDEN_NAME,2000);
+//        }
+//    }
 
     /**
      * hidden user's name
      */
-    public void hiddenUserNames() {
-        //todo
+    private void updateNameShowing() {
+        if (ArcWindowManager.getArcMemberView() != null) {
+            ArcWindowManager.getArcMemberView().updateNameShowing();
+        }
     }
 
     /**
      * get user id
      *
-     * @return
+     * @return the current user id
      */
     public String getUserId() {
         return USER_ID;
@@ -491,10 +526,12 @@ public class ArcVoiceHelper {
                     }
 
                     if (isStatusUpdateRunning) {
-                        mainThreadHandler.postDelayed(runnable, 2000);
+//                        mainThreadHandler.postDelayed(runnable, 2000);
+                        mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_UPDATE_DATA, 2000);
                     } else {
                         LogUtils.e("onCallStatusUpdate first");
-                        mainThreadHandler.post(runnable);
+//                        mainThreadHandler.post(runnable);
+                        mainThreadHandler.sendEmptyMessage(MESSAGE_UPDATE_DATA);
                         isStatusUpdateRunning = true;
                     }
                 }
