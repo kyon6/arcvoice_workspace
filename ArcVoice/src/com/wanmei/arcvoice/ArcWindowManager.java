@@ -176,8 +176,9 @@ public class ArcWindowManager {
             if(hubY < 0){
                 hubY = 0;
             }
-            if(hubY > screenHeight){
-                hubY = screenHeight;
+            int h = DeviceUtils.getNavigationBarHeight(context);
+            if(hubY > screenHeight - h){
+                hubY = screenHeight - h;
             }
 
             arcMemberView = new ArcMemberView(context, orientation);
@@ -242,7 +243,10 @@ public class ArcWindowManager {
             LogUtils.e("screenWidthHeight:" + screenWidth + "," + screenHeight);
             int[] xy = new int[2];
             arcHudView.getLocationOnScreen(xy);
-            LogUtils.e("locationOnScreen:" + xy[0] + "," + xy[1]);
+            int[] zn = new int[2];
+            arcHudView.getLocationInWindow(zn);
+            LogUtils.e("getLocationOnScreen:" + xy[0] + "," + xy[1]);
+            LogUtils.e("getLocationInWindow:" + zn[0] + "," + zn[1]);
             LogUtils.e("big position:" + arcMemberWindowParams.x + "," + arcMemberWindowParams.y + "-[" + ArcMemberView.viewWidth + "," + ArcMemberView.viewHeight + "]");
         }
     }
