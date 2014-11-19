@@ -139,6 +139,8 @@ public class ArcVoiceHelper {
                 isInSession = true;
                 ArcWindowManager.removeArcSettingsWindow(mContext);
                 showAvatars();
+                if (!mMicEnable)
+                    muteMyself();
             } else {
                 hiddenAll();
             }
