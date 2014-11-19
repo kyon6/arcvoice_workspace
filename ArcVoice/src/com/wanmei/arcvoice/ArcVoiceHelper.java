@@ -2,7 +2,6 @@ package com.wanmei.arcvoice;
 
 import android.content.Context;
 import android.os.Handler;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -74,10 +73,12 @@ public class ArcVoiceHelper {
         public void run() {
             if (ArcWindowManager.getArcMemberView() != null) {
                 ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
+//                isUpdating = false;
             }
         }
     };
-    private boolean mEnable;
+    private boolean isUpdating;
+    private boolean mArcEnable;
     private boolean mMicEnable;
 
     private ArcVoiceHelper(Context context) {
@@ -133,10 +134,14 @@ public class ArcVoiceHelper {
      */
     public void startSession(String sessionId) {
         if (arcVoice != null) {
-            arcVoice.joinSession(sessionId);
-            isInSession = true;
-            ArcWindowManager.removeArcSettingsWindow(mContext);
-            showAvatars();
+            if (mArcEnable) {
+                arcVoice.joinSession(sessionId);
+                isInSession = true;
+                ArcWindowManager.removeArcSettingsWindow(mContext);
+                showAvatars();
+            } else {
+                hiddenAll();
+            }
         }
     }
 
@@ -168,7 +173,7 @@ public class ArcVoiceHelper {
     }
 
     public void setArcEnable(boolean enable) {
-        mEnable = enable;
+        mArcEnable = enable;
     }
 
     public void setMicEnable(boolean enable) {
@@ -370,7 +375,7 @@ public class ArcVoiceHelper {
      * mute or unmute myself
      */
     public void doMuteMyself() {
-        if (arcVoice == null)
+        if (arcVoice == null || !mMicEnable)
             return;
 
         if (isMuteMyself) {
@@ -489,7 +494,10 @@ public class ArcVoiceHelper {
                     }
 
                     if (isStatusUpdateRunning) {
-                        mainThreadHandler.postDelayed(runnable, 2000);
+                        if (!isUpdating) {
+                            isUpdating = true;
+                            mainThreadHandler.postDelayed(runnable, 3000);
+                        }
                     } else {
                         LogUtils.e("onCallStatusUpdate first");
                         mainThreadHandler.post(runnable);

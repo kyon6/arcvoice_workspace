@@ -3,6 +3,7 @@ package com.wanmei.arcvoice.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -30,9 +31,10 @@ public class ArcMemberView extends LinearLayout {
     private HorizontalListView mHorizontalListView;
     private MembersListAdapter mAdapter;
     private ArcVoiceHelper.Orientation mOrientation;
+    private boolean isScrolling;
 
-	public ArcMemberView(final Context context,ArcVoiceHelper.Orientation orientation) {
-		super(context);
+    public ArcMemberView(final Context context, ArcVoiceHelper.Orientation orientation) {
+        super(context);
 		LayoutInflater.from(context).inflate(R.layout.layout_member_view, this);
 		View view = findViewById(R.id.big_window_layout);
 
@@ -61,10 +63,30 @@ public class ArcMemberView extends LinearLayout {
             mListView.setVisibility(View.GONE);
             mHorizontalListView.setAdapter(mAdapter);
         }
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                isScrolling = scrollState == SCROLL_STATE_TOUCH_SCROLL;
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+        mHorizontalListView.setOnScrollStateChangedListener(new HorizontalListView.OnScrollStateChangedListener() {
+            @Override
+            public void onScrollStateChanged(ScrollState scrollState) {
+                isScrolling = scrollState == ScrollState.SCROLL_STATE_TOUCH_SCROLL;
+            }
+        });
     }
 
     public void updateAdapter(List<Member> list) {
         if (list != null) {
+            if (isScrolling) {
+                return;
+            }
             mAdapter.setData(list);
             mAdapter.notifyDataSetChanged();
         }
