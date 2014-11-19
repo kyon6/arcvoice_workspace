@@ -143,6 +143,7 @@ public class ArcVoiceHelper {
                 showAvatars();
                 if (!mMicEnable) {
                     muteMyself();
+                    isMuteMyself = true;
                 }
             } else {
                 hiddenAll();
