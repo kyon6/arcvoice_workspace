@@ -2,8 +2,6 @@ package com.wanmei.arcvoice;
 
 import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -70,6 +68,7 @@ public class ArcVoiceHelper {
     private ArcVoiceEventHandler eventHandler;
     private Handler mainThreadHandler;
     private List<Member> mPlayerList = null;
+    private boolean isUpdating;
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -79,13 +78,13 @@ public class ArcVoiceHelper {
             }
         }
     };
-    private boolean isUpdating;
     private boolean mArcEnable;
     private boolean mMicEnable;
 
     private ArcVoiceHelper(Context context) {
         this.mContext = context;
         this.mainThreadHandler = new Handler();
+        ArcVoicePersistenceData.getInstance().init(mContext);
     }
 
     public static ArcVoiceHelper getInstance(Context context) {
@@ -115,7 +114,6 @@ public class ArcVoiceHelper {
         this.mPlayerList = new ArrayList<Member>();
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mContext));
-        ArcVoicePersistenceData.getInstance().init(mContext);
 
         setupArc();
     }
