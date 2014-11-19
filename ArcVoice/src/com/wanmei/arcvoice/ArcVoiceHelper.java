@@ -2,6 +2,7 @@ package com.wanmei.arcvoice;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -145,7 +146,8 @@ public class ArcVoiceHelper {
      * <p/>
      * 这里需要游戏开发者将朋友信息传递进来（包括userId，userName，userAvatar），这样通过userId关联可以显示用户信息
      * <p/>
-     * todo 如果是进入某个区域形成会话，游戏开发者能不能获得其他玩家的相关信息？？需要确认
+     *  如果是进入某个区域形成会话，游戏开发者能不能获得其他玩家的相关信息？？需要确认
+     *  不需要考虑
      * <p/>
      * String imageUri = "http://site.com/image.png"; // from Web
      * String imageUri = "file:///mnt/sdcard/image.png"; // from SD card
