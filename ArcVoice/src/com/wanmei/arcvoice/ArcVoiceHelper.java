@@ -188,7 +188,7 @@ public class ArcVoiceHelper {
             unMuteMyself();
         else
             muteMyself();
-        isMuteMyself = mMicEnable;
+        isMuteMyself = !mMicEnable;
     }
 
     /**
