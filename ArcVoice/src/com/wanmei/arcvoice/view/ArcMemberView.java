@@ -15,6 +15,7 @@ import com.wanmei.arcvoice.utils.DensityUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
 import com.wanmei.arcvoice.widget.HorizontalListView;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ArcMemberView extends LinearLayout {
@@ -28,6 +29,7 @@ public class ArcMemberView extends LinearLayout {
 	 */
 	public static int viewHeight;
 
+    private View view;
     private ListView mListView;
     private HorizontalListView mHorizontalListView;
     private MembersListAdapter mAdapter;
@@ -37,7 +39,7 @@ public class ArcMemberView extends LinearLayout {
     public ArcMemberView(final Context context, ArcVoiceHelper.Orientation orientation) {
         super(context);
 		LayoutInflater.from(context).inflate(R.layout.layout_member_view, this);
-		View view = findViewById(R.id.big_window_layout);
+		view = findViewById(R.id.big_window_layout);
 
         LinearLayout.LayoutParams params = (LayoutParams) view.getLayoutParams();
         mOrientation = orientation;
@@ -71,7 +73,8 @@ public class ArcMemberView extends LinearLayout {
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                isScrolling = scrollState == SCROLL_STATE_TOUCH_SCROLL;
+                isScrolling = (scrollState != SCROLL_STATE_IDLE);
+                LogUtils.e("onScrollStateChanged:" + isScrolling);
             }
 
             @Override
@@ -82,21 +85,38 @@ public class ArcMemberView extends LinearLayout {
         mHorizontalListView.setOnScrollStateChangedListener(new HorizontalListView.OnScrollStateChangedListener() {
             @Override
             public void onScrollStateChanged(ScrollState scrollState) {
-                isScrolling = scrollState == ScrollState.SCROLL_STATE_TOUCH_SCROLL;
+                isScrolling = (scrollState != ScrollState.SCROLL_STATE_TOUCH_SCROLL);
+                LogUtils.e("onScrollStateChanged:" + isScrolling);
             }
         });
     }
 
     public void updateAdapter(List<Member> list) {
+//        if(isScrolling)
+//            return;
+
         if (list != null && mAdapter != null) {
-            LogUtils.e("updateAdapter：" + list.size());
+            //LogUtils.e("updateAdapter：" + list.size());
+            if(mListView.isStackFromBottom() && mOrientation == ArcVoiceHelper.Orientation.VERTICAL){
+                Collections.reverse(list);
+            }
+
             mAdapter.setData(list);
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    public void updateNameShowing(){
+    public void hiddenNameShowing(){
         if(mAdapter != null){
+//            LinearLayout.LayoutParams params = (LayoutParams) view.getLayoutParams();
+//            if(mOrientation == ArcVoiceHelper.Orientation.VERTICAL){
+//                if(!ArcVoiceHelper.getInstance(getContext()).isNameShowing()){
+//                    params.width = DensityUtils.dip2px(getContext(),50);
+//                }
+//                params.height = DensityUtils.dip2px(getContext(),200);
+//            }
+//            view.setLayoutParams(params);
+
             mAdapter.updateNameShowing();
             mAdapter.notifyDataSetChanged();
         }

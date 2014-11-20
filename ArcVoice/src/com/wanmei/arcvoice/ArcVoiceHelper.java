@@ -99,8 +99,7 @@ public class ArcVoiceHelper {
             @Override
             public void handleMessage(Message msg) {
                 if(msg.what == MESSAGE_HIDDEN_NAME){
-                    isNameShowing = false;
-                    updateNameShowing();
+                    hiddenNameShowing();
                 }else{
                     if (ArcWindowManager.getArcMemberView() != null) {
                         ArcWindowManager.getArcMemberView().updateAdapter(mPlayerList);
@@ -169,8 +168,6 @@ public class ArcVoiceHelper {
                 isInSession = true;
                 ArcWindowManager.removeArcSettingsWindow(mContext);
 
-                isNameShowing = true;
-                //mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_HIDDEN_NAME,3000);
                 showAvatars();
 
                 if (!mMicEnable) {
@@ -301,8 +298,10 @@ public class ArcVoiceHelper {
         if (isAvatarShow)
             return;
 
-        ArcWindowManager.createArcMemberWindow(mContext);
         isAvatarShow = true;
+        isNameShowing = true;
+        ArcWindowManager.createArcMemberWindow(mContext);
+        mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_HIDDEN_NAME,2000);
         LogUtils.e("showAvatars:" + isAvatarShow + "=" + this);
 
         if (ArcWindowManager.getArcMemberView() != null && mPlayerList != null) {
@@ -375,9 +374,10 @@ public class ArcVoiceHelper {
     /**
      * hidden user's name
      */
-    private void updateNameShowing() {
+    private void hiddenNameShowing() {
         if (ArcWindowManager.getArcMemberView() != null) {
-            ArcWindowManager.getArcMemberView().updateNameShowing();
+            isNameShowing = false;
+            ArcWindowManager.getArcMemberView().hiddenNameShowing();
         }
     }
 
@@ -509,7 +509,7 @@ public class ArcVoiceHelper {
 
             @Override
             public void onCallStatusUpdate(final Map memberStatusMap) {
-                LogUtils.w("onCallStatusUpdate:" + isAvatarShow + "," + mInstance.isAvatarShow);
+                //LogUtils.w("onCallStatusUpdate:" + isAvatarShow + "," + mInstance.isAvatarShow);
                 if (mInstance.isAvatarShow) {
                     mInstance.mPlayerList = new ArrayList<Member>();
                     Iterator<MemberCallStatus> callStatusItera = memberStatusMap.values().iterator();
@@ -529,7 +529,7 @@ public class ArcVoiceHelper {
                     }
 
                     //if (isStatusUpdateRunning) {
-                        LogUtils.e("onCallStatusUpdate:"+mPlayerInfoList.size()+","+mInstance.mPlayerInfoList.size());
+                        //LogUtils.e("onCallStatusUpdate:"+mPlayerInfoList.size()+","+mInstance.mPlayerInfoList.size());
                         mainThreadHandler.sendEmptyMessage(MESSAGE_UPDATE_DATA);
 //                    } else {
 //                        LogUtils.e("onCallStatusUpdate first");

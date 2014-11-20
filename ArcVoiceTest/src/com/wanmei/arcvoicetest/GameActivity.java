@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -105,6 +106,13 @@ public class GameActivity extends Activity {
         LogUtils.e("GameActivity onPause");
         mHelper.hiddenAll();
         super.onPause();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        LogUtils.e("onConfigurationChanged");
+        mHelper.hiddenOthers();
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override
