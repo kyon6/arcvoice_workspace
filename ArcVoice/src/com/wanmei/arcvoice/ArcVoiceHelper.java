@@ -98,7 +98,7 @@ public class ArcVoiceHelper {
 
             @Override
             public void handleMessage(Message msg) {
-                if(msg.what == 1){
+                if(msg.what == MESSAGE_HIDDEN_NAME){
                     isNameShowing = false;
                     updateNameShowing();
                 }else{
@@ -170,7 +170,7 @@ public class ArcVoiceHelper {
                 ArcWindowManager.removeArcSettingsWindow(mContext);
 
                 isNameShowing = true;
-                mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_HIDDEN_NAME,3000);
+                //mainThreadHandler.sendEmptyMessageDelayed(MESSAGE_HIDDEN_NAME,3000);
                 showAvatars();
 
                 if (!mMicEnable) {
