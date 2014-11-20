@@ -89,7 +89,7 @@ public class ArcMemberView extends LinearLayout {
 
     public void updateAdapter(List<Member> list) {
         if (list != null && mAdapter != null) {
-            LogUtils.e("updateAdapter");
+            LogUtils.e("updateAdapter：" + list.size());
             mAdapter.setData(list);
             mAdapter.notifyDataSetChanged();
         }

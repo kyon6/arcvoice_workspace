@@ -75,6 +75,7 @@ public class MembersListAdapter extends ParentAdapter<Member> {
             mViewHolder.mNameView.setVisibility(View.GONE);
         }
 
+        mViewHolder.mStatusIcon.setImageResource(0);
         switch (member.getUserState()) {
             case CONNECTED:
                 // Connected refers to users who are on the voice session, but not currently speaking.
