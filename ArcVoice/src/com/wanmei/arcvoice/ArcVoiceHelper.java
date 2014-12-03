@@ -54,6 +54,7 @@ public class ArcVoiceHelper {
      * setting view  是否显示状态
      */
     private boolean isSettingsShow = false;//show settings default
+
     /**
      * 设置hud排列方向
      */
@@ -242,6 +243,7 @@ public class ArcVoiceHelper {
     public void hiddenOthers() {
         hiddenAvatars();
         hiddenSettings();
+        hiddenHelp();
     }
 
     /**
@@ -359,6 +361,10 @@ public class ArcVoiceHelper {
         ArcWindowManager.removeArcSettingsWindow(mContext);
         isSettingsShow = false;
 
+    }
+
+    private void hiddenHelp() {
+        ArcWindowManager.removeArcHelpWindow(mContext);
     }
 
     /**

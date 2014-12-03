@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/transparent_half_white"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="Using Arc Voice"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/help_viewpager"
+        android:layout_width="300dp"
+        android:layout_height="150dp"/>
+
+    <LinearLayout
+        android:id="@+id/help_position"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"/>
+
+</LinearLayout>

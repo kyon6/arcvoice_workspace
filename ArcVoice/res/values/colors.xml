@@ -8,5 +8,6 @@
     <color name="red">#f00</color>
 
     <color name="transparent">#0000</color>
+    <color name="transparent_half_white">#e999</color>
     <drawable name="transparent">#0000</drawable>
 </resources>

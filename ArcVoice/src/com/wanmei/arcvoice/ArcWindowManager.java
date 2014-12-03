@@ -6,8 +6,10 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
+import com.wanmei.arcvoice.utils.DensityUtils;
 import com.wanmei.arcvoice.utils.DeviceUtils;
 import com.wanmei.arcvoice.utils.LogUtils;
+import com.wanmei.arcvoice.view.ArcHelpView;
 import com.wanmei.arcvoice.view.ArcHudView;
 import com.wanmei.arcvoice.view.ArcMemberView;
 import com.wanmei.arcvoice.view.ArcSettingsView;
@@ -26,6 +28,8 @@ public class ArcWindowManager {
      * 大悬浮窗View的实例
      */
     private static ArcMemberView arcMemberView;
+
+    private static ArcHelpView arcHelpView;
 
     private static ArcSettingsView arcSettingsView;
     /**
@@ -79,6 +83,24 @@ public class ArcWindowManager {
             arcHudView.setParams(arcHudWindowParams);
             windowManager.addView(arcHudView, arcHudWindowParams);
             //LogUtils.e("==HubView:" + arcHudView);
+        }
+    }
+
+    public static void createArcHelpWindow(Context context) {
+        WindowManager windowManager = getWindowManager(context);
+        int screenWidth = windowManager.getDefaultDisplay().getWidth();
+        int screenHeight = windowManager.getDefaultDisplay().getHeight();
+        if (arcHelpView == null) {
+            arcHelpView = new ArcHelpView(context);
+                LayoutParams arcHelpWindowParams = new LayoutParams();
+            arcHelpWindowParams.type = LayoutParams.TYPE_PHONE;
+            arcHelpWindowParams.format = PixelFormat.RGBA_8888;
+            arcHelpWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | LayoutParams.FLAG_NOT_FOCUSABLE;
+            arcHelpWindowParams.gravity = Gravity.CENTER;
+            arcHelpWindowParams.width = DensityUtils.dip2px(context,300);
+            arcHelpWindowParams.height = DensityUtils.dip2px(context,200);
+            windowManager.addView(arcHelpView, arcHelpWindowParams);
         }
     }
 
@@ -282,6 +304,14 @@ public class ArcWindowManager {
             WindowManager windowManager = getWindowManager(context);
             windowManager.removeView(arcSettingsView);
             arcSettingsView = null;
+        }
+    }
+
+    public static void removeArcHelpWindow(Context context) {
+        if (arcHelpView != null) {
+            WindowManager windowManager = getWindowManager(context);
+            windowManager.removeView(arcHelpView);
+            arcHelpView = null;
         }
     }
 

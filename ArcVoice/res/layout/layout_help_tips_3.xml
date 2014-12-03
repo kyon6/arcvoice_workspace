@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal|top"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/tutorial3_grey_icon"
+            android:text="A grey border around the player icon means that the player is disconnected."/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/tutorial3_red_icon"
+            android:text="A red border around the player icon means that the player is muted."/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/tutorial3_green_icon"
+            android:text="A green border around the player icon means that the player is active. You can hear the player and the player can hear you."/>
+
+</LinearLayout>

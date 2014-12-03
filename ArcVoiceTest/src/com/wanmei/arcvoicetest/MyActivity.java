@@ -15,7 +15,7 @@ public class MyActivity extends Activity {
 
     public static final String ARC_APP_ID = "AFSIBQV2";
     public static final String ARC_APP_CREDENTIALS = "EP95V2XMWK1OCZVQNVCYIHBFLY1XGYWG";
-    public static final ArcRegion ARC_REGION = ArcRegion.VIRGINIA;
+    public static final ArcRegion ARC_REGION = ArcRegion.BEIJING;
     EditText mSessionEditText;
     EditText mUserIdEditText;
     Button mStartBtn;

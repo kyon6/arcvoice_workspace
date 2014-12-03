@@ -6,9 +6,11 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.wanmei.arcvoice.ArcVoiceHelper;
 import com.wanmei.arcvoice.ArcVoicePersistenceData;
+import com.wanmei.arcvoice.ArcWindowManager;
 import com.wanmei.arcvoice.R;
 
 /**
@@ -22,6 +24,7 @@ public class ArcSettingsView extends LinearLayout {
 
     public static int viewHeight;
     private CheckBox enable_CheckBox, mic_CheckBox;
+    private TextView arc_help;
 
     public ArcSettingsView(Context context) {
         super(context);
@@ -41,6 +44,8 @@ public class ArcSettingsView extends LinearLayout {
         mic_CheckBox = (CheckBox) findViewById(R.id.arc_mic_check);
         mic_CheckBox.setChecked(ArcVoicePersistenceData.getInstance().getArcMicEnable());
         ArcVoiceHelper.getInstance(getContext()).setMicEnable(mic_CheckBox.isChecked());
+
+        arc_help = (TextView) findViewById(R.id.arc_help);
     }
 
     private void initActions() {
@@ -56,6 +61,13 @@ public class ArcSettingsView extends LinearLayout {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ArcVoiceHelper.getInstance(getContext()).setMicEnable(isChecked);
                 ArcVoicePersistenceData.getInstance().setArcMicEnable(isChecked);
+            }
+        });
+
+        arc_help.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArcWindowManager.createArcHelpWindow(getContext());
             }
         });
 
